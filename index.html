@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Aplicativo</title>
+
+    <!-- 1. Ícone padrão para navegadores (Favicon) -->
+    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
+
+    <!-- 2. Ícone para iOS (iPhone / iPad - Tela Inicial) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
+
+    <!-- 3. Web App Manifest embutido dinamicamente (para Android e PWA) -->
+    <script>
+        const myManifest = {
+            "name": "Meu Aplicativo",
+            "short_name": "Meu App",
+            "start_url": "./",
+            "display": "standalone",
+            "background_color": "#ffffff",
+            "theme_color": "#000000",
+            "icons": [
+                {
+                    "src": "https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0",
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                },
+                {
+                    "src": "https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0",
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                }
+            ]
+        };
+
+        const stringManifest = JSON.stringify(myManifest);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        
+        const linkElem = document.createElement('link');
+        linkElem.rel = 'manifest';
+        linkElem.href = manifestURL;
+        document.head.appendChild(linkElem);
+    </script>
+</head>
+<body>
+    <h1>Aplicação Pronta!</h1>
+    <p>Adicione esta página à sua tela inicial para ver o novo ícone.</p>
+</body>
+</html>
