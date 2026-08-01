@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Previa Treinamentos - Portal de Ensino Prático</title>
-
-  <!-- 1. Ícone padrão para navegadores (Favicon) -->
+ <!-- 1. Ícone padrão para navegadores (Favicon) -->
   <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
 
   <!-- 2. Ícone para iOS (iPhone / iPad - Tela Inicial) -->
@@ -45,7 +44,6 @@
     linkElem.href = manifestURL;
     document.head.appendChild(linkElem);
   </script>
-
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -200,7 +198,7 @@
         <div>
           <label for="select-modelo-aula" class="block text-sm font-bold text-slate-700 mb-1">Modelo de Aula Prática</label>
           <select id="select-modelo-aula" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#f26522] transition">
-            <!-- Populados dinamicamente -->
+            <!-- Populados dinamicamente via buscarModelosDeAula -->
           </select>
         </div>
         <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100 italic">
@@ -215,7 +213,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE VISUALIZAÇÃO DE AVALIAÇÃO DETALHADA -->
+  <!-- MODAL DE VISUALIZAÇÃO DE AVALIAÇÃO DETALHADA (CORRIGIDO E COMPLETO) -->
   <div id="modal-avaliacao-detalhada" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
     <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-6 m-4 transform scale-95 transition-transform duration-200 max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
@@ -303,11 +301,13 @@
         </button>
       </div>
 
-      <!-- Corpo do Certificado -->
+      <!-- Corpo do Certificado (Layout em Paisagem) -->
       <div id="visual-certificado-quadro" class="border-[14px] border-[#022b26] p-8 sm:p-12 relative bg-gradient-to-tr from-[#fafdfd] to-white rounded-2xl shadow-inner min-h-[480px] flex flex-col justify-between text-center overflow-hidden">
         
+        <!-- Detalhe em Ouro nas bordas -->
         <div class="absolute inset-2 border-2 border-[#f26522] pointer-events-none rounded-lg opacity-80"></div>
         
+        <!-- Selo de fundo marca d'água -->
         <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
           <i data-lucide="shield" class="w-96 h-96 text-[#0d6c60]"></i>
         </div>
@@ -355,7 +355,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE FORMULÁRIO DE AVALIAÇÃO -->
+  <!-- MODAL DE FORMULÁRIO DE AVALIAÇÃO (Apenas para o Instrutor) -->
   <div id="modal-preencher-avaliacao" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
     <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-6 m-4 transform scale-95 transition-transform duration-200 max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
@@ -394,6 +394,7 @@
             </tbody>
           </table>
 
+          <!-- Comportamental Form -->
           <div class="mt-6">
             <h4 class="font-bold text-sm text-slate-900 mb-2 border-b pb-1">Avaliação Comportamental</h4>
             <table class="w-full text-left border-collapse text-xs border border-slate-200">
@@ -434,7 +435,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE SAIBA MAIS SOBRE O INSTRUTOR -->
+  <!-- MODAL DE SAIBA MAIS SOBRE O INSTRUTOR (FOTO E RESUMO) -->
   <div id="modal-saiba-mais-instrutor" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
     <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 m-4 transform scale-95 transition-transform duration-200 flex flex-col relative max-h-[85vh] overflow-y-auto custom-scrollbar">
       <div class="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
@@ -445,6 +446,7 @@
       </div>
       
       <div class="flex flex-col items-center text-center space-y-4">
+        <!-- Foto do Instrutor com Fallback elegante -->
         <div class="relative w-36 h-36 rounded-full overflow-hidden border-4 border-teal-50 shadow-inner bg-slate-100 flex items-center justify-center">
           <img id="modal-inst-foto" src="" alt="Foto do Instrutor" class="w-full h-full object-cover hidden" onerror="this.classList.add('hidden'); document.getElementById('modal-inst-avatar-fallback').classList.remove('hidden');">
           <div id="modal-inst-avatar-fallback" class="text-[#0d6c60]">
@@ -494,6 +496,7 @@
       <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full filter blur-3xl -mr-20 -mt-20"></div>
       
       <div class="relative text-center">
+        <!-- Logo Principal -->
         <div class="mx-auto flex justify-center pb-4">
           <div id="logo-fallback-login" class="text-3xl font-extrabold text-white tracking-widest">
             PREV<span class="text-[#f26522]">I</span>A
@@ -502,6 +505,7 @@
         <p class="text-teal-100 text-sm font-medium">Bem Vindo a Autoescola Digital PREVIA.<br> Selecione seu perfil abaixo para acessar o sistema</p>
       </div>
 
+      <!-- Seletor de Perfil Aluno / Instrutor -->
       <div class="bg-[#022320] p-1 rounded-2xl flex gap-1 border border-teal-800/50">
         <button id="perfil-aluno" onclick="mudarPerfilLogin('aluno')" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-[#f26522] text-white shadow-md">
           Sou Aluno
@@ -552,15 +556,15 @@
       </form>
       
       <div class="text-center text-[10px] text-teal-300/40 pt-4 border-t border-teal-900/40">
-        © 2026 Previa Treinamentos — Powered by IntelliCreate
-      </div>
+        © 2026 Previa Treinamentos      
+     </div>
     </div>
   </div>
 
   <!-- PORTAL PRINCIPAL (DASHBOARD) -->
   <div id="portal-dashboard" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
     
-    <!-- BARRA LATERAL -->
+    <!-- BARRA LATERAL (Minimizável) -->
     <aside id="main-sidebar" class="w-full md:w-64 bg-[#022320] text-white flex flex-col border-r border-[#073d37] sidebar-transition relative flex-shrink-0">
       <div class="p-6 border-b border-[#073d37] flex items-center justify-between">
         <div class="flex items-center space-x-3 overflow-hidden">
@@ -575,6 +579,7 @@
         </div>
       </div>    
 
+      <!-- Informações Rápidas do Usuário Logado -->
       <div class="p-4 mx-4 my-6 bg-[#042e2a] rounded-2xl border border-teal-900/50 overflow-hidden" id="sidebar-user-card">
         <div class="flex items-center space-x-3">
           <div class="h-10 w-10 bg-[#f26522]/10 text-[#f26522] rounded-full flex items-center justify-center font-bold border border-[#f26522]/20 flex-shrink-0" id="aluno-iniciais">
@@ -589,7 +594,7 @@
         </div>
       </div>
 
-      <!-- Menu ALUNO -->
+      <!-- Menu de Navegação do ALUNO -->
       <nav id="menu-aluno" class="flex-1 px-4 space-y-1.5">
         <button onclick="alternarAba('inicio')" id="btn-menu-inicio"
           class="menu-item flex items-center space-x-3 w-full px-4 py-3 rounded-xl text-xs font-bold bg-[#f26522] text-white transition-all duration-150">
@@ -613,7 +618,7 @@
         </button>
       </nav>
 
-      <!-- Menu INSTRUTOR -->
+      <!-- Menu de Navegação do INSTRUTOR -->
       <nav id="menu-instrutor" class="hidden flex-1 px-4 space-y-1.5">
         <button onclick="alternarAba('agenda-instrutor')" id="btn-menu-agenda-instrutor"
           class="menu-item flex items-center space-x-3 w-full px-4 py-3 rounded-xl text-xs font-bold bg-[#f26522] text-white transition-all duration-150">
@@ -635,11 +640,13 @@
     <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
     <main class="flex-1 flex flex-col min-w-0 overflow-y-auto max-h-screen bg-slate-50">
       
+      <!-- Cabeçalho Superior -->
       <header id="main-header" class="bg-white border-b border-slate-100 py-3 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-40">
         <div class="flex items-center space-x-4">
           <h2 id="titulo-secao-portal" class="text-base font-extrabold text-slate-900 uppercase tracking-wide">Relatório Geral</h2>
         </div>
         <div class="flex items-center space-x-4">
+          <!-- Bloco do Instrutor Vinculado -->
           <div class="hidden sm:flex flex-col items-end text-right" id="header-instrutor-box">
             <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Instrutor Vinculado</span>
             <span class="text-xs font-extrabold text-[#0d6c60]" id="aluno-instrutor">Não vinculado</span>
@@ -658,6 +665,7 @@
         </div>
       </header>
 
+      <!-- AVISO DE SEGURANÇA PERSISTENTE NO TOPO -->
       <div id="alerta-seguranca-geral" class="hidden mx-6 sm:mx-8 mt-4">
         <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-2xl shadow-sm flex items-start space-x-3">
           <div class="flex-shrink-0 text-amber-600 mt-0.5">
@@ -672,10 +680,10 @@
         </div>
       </div>
 
-      <!-- SEÇÕES -->
+      <!-- SEÇÕES DO ALUNO -->
       <div id="container-secoes" class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6 transition-all duration-300">
 
-        <!-- ABA 1: RELATÓRIO GERAL -->
+        <!-- ABA 1: RELATÓRIO GERAL (DASHBOARD ALUNO) -->
         <section id="secao-inicio" class="space-y-6">
           <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100/80 rounded-3xl p-6 sm:p-8 text-teal-950 relative overflow-hidden shadow-sm">
             <div class="absolute right-0 top-0 transform translate-x-12 -translate-y-12 w-64 h-64 bg-teal-200/10 rounded-full pointer-events-none"></div>
@@ -686,6 +694,7 @@
             </div>
           </div>
 
+          <!-- Cards de Métricas e Informações Cadastrais -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
               <div class="h-11 w-11 bg-teal-50 rounded-xl flex items-center justify-center text-[#0d6c60] flex-shrink-0">
@@ -718,6 +727,7 @@
             </div>
           </div>
           
+          <!-- Box sobre o Instrutor Vinculado -->
           <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
             <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <i data-lucide="badge-check" class="text-[#0d6c60]"></i> Instrutor Vinculado e Veículo Oficial
@@ -735,7 +745,7 @@
           </div>
         </section>
 
-        <!-- ABA 2: AGENDAR AULA -->
+        <!-- ABA 2: AGENDAR AULA (ALUNO) -->
         <section id="secao-agendar" class="hidden space-y-6">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -748,11 +758,13 @@
             </button>
           </div>
 
+          <!-- Loader -->
           <div id="loader-agendar" class="bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-3">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0d6c60]"></div>
             <span class="text-slate-500 font-medium text-xs">Buscando aulas com seu instrutor...</span>
           </div>
 
+          <!-- Vazio -->
           <div id="vazio-agendar" class="hidden bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-4">
             <div class="h-12 w-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center">
               <i data-lucide="calendar" class="h-6 w-6"></i>
@@ -763,70 +775,159 @@
             </div>
           </div>
 
-          <div id="grid-aulas-agendar" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+          <!-- Grid de Aulas -->
+          <div id="grid-aulas-agendar" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Gerado via JS -->
+          </div>
         </section>
+<!-- ABA 2.5: PLATAFORMA DE CURSOS EAD (DO ALUNO) -->
+<section id="secao-cursos" class="hidden space-y-4">
 
-        <!-- ABA 2.5: PLATAFORMA CURSOS EAD -->
-        <section id="secao-cursos" class="hidden space-y-4">
-          <div class="flex flex-col gap-4 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-              <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
-                <div id="status-progresso-curso-container" class="hidden bg-white border border-slate-100 rounded-2xl p-3 shadow-sm flex items-center gap-4">
-                  <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-teal-50 text-[#0d6c60] rounded-xl">
-                      <i data-lucide="graduation-cap" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                      <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Progresso deste Curso</span>
-                      <div class="flex items-center gap-2">
-                        <span id="badge-progresso-curso" class="text-xs font-extrabold text-[#0d6c60]">Buscando status...</span>
-                      </div>
-                    </div>
-                  </div>
+  <!-- Barra Superior -->
+  <div class="flex flex-col gap-4 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
 
-                  <div class="flex items-center gap-2">
-                    <button id="btn-concluir-curso" onclick="finalizarCursoAtivo()" class="px-4 py-2 bg-[#0d6c60] hover:bg-[#07473f] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2 transition duration-150">
-                      <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                      <span>Concluir Curso</span>
-                    </button>
-                    <button id="btn-gerar-certificado" onclick="abrirCertificado()" class="hidden px-5 py-2 bg-[#f26522] hover:bg-[#d94f10] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2 transition duration-150 animate-pulse">
-                      <i data-lucide="award" class="w-4 h-4"></i>
-                      <span>Emitir Certificado</span>
-                    </button>
-                  </div>
-                </div>
+    <!-- Linha Superior -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
 
-                <div id="dropdown-aulas-container" class="hidden flex items-center gap-2">
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">Aula:</span>
-                  <select id="select-aula-playlist" onchange="carregarVideoNoPlayerPeloId(this.value)" class="px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs font-bold text-[#0d6c60] bg-white focus:outline-none focus:ring-2 focus:ring-[#f26522] max-w-[200px] truncate"></select>
-                </div>
 
-                <button id="btn-voltar-catalogo" onclick="voltarAoCatalogoCursos()" class="hidden inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 transition shadow-sm">
-                  <i data-lucide="arrow-left" class="h-4 w-4 mr-1"></i> Voltar
-                </button>
+      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+
+        <!-- Barra de Progresso e Certificação -->
+       <div id="status-progresso-curso-container"
+     class="hidden bg-white border border-slate-100 rounded-2xl p-3 shadow-sm flex items-center gap-4">
+
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-teal-50 text-[#0d6c60] rounded-xl">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </div>
+
+            <div>
+              <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">
+                Progresso deste Curso
+              </span>
+
+              <div class="flex items-center gap-2">
+                <span id="badge-progresso-curso" class="text-xs font-extrabold text-[#0d6c60]">
+                  Buscando status...
+                </span>
               </div>
             </div>
           </div>
 
-          <div id="loader-cursos" class="bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-3">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0d6c60]"></div>
-            <span class="text-slate-500 font-medium text-xs">Acessando seus cursos matriculados...</span>
+          <div class="flex items-center gap-2">
+
+            <!-- Botão de Conclusão do Curso -->
+            <button id="btn-concluir-curso"
+              onclick="finalizarCursoAtivo()"
+              class="px-4 py-2 bg-[#0d6c60] hover:bg-[#07473f] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2 transition duration-150">
+
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              <span>Concluir Curso</span>
+
+            </button>
+
+            <!-- Botão de Certificado -->
+            <button id="btn-gerar-certificado"
+              onclick="abrirCertificado()"
+              class="hidden px-5 py-2 bg-[#f26522] hover:bg-[#d94f10] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2 transition duration-150 animate-pulse">
+
+              <i data-lucide="award" class="w-4 h-4"></i>
+              <span>Emitir Certificado</span>
+
+            </button>
+
           </div>
 
-          <div id="cursos-catalogo-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden"></div>
+        </div>
 
-          <div id="cursos-player-container" class="hidden flex flex-col space-y-4">
-            <div id="player-wrapper-fullscreen" class="bg-black rounded-3xl overflow-hidden shadow-xl border border-slate-800 aspect-video relative flex items-center justify-center w-full max-h-[70vh]">
-              <iframe id="iframe-player-curso" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              <div id="iframe-player-loading" class="absolute inset-0 bg-[#022320]/90 flex flex-col items-center justify-center text-white space-y-3 hidden">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f26522]"></div>
-                <span class="text-xs font-semibold text-teal-200">Carregando conteúdo da aula...</span>
-              </div>
-            </div>
-          </div>
-        </section>
+        <!-- Menu de seleção de aula -->
+        <div id="dropdown-aulas-container" class="hidden flex items-center gap-2">
 
-        <!-- ABA 3: HISTÓRICO E NOTAS -->
+          <span class="text-[10px] font-bold text-slate-400 uppercase">
+            Aula:
+          </span>
+
+          <select
+            id="select-aula-playlist"
+            onchange="carregarVideoNoPlayerPeloId(this.value)"
+            class="px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs font-bold text-[#0d6c60] bg-white focus:outline-none focus:ring-2 focus:ring-[#f26522] max-w-[200px] truncate">
+
+          </select>
+
+        </div>
+
+        <!-- Botão Voltar -->
+        <button
+          id="btn-voltar-catalogo"
+          onclick="voltarAoCatalogoCursos()"
+          class="hidden inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 transition shadow-sm">
+
+          <i data-lucide="arrow-left" class="h-4 w-4 mr-1"></i>
+          Voltar
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Loader de Cursos -->
+  <div id="loader-cursos" class="bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-3">
+
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0d6c60]"></div>
+
+    <span class="text-slate-500 font-medium text-xs">
+      Acessando seus cursos matriculados...
+    </span>
+
+  </div>
+
+  <!-- Catálogo de Cursos -->
+  <div id="cursos-catalogo-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
+
+    <!-- Gerado dinamicamente via JS -->
+
+  </div>
+
+  <!-- Player -->
+  <div id="cursos-player-container" class="hidden flex flex-col space-y-4">
+
+    <!-- Player -->
+    <div id="player-wrapper-fullscreen"
+      class="bg-black rounded-3xl overflow-hidden shadow-xl border border-slate-800 aspect-video relative flex items-center justify-center w-full max-h-[70vh]">
+
+      <iframe
+        id="iframe-player-curso"
+        class="w-full h-full"
+        src=""
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+
+      </iframe>
+
+      <!-- Loader do Player -->
+      <div id="iframe-player-loading"
+        class="absolute inset-0 bg-[#022320]/90 flex flex-col items-center justify-center text-white space-y-3 hidden">
+
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f26522]"></div>
+
+        <span class="text-xs font-semibold text-teal-200">
+          Carregando conteúdo da aula...
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+        <!-- ABA 3: HISTÓRICO E NOTAS (ALUNO) -->
         <section id="secao-historico" class="hidden space-y-6">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -839,6 +940,7 @@
             </button>
           </div>
 
+          <!-- Métricas -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div class="bg-white p-5 rounded-2xl border border-slate-100">
               <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Aulas Práticas Totais</span>
@@ -854,11 +956,13 @@
             </div>
           </div>
 
+          <!-- Loader Histórico -->
           <div id="loader-historico" class="bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-3">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0d6c60]"></div>
             <span class="text-slate-500 font-medium text-xs">Carregando histórico acadêmico...</span>
           </div>
 
+          <!-- Vazio Histórico -->
           <div id="vazio-historico" class="hidden bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-4">
             <div class="h-12 w-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center">
               <i data-lucide="folder-open" class="h-6 w-6"></i>
@@ -869,6 +973,7 @@
             </div>
           </div>
 
+          <!-- Tabela Desktop -->
           <div id="card-tabela-historico" class="hidden bg-white rounded-2xl border border-slate-100 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
@@ -881,12 +986,17 @@
                     <th class="p-4 text-[10px] font-bold uppercase text-slate-500 tracking-wider">Ações</th>
                   </tr>
                 </thead>
-                <tbody id="tabela-linhas-historico" class="divide-y divide-slate-100 text-xs text-slate-700"></tbody>
+                <tbody id="tabela-linhas-historico" class="divide-y divide-slate-100 text-xs text-slate-700">
+                  <!-- JS -->
+                </tbody>
               </table>
             </div>
           </div>
 
-          <div id="layout-cards-historico" class="hidden grid grid-cols-1 gap-4 md:hidden"></div>
+          <!-- Cards Mobile -->
+          <div id="layout-cards-historico" class="hidden grid grid-cols-1 gap-4 md:hidden">
+            <!-- JS -->
+          </div>
         </section>
 
         <!-- SEÇÃO: AGENDA DO INSTRUTOR -->
@@ -902,11 +1012,13 @@
             </button>
           </div>
 
+          <!-- Loader Instrutor -->
           <div id="loader-instrutor" class="bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-3">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0d6c60]"></div>
             <span class="text-slate-500 font-medium text-xs">Carregando cronograma diário...</span>
           </div>
 
+          <!-- Vazio Instrutor -->
           <div id="vazio-instrutor" class="hidden bg-white rounded-2xl p-12 text-center border border-slate-100 flex flex-col items-center justify-center space-y-4">
             <div class="h-12 w-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center">
               <i data-lucide="calendar-days" class="h-6 w-6"></i>
@@ -917,6 +1029,7 @@
             </div>
           </div>
 
+          <!-- Tabela de Alunos do Instrutor -->
           <div id="card-tabela-instrutor" class="hidden bg-white rounded-2xl border border-slate-100 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
@@ -929,7 +1042,9 @@
                     <th class="p-4 text-[10px] font-bold uppercase text-slate-500 tracking-wider">Ações</th>
                   </tr>
                 </thead>
-                <tbody id="tabela-linhas-instrutor" class="divide-y divide-slate-100 text-xs text-slate-700"></tbody>
+                <tbody id="tabela-linhas-instrutor" class="divide-y divide-slate-100 text-xs text-slate-700">
+                  <!-- JS -->
+                </tbody>
               </table>
             </div>
           </div>
@@ -951,11 +1066,13 @@
     let perfilLogado = "aluno";
     let dadosUsuario = null;
 
+    // Estado da Plataforma de Cursos
     let cursosCarregados = [];
     let cursoAtivo = null;
     let aulaAtiva = null;
     let sidebarMinimizada = false;
 
+    // Recupera o estado inicial da sidebar do localStorage
     if (localStorage.getItem("previa_sidebar_minimizada") === "true") {
       sidebarMinimizada = true;
     }
@@ -994,6 +1111,10 @@
         if (iconToggle) iconToggle.setAttribute("data-lucide", "menu-fold");
       }
       lucide.createIcons();
+    }
+
+    function transformarCPF(input) {
+      mascararCPF(input);
     }
 
     function mascararCPF(input) {
@@ -1083,6 +1204,26 @@
         fecharModal();
         acaoConfirmar();
       };
+    }
+
+    function obterCategoriaDoItem(nomeItem) {
+      const txt = nomeItem.toLowerCase();
+      if (txt.includes("segurança") || txt.includes("entrar") || txt.includes("sair") || txt.includes("limpador") || txt.includes("faróis") || txt.includes("finalização")) {
+        return "Verificação de Segurança";
+      }
+      if (txt.includes("banco") || txt.includes("retrovisores") || txt.includes("cinto")) {
+        return "Ergonomia";
+      }
+      if (txt.includes("painel") || txt.includes("volante") || txt.includes("pedais") || txt.includes("marchas") || txt.includes("reduções") || txt.includes("domínio")) {
+        return "Atenção e habilidade técnica";
+      }
+      if (txt.includes("velocidade") || txt.includes("distância") || txt.includes("ultrapassagens") || txt.includes("adversas") || txt.includes("manobras") || txt.includes("pedestres") || txt.includes("motociclistas")) {
+        return "Direção defensiva";
+      }
+      if (txt.includes("cruzamentos") || txt.includes("faixas") || txt.includes("seta") || txt.includes("sinalização") || txt.includes("sinalizações") || txt.includes("parada") || txt.includes("estacionamento")) {
+        return "Circulação e conduta";
+      }
+      return "Geral";
     }
 
     async function realizarLogin(event) {
@@ -1439,6 +1580,7 @@
 
       renderizarVisualDeProgressoCurso();
 
+      // Envia notificação de "Iniciado" para a planilha caso o curso esteja como "Não Iniciado"
       if (cursoAtivo.status !== "Iniciado" && cursoAtivo.status !== "Finalizado") {
         try {
           const urlStatus = `${SCRIPT_URL_PLANILHA}?action=atualizarStatusCurso&cpf=${dadosUsuario.cpf}&cursoId=${cursoAtivo.id}&status=Iniciado`;
@@ -1542,12 +1684,14 @@
       canvas.height = 800;
       const ctx = canvas.getContext("2d");
 
+      // Gradiente de fundo sofisticado
       const grad = ctx.createLinearGradient(0, 0, 1200, 800);
       grad.addColorStop(0, "#fafdfd");
       grad.addColorStop(1, "#f2f7f6");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 1200, 800);
 
+      // Moldura Externa Dupla (Verde e Laranja)
       ctx.lineWidth = 18;
       ctx.strokeStyle = "#022b26"; 
       ctx.strokeRect(18, 18, 1164, 764);
@@ -1556,6 +1700,7 @@
       ctx.strokeStyle = "#f26522"; 
       ctx.strokeRect(32, 32, 1136, 736);
 
+      // Selo Circular no Fundo (Marca d'água)
       ctx.beginPath();
       ctx.arc(600, 400, 140, 0, 2 * Math.PI);
       ctx.fillStyle = "rgba(13, 108, 96, 0.02)";
@@ -1593,6 +1738,7 @@
       const hashUnico = `PRV-${dadosUsuario.cpf.substring(0,4)}-${cursoAtivo.id}-${Math.floor(1000 + Math.random() * 9000)}`;
       ctx.fillText(`Emitido em ${dataHoje} | Chave de Registro: ${hashUnico}`, 600, 530);
 
+      // Assinatura
       ctx.strokeStyle = "#cbd5e1";
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -1614,15 +1760,18 @@
 
       try {
         const { jsPDF } = window.jspdf;
+        // Instancia PDF em formato paisagem com as dimensões exatas do canvas do certificado
         const pdf = new jsPDF({
           orientation: 'landscape',
           unit: 'px',
           format: [1200, 800]
         });
 
+        // Converte o canvas para imagem JPEG de altíssima qualidade
         const imgData = canvas.toDataURL("image/jpeg", 0.98);
         pdf.addImage(imgData, 'JPEG', 0, 0, 1200, 800);
         
+        // Efetua o download do arquivo PDF
         pdf.save(`Certificado_${cursoAtivo.titulo.replace(/\s+/g, "_")}.pdf`);
         mostrarNotificacao("Download do certificado em PDF iniciado com sucesso!", "sucesso");
       } catch (pdfError) {
@@ -1660,22 +1809,31 @@
       const loader = document.getElementById("iframe-player-loading");
       const select = document.getElementById("select-aula-playlist");
 
+      loader.classList.remove("hidden");
       if (select) select.value = aula.id;
 
-      loader.classList.remove("hidden");
-      
-      let embedUrl = aula.url;
-      if (embedUrl.includes("youtube.com/watch?v=")) {
-        embedUrl = embedUrl.replace("watch?v=", "embed/");
-      } else if (embedUrl.includes("youtu.be/")) {
-        embedUrl = embedUrl.replace("youtu.be/", "youtube.com/embed/");
+      let urlFinal = "";
+      if (aula.tipo === 'youtube') {
+        urlFinal = converterUrlParaEmbedYoutube(aula.url);
+      } else {
+        urlFinal = aula.url;
       }
 
-      iframe.src = embedUrl;
-
-      setTimeout(() => {
+      iframe.src = urlFinal;
+      iframe.onload = () => {
         loader.classList.add("hidden");
-      }, 1000);
+      };
+    }
+
+    function converterUrlParaEmbedYoutube(url) {
+      if (!url) return "";
+      let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      let match = url.match(regExp);
+      
+      if (match && match[2].length === 11) {
+        return `https://www.youtube.com/embed/${match[2]}?autoplay=1&rel=0`;
+      }
+      return url;
     }
 
     async function carregarAulasDisponiveis() {
@@ -1688,62 +1846,83 @@
       grid.classList.add("hidden");
       grid.innerHTML = "";
 
+      const instrutorAluno = dadosUsuario && dadosUsuario.instrutor ? dadosUsuario.instrutor : "";
+
       try {
-        const urlAulas = `${SCRIPT_URL_PLANILHA}?action=buscarAulasLivres&cpf=${dadosUsuario.cpf}`;
-        const res = await fetch(urlAulas);
+        const urlObterDados = `${SCRIPT_URL_PLANILHA}?action=buscarAulasDisponiveis&instrutor=${encodeURIComponent(instrutorAluno)}`;
+        const res = await fetch(urlObterDados);
         const aulas = await res.json();
 
-        loader.classList.add("hidden");
+        const aulasDisponiveis = aulas.filter(aula => {
+          const statusVal = String(aula.status || "").trim().toLowerCase();
+          return statusVal !== "agendada" && statusVal !== "concluída" && statusVal !== "concluida";
+        });
 
-        if (aulas && aulas.length > 0) {
+        if (aulasDisponiveis && aulasDisponiveis.length > 0) {
+          loader.classList.add("hidden");
           grid.classList.remove("hidden");
-          aulas.forEach(aula => {
-            const card = document.createElement("div");
-            card.className = "bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition space-y-4 flex flex-col justify-between";
-            card.innerHTML = `
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="px-2.5 py-1 bg-teal-50 text-[#0d6c60] font-bold rounded-lg text-[10px] uppercase border border-teal-100">
-                    Disponível
-                  </span>
-                  <span class="text-xs font-bold text-slate-400">🚗 Prática</span>
+
+          aulasDisponiveis.forEach(aula => {
+            const dataFormatada = formatarData(aula.data);
+            const htmlCard = `
+              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-100">
+                      Disponível
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-bold flex items-center uppercase tracking-wide">
+                      <i data-lucide="clock" class="h-3.5 w-3.5 mr-1 text-slate-400"></i> ${aula.inicio} até ${aula.fim}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-sm line-clamp-2">${aula.titulo}</h4>
+                    <p class="text-xs text-[#0d6c60] font-bold mt-1 flex items-center">
+                      <i data-lucide="user-cog" class="h-3.5 w-3.5 mr-1 text-teal-500"></i> Prof. ${aula.instrutor}
+                    </p>
+                    <p class="text-[11px] text-slate-500 font-semibold mt-0.5 flex items-center">
+                      <i data-lucide="car-front" class="h-3.5 w-3.5 mr-1 text-slate-400"></i> Veículo: ${aula.veiculo || "Não informado"}
+                    </p>
+                  </div>
+                  <div class="border-t border-slate-100 pt-3 space-y-1.5 text-xs text-slate-500">
+                    <div class="flex items-center">
+                      <i data-lucide="calendar" class="h-4 w-4 mr-2 text-slate-400 flex-shrink-0"></i>
+                      <span>Data: <strong>${dataFormatada}</strong></span>
+                    </div>
+                    <div class="flex items-center">
+                      <i data-lucide="map-pin" class="h-4 w-4 mr-2 text-slate-400 flex-shrink-0"></i>
+                      <span class="truncate">Local: <strong>${aula.local || 'Não especificado'}</strong></span>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 class="font-bold text-slate-900 text-sm">${aula.titulo}</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Instrutor: <strong>${aula.instrutor}</strong></p>
-                </div>
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs space-y-1">
-                  <p class="text-slate-600">📆 Data: <strong class="text-slate-900">${aula.data}</strong></p>
-                  <p class="text-slate-600">⏰ Horário: <strong class="text-slate-900">${aula.horario}</strong></p>
-                  <p class="text-slate-600 truncate">📍 Local: <strong class="text-slate-900">${aula.local}</strong></p>
-                </div>
+                <button onclick="abrirModalSelecaoAula('${aula.id}', '${aula.titulo}', '${dataFormatada}', '${aula.inicio}', '${aula.fim}', '${aula.local}', '${aula.instrutor}')"
+                  class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-[#f26522] hover:bg-[#d94f10] text-white shadow-sm flex items-center justify-center space-x-2 transition duration-150">
+                  <i data-lucide="calendar-check" class="h-4 w-4"></i>
+                  <span>Agendar Aula</span>
+                </button>
               </div>
-              <button onclick="solicitarAgendamento('${aula.id}', '${aula.titulo}', '${aula.data}', '${aula.horario}', '${aula.instrutor}')"
-                class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-[#f26522] hover:bg-[#d94f10] text-white shadow-md transition">
-                Reservar Horário
-              </button>
             `;
-            grid.appendChild(card);
+            grid.innerHTML += htmlCard;
           });
           lucide.createIcons();
         } else {
+          loader.classList.add("hidden");
           vazio.classList.remove("hidden");
         }
       } catch (err) {
-        console.error("Erro ao carregar aulas disponíveis:", err);
+        console.error("Erro ao buscar aulas:", err);
         loader.classList.add("hidden");
-        mostrarNotificacao("Erro ao carregar horários livres.", "erro");
+        vazio.classList.remove("hidden");
       }
     }
 
-    let aulaEmSelecao = null;
-
-    function solicitarAgendamento(aulaId, titulo, data, horario, instrutor) {
-      aulaEmSelecao = { aulaId, titulo, data, horario, instrutor };
-      
+    async function abrirModalSelecaoAula(aulaId, tituloOriginal, dataFormatada, inicio, fim, local, instrutor) {
       const modal = document.getElementById("modal-selecao-aula");
-      const select = document.getElementById("select-modelo-aula");
-      select.innerHTML = `<option value="">Carregando modelos...</option>`;
+      const btnConfirmar = document.getElementById("btn-confirmar-selecao");
+      const btnCancelar = document.getElementById("btn-cancelar-selecao");
+      const selectModelo = document.getElementById("select-modelo-aula");
+
+      selectModelo.innerHTML = `<option value="">Carregando modelos de aula...</option>`;
 
       modal.classList.remove("hidden");
       setTimeout(() => {
@@ -1751,259 +1930,391 @@
         modal.querySelector("div").classList.remove("scale-95");
       }, 10);
 
-      fetch(`${SCRIPT_URL_PLANILHA}?action=buscarModelosDeAula`)
-        .then(res => res.json())
-        .then(modelos => {
-          select.innerHTML = "";
-          if (modelos && modelos.length > 0) {
-            modelos.forEach(mod => {
-              const opt = document.createElement("option");
-              opt.value = mod.nome;
-              opt.textContent = mod.nome;
-              select.appendChild(opt);
-            });
-          } else {
-            select.innerHTML = `<option value="Aula Prática Padrão">Aula Prática Padrão</option>`;
+      const fecharModal = () => {
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+        setTimeout(() => modal.classList.add("hidden"), 200);
+      };
+
+      btnCancelar.onclick = () => fecharModal();
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL_PLANILHA}?action=buscarModelosDeAula`);
+        const modelos = await response.json();
+        
+        selectModelo.innerHTML = "";
+        modelos.forEach(modelo => {
+          const opt = document.createElement("option");
+          opt.value = modelo;
+          opt.textContent = modelo;
+          if (modelo === "Aula Trânsito Intenso") {
+            opt.selected = true;
           }
-        })
-        .catch(() => {
-          select.innerHTML = `<option value="Aula Prática Padrão">Aula Prática Padrão</option>`;
+          selectModelo.appendChild(opt);
         });
+      } catch (err) {
+        console.warn("Erro ao buscar modelos de aula dinâmicos, usando padrão.");
+        selectModelo.innerHTML = `<option value="Aula Trânsito Intenso" selected>Aula Trânsito Intenso</option>`;
+      }
 
-      document.getElementById("btn-cancelar-selecao").onclick = fecharModalSelecaoAula;
-      document.getElementById("btn-confirmar-selecao").onclick = confirmarAgendamentoComModelo;
+      btnConfirmar.onclick = () => {
+        const modeloSelecionado = selectModelo.value;
+        if (!modeloSelecionado) {
+          mostrarNotificacao("Por favor, selecione um modelo de aula.", "erro");
+          return;
+        }
+        fecharModal();
+        realizarAgendamentoNaPlanilha(aulaId, modeloSelecionado, dataFormatada, inicio, fim, local, instrutor);
+      };
     }
 
-    function fecharModalSelecaoAula() {
-      const modal = document.getElementById("modal-selecao-aula");
-      modal.classList.add("opacity-0");
-      modal.querySelector("div").classList.add("scale-95");
-      setTimeout(() => modal.classList.add("hidden"), 200);
-    }
-
-    async function confirmarAgendamentoComModelo() {
-      if (!aulaEmSelecao) return;
-
-      const selectModelo = document.getElementById("select-modelo-aula").value;
-      fecharModalSelecaoAula();
-
-      mostrarNotificacao("Confirmando o seu agendamento no sistema...", "info");
+    async function realizarAgendamentoNaPlanilha(aulaId, tituloAula, dataStr, horaStr, fimStr, localStr, instrutorStr) {
+      mostrarNotificacao("Efetuando o seu agendamento no sistema...", "info");
 
       try {
-        const urlAgendar = `${SCRIPT_URL_PLANILHA}?action=agendarAula&cpf=${dadosUsuario.cpf}&aulaId=${aulaEmSelecao.aulaId}&modelo=${encodeURIComponent(selectModelo)}`;
-        const res = await fetch(urlAgendar);
-        const json = await res.json();
+        const urlAgendamento = `${SCRIPT_URL_PLANILHA}?action=agendar&cpf=${dadosUsuario.cpf}&aulaId=${aulaId}&tituloAula=${encodeURIComponent(tituloAula)}`;
+        const resposta = await fetch(urlAgendamento);
+        const resJSON = await resposta.json();
 
-        if (json.success) {
-          document.getElementById("sucesso-aula-titulo").textContent = aulaEmSelecao.titulo;
-          document.getElementById("sucesso-aula-data").textContent = aulaEmSelecao.data;
-          document.getElementById("sucesso-aula-hora").textContent = aulaEmSelecao.horario;
-          document.getElementById("sucesso-aula-instrutor").textContent = aulaEmSelecao.instrutor;
-
-          const modalSucesso = document.getElementById("modal-sucesso-agendamento");
-          modalSucesso.classList.remove("hidden");
-          setTimeout(() => {
-            modalSucesso.classList.remove("opacity-0");
-            modalSucesso.querySelector("div").classList.remove("scale-95");
-          }, 10);
-
-          document.getElementById("btn-sucesso-whats").onclick = () => {
-            const whatsAppNumber = dadosUsuario.instrutorDetalhes && dadosUsuario.instrutorDetalhes.telefone 
-              ? dadosUsuario.instrutorDetalhes.telefone.replace(/\D/g, "")
-              : "";
-            
-            const txtMsgWhats = encodeURIComponent(`Olá ${aulaEmSelecao.instrutor}! Acabei de agendar a aula de "${aulaEmSelecao.titulo}" (${selectModelo}) para o dia ${aulaEmSelecao.data} às ${aulaEmSelecao.horario} pelo Portal PREVIA.`);
-            
-            if (whatsAppNumber) {
-              window.open(`https://wa.me/55${whatsAppNumber}?text=${txtMsgWhats}`, '_blank');
-            } else {
-              window.open(`https://wa.me/?text=${txtMsgWhats}`, '_blank');
-            }
-            fecharModalSucesso();
-            alternarAba("historico");
-          };
-
-          document.getElementById("btn-sucesso-fechar").onclick = () => {
-            fecharModalSucesso();
-            alternarAba("historico");
-          };
-
+        if (resJSON.success) {
+          mostrarNotificacao(`Excelente! Aula agendada com sucesso.`, "sucesso");
+          abrirModalSucessoAgendamento(tituloAula, dataStr, horaStr, fimStr, localStr, instrutorStr, resJSON.telefoneInstrutor);
         } else {
-          mostrarNotificacao(json.message || "Erro ao efetuar reserva.", "erro");
+          mostrarNotificacao(resJSON.message || "Erro ao efetuar agendamento.", "erro");
         }
       } catch (err) {
-        console.error("Erro ao agendar:", err);
-        mostrarNotificacao("Falha de conexão ao agendar aula.", "erro");
+        console.error("Falha ao salvar agendamento:", err);
+        mostrarNotificacao("Erro de comunicação ao salvar agendamento.", "erro");
       }
     }
 
-    function fecharModalSucesso() {
-      const modalSucesso = document.getElementById("modal-sucesso-agendamento");
-      modalSucesso.classList.add("opacity-0");
-      modalSucesso.querySelector("div").classList.add("scale-95");
-      setTimeout(() => modalSucesso.classList.add("hidden"), 200);
+    function abrirModalSucessoAgendamento(titulo, data, inicio, fim, local, instrutor, telefoneInstrutor) {
+      const modal = document.getElementById("modal-sucesso-agendamento");
+      
+      document.getElementById("sucesso-aula-titulo").textContent = titulo;
+      document.getElementById("sucesso-aula-data").textContent = data;
+      document.getElementById("sucesso-aula-hora").textContent = `${inicio} às ${fim}`;
+      document.getElementById("sucesso-aula-instrutor").textContent = `Prof. ${instrutor}`;
+
+      const textWhats = `Olá! Seguem os detalhes do meu novo agendamento na Previa Treinamentos:\n\n` +
+        `🚗 Aula: *${titulo}*\n` +
+        `📆 Data: *${data}*\n` +
+        `⏰ Horário: *${inicio} às ${fim}*\n` +
+        `📍 Local: *${local || "Não especificado"}*\n` +
+        `👨‍🏫 Instrutor: *Prof. ${instrutor}*`;
+
+      let numeroLimpo = telefoneInstrutor ? String(telefoneInstrutor).replace(/\D/g, "") : "";
+      if (numeroLimpo.length === 11 || numeroLimpo.length === 10) {
+        numeroLimpo = "55" + numeroLimpo;
+      }
+
+      const linkWhats = `https://api.whatsapp.com/send?phone=${numeroLimpo}&text=${encodeURIComponent(textWhats)}`;
+
+      const btnWhats = document.getElementById("btn-sucesso-whats");
+      const btnFechar = document.getElementById("btn-sucesso-fechar");
+
+      btnWhats.onclick = () => {
+        window.open(linkWhats, "_blank");
+        fecharModalSucesso();
+      };
+
+      btnFechar.onclick = () => {
+        fecharModalSucesso();
+      };
+
+      modal.classList.remove("hidden");
+      setTimeout(() => {
+        modal.classList.remove("opacity-0");
+        modal.querySelector("div").classList.remove("scale-95");
+      }, 10);
+
+      function fecharModalSucesso() {
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          alternarAba("historico");
+        }, 200);
+      }
     }
 
     async function carregarHistoricoDeAulas() {
       const loader = document.getElementById("loader-historico");
       const vazio = document.getElementById("vazio-historico");
-      const cardTabela = document.getElementById("card-tabela-historico");
-      const linhasTabela = document.getElementById("tabela-linhas-historico");
-      const layoutCards = document.getElementById("layout-cards-historico");
+      const tabela = document.getElementById("card-tabela-historico");
+      const listagemCards = document.getElementById("layout-cards-historico");
+      const tbody = document.getElementById("tabela-linhas-historico");
 
       loader.classList.remove("hidden");
       vazio.classList.add("hidden");
-      cardTabela.classList.add("hidden");
-      layoutCards.classList.add("hidden");
-      linhasTabela.innerHTML = "";
-      layoutCards.innerHTML = "";
+      tabela.classList.add("hidden");
+      listagemCards.classList.add("hidden");
+      
+      tbody.innerHTML = "";
+      listagemCards.innerHTML = "";
 
       try {
-        const urlHistorico = `${SCRIPT_URL_PLANILHA}?action=buscarHistoricoAluno&cpf=${dadosUsuario.cpf}`;
-        const res = await fetch(urlHistorico);
-        const aulas = await res.json();
+        const urlListarHist = `${SCRIPT_URL_PLANILHA}?action=buscarHistorico&cpf=${dadosUsuario.cpf}`;
+        const res = await fetch(urlListarHist);
+        const dados = await res.json();
 
-        loader.classList.add("hidden");
+        if (dados && dados.length > 0) {
+          loader.classList.add("hidden");
+          tabela.classList.remove("hidden");
+          listagemCards.classList.remove("hidden");
 
-        if (aulas && aulas.length > 0) {
-          cardTabela.classList.remove("hidden");
-          layoutCards.classList.remove("hidden");
-
-          let concluidasCount = 0;
+          let totalAulas = dados.length;
+          let concluidas = 0;
           let somaNotas = 0;
-          let qtdComNota = 0;
+          let notasContador = 0;
 
-          document.getElementById("total-aulas-num").textContent = aulas.length;
+          dados.forEach(item => {
+            const dataFormatada = formatarData(item.data);
+            const notaNum = parseFloat(item.nota);
+            let statusBadge = "";
 
-          aulas.forEach(aula => {
-            if (aula.status === "Concluída" || aula.status === "Avaliada") concluidasCount++;
-            if (aula.nota && !isNaN(parseFloat(aula.nota))) {
-              somaNotas += parseFloat(aula.nota);
-              qtdComNota++;
+            const isConcluida = item.nota && item.nota !== "Pendente" && !isNaN(notaNum);
+
+            if (isConcluida) {
+              concluidas++;
+              somaNotas += notaNum;
+              notesContador = notasContador + 1;
+              statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-100">Concluída</span>`;
+            } else {
+              statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-100">Agendada</span>`;
             }
 
-            let badgeStatusHtml = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-700 border border-amber-200">Agendada</span>`;
-            if (aula.status === "Concluída" || aula.status === "Avaliada") {
-              badgeStatusHtml = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">Concluída (Nota: ${aula.nota || '--'})</span>`;
-            }
+            let notaDisplay = isConcluida ? `${notaNum.toFixed(1)} / 10.0` : "Pendente";
 
-            let btnVerFicha = "";
-            if (aula.status === "Concluída" || aula.status === "Avaliada") {
-              btnVerFicha = `
-                <button onclick="visualizarAvaliacaoDetalhada('${aula.id}')" class="px-3 py-1.5 bg-teal-50 hover:bg-teal-100 text-[#0d6c60] border border-teal-200 rounded-xl font-bold text-xs transition flex items-center gap-1">
-                  <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Ver Ficha
+            const hoje = new Date();
+            hoje.setHours(0,0,0,0);
+            
+            const dataAulaObj = new Date(item.data + "T00:00:00");
+            const diffTempo = dataAulaObj - hoje;
+            const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24));
+            
+            let acaoHTML = "";
+
+            if (!isConcluida) {
+              if (diffDias >= 3) {
+                acaoHTML = `
+                  <button onclick="confirmarCancelamento('${item.id}', '${item.titulo}', '${dataFormatada}')" 
+                    class="px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 text-xs font-bold rounded-lg border border-rose-100 transition flex items-center gap-1">
+                    <i data-lucide="calendar-x" class="w-3.5 h-3.5"></i> Cancelar
+                  </button>
+                `;
+              } else {
+                acaoHTML = `
+                  <span class="text-[10px] font-bold text-slate-400 block mb-1 italic max-w-[120px]" title="Só é permitido cancelar com 3 dias de antecedência">
+                    Prazo bloqueado (< 3 dias)
+                  </span>
+                `;
+              }
+            } else {
+              acaoHTML = `
+                <button onclick="obterEDetalharAvaliacao('${item.id}', '${item.titulo}', '${dataFormatada}', '${item.nota}', '${item.obs}', '${encodeURIComponent(item.detalhes)}')"
+                  class="px-3 py-1 bg-teal-50 text-teal-700 hover:bg-teal-100 text-xs font-bold rounded-lg border border-teal-100 transition flex items-center gap-1">
+                  <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> Ver Ficha
                 </button>
               `;
-            } else {
-              btnVerFicha = `<span class="text-[11px] text-slate-400 italic">Aguardando aula</span>`;
             }
 
-            // Tabela Desktop
-            const tr = document.createElement("tr");
-            tr.className = "hover:bg-slate-50 transition";
-            tr.innerHTML = `
-              <td class="p-4 font-bold text-slate-900">${aula.titulo}</td>
-              <td class="p-4">${aula.data} às ${aula.horario}</td>
-              <td class="p-4">${aula.instrutor} (${aula.local})</td>
-              <td class="p-4">${badgeStatusHtml}</td>
-              <td class="p-4">${btnVerFicha}</td>
-            `;
-            linhasTabela.appendChild(tr);
+            let numeroWhats = item.telefoneInstrutor ? String(item.telefoneInstrutor).replace(/\D/g, "") : "";
+            if (numeroWhats.length === 11 || numeroWhats.length === 10) {
+              numeroWhats = "55" + numeroWhats;
+            }
 
-            // Cards Mobile
-            const mobCard = document.createElement("div");
-            mobCard.className = "bg-white p-4 rounded-2xl border border-slate-100 space-y-2 shadow-sm";
-            mobCard.innerHTML = `
-              <div class="flex justify-between items-start">
-                <h4 class="font-bold text-slate-900 text-sm">${aula.titulo}</h4>
-                ${badgeStatusHtml}
-              </div>
-              <p class="text-xs text-slate-500">📆 ${aula.data} às ${aula.horario}</p>
-              <p class="text-xs text-slate-500">👨‍🏫 ${aula.instrutor}</p>
-              <div class="pt-2 border-t border-slate-100 flex justify-end">
-                ${btnVerFicha}
+            const textoWhats = `Olá! Seguem os detalhes do meu agendamento na Previa Treinamentos:\n\n` +
+              `🚗 Aula: *${item.titulo}*\n` +
+              `📆 Data: *${dataFormatada}*\n` +
+              `⏰ Horário: *${item.inicio} às ${item.fim}*\n` +
+              `📍 Local: *${item.local || "Não especificado"}*\n` +
+              `👨‍🏫 Instrutor: *Prof. ${item.instrutor}*`;
+            
+            const linkWhats = `https://api.whatsapp.com/send?phone=${numeroWhats}&text=${encodeURIComponent(textoWhats)}`;
+
+            const tr = document.createElement("tr");
+            tr.className = "hover:bg-slate-50/50 transition";
+            tr.innerHTML = `
+              <td class="p-4">
+                <div class="font-bold text-slate-900 text-sm">${item.titulo}</div>
+              </td>
+              <td class="p-4">
+                <div class="font-semibold text-slate-800">${dataFormatada}</div>
+                <div class="text-xs text-slate-400 font-semibold">${item.inicio} às ${item.fim}</div>
+              </td>
+              <td class="p-4">
+                <div class="font-bold text-[#0d6c60] text-xs">Prof. ${item.instrutor}</div>
+                <div class="text-xs text-slate-400 mt-0.5">${item.local || 'Não especificado'}</div>
+                <div class="text-[10px] text-slate-500 font-semibold mt-0.5">🚗 Veículo: ${item.veiculo || 'Não informado'}</div>
+              </td>
+              <td class="p-4 space-y-1">
+                <div>${statusBadge}</div>
+                <div class="text-xs font-bold text-slate-600">Nota: ${notaDisplay}</div>
+              </td>
+              <td class="p-4">
+                <div class="flex items-center gap-2">
+                  ${acaoHTML}
+                  <a href="${linkWhats}" target="_blank" class="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition border border-emerald-100" title="Compartilhar com Instrutor pelo WhatsApp">
+                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                  </a>
+                </div>
+              </td>
+            `;
+            tbody.appendChild(tr);
+
+            const cardMobile = `
+              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                  ${statusBadge}
+                  <span class="text-xs font-extrabold text-slate-700">Nota: ${notaDisplay}</span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">${item.titulo}</h4>
+                  <p class="text-xs text-slate-400 mt-1">${dataFormatada} • ${item.inicio} às ${item.fim}</p>
+                </div>
+                <div class="pt-2 border-t border-slate-100 flex flex-col gap-1 text-xs text-slate-500">
+                  <div class="flex justify-between">
+                    <span>Local: <strong>${item.local || 'Sede'}</strong></span>
+                    <span class="text-[#0d6c60] font-bold">Prof. ${item.instrutor}</span>
+                  </div>
+                  <div class="text-slate-500 font-semibold text-[11px] bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                    🚗 Veículo: ${item.veiculo || 'Não informado'}
+                  </div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Feedback Geral:</span>
+                  <p class="text-xs italic text-slate-600">"${item.obs || 'Nenhuma observação lançada.'}"</p>
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-2">
+                  ${acaoHTML}
+                  <a href="${linkWhats}" target="_blank" class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition border border-emerald-100 text-xs font-bold flex items-center gap-1">
+                    <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Compartilhar
+                  </a>
+                </div>
               </div>
             `;
-            layoutCards.appendChild(mobCard);
+            listagemCards.innerHTML += cardMobile;
           });
 
-          document.getElementById("total-aulas-concluidas").textContent = concluidasCount;
-          document.getElementById("media-notas").textContent = qtdComNota > 0 ? (somaNotas / qtdComNota).toFixed(1) : "--";
+          document.getElementById("total-aulas-num").textContent = totalAulas;
+          document.getElementById("total-aulas-concluidas").textContent = concluidas;
+          
+          const mediaFinal = notasContador > 0 ? (somaNotas / notasContador).toFixed(1) : "N/A";
+          document.getElementById("media-notas").textContent = mediaFinal;
 
           lucide.createIcons();
         } else {
+          loader.classList.add("hidden");
           vazio.classList.remove("hidden");
           document.getElementById("total-aulas-num").textContent = "0";
           document.getElementById("total-aulas-concluidas").textContent = "0";
-          document.getElementById("media-notas").textContent = "--";
+          document.getElementById("media-notas").textContent = "N/A";
         }
       } catch (err) {
-        console.error("Erro ao carregar histórico:", err);
+        console.error("Falha ao listar histórico:", err);
         loader.classList.add("hidden");
-        mostrarNotificacao("Erro ao carregar histórico de aulas.", "erro");
+        vazio.classList.remove("hidden");
       }
     }
 
-    async function visualizarAvaliacaoDetalhada(aulaId) {
-      mostrarNotificacao("Buscando ficha técnica de avaliação...", "info");
+    function confirmarCancelamento(aulaId, tituloAula, dataStr) {
+      pedirConfirmacao(
+        "Confirmar Cancelamento",
+        `Você realmente deseja cancelar a aula "${tituloAula}" no dia ${dataStr}? O horário será reaberto imediatamente para agendamento.`,
+        () => processarCancelamentoNaPlanilha(aulaId, tituloAula)
+      );
+    }
+
+    async function processarCancelamentoNaPlanilha(aulaId, tituloAula) {
+      mostrarNotificacao("Efetuando o cancelamento da aula...", "info");
 
       try {
-        const urlFicha = `${SCRIPT_URL_PLANILHA}?action=buscarAvaliacaoDetalhada&aulaId=${aulaId}`;
-        const res = await fetch(urlFicha);
-        const json = await res.json();
+        const urlCancelamento = `${SCRIPT_URL_PLANILHA}?action=cancelar&cpf=${dadosUsuario.cpf}&aulaId=${aulaId}`;
+        const resposta = await fetch(urlCancelamento);
+        const resJSON = await resposta.json();
 
-        if (json.success) {
-          const dados = json.avaliacao;
-          document.getElementById("detalhes-aluno-sub").textContent = `Modelo: ${dados.modeloAula || 'Padrão'}`;
-          document.getElementById("detalhes-nota-geral").textContent = dados.notaFinal || '--';
-          document.getElementById("detalhes-feedback-texto").textContent = dados.feedbackGeral || 'Nenhum parecer técnico registrado.';
-
-          const tabelaPedagogica = document.getElementById("linhas-avaliacao-tabela");
-          tabelaPedagogica.innerHTML = "";
-
-          if (dados.itensPedagogicos && dados.itensPedagogicos.length > 0) {
-            dados.itensPedagogicos.forEach(item => {
-              const tr = document.createElement("tr");
-              tr.innerHTML = `
-                <td class="p-2 border-r border-slate-200 font-bold text-slate-700">${item.categoria || 'Geral'}</td>
-                <td class="p-2 border-r border-slate-200 text-slate-800">${item.item}</td>
-                <td class="p-2 border-r border-slate-200 text-center">${item.nota === 1 ? '❌' : ''}</td>
-                <td class="p-2 border-r border-slate-200 text-center">${item.nota === 2 ? '⚠️' : ''}</td>
-                <td class="p-2 border-r border-slate-200 text-center">${item.nota === 3 ? '👍' : ''}</td>
-                <td class="p-2 text-center">${item.nota === 4 ? '⭐' : ''}</td>
-              `;
-              tabelaPedagogica.appendChild(tr);
-            });
-          }
-
-          const tabelaComp = document.getElementById("linhas-comportamental-tabela");
-          tabelaComp.innerHTML = "";
-
-          if (dados.itensComportamentais && dados.itensComportamentais.length > 0) {
-            dados.itensComportamentais.forEach(item => {
-              const tr = document.createElement("tr");
-              tr.innerHTML = `
-                <td class="p-2 border-r border-slate-200 text-slate-800">${item.item}</td>
-                <td class="p-2 border-r border-slate-200 text-center">${item.resposta === 'Sim' ? '✅' : ''}</td>
-                <td class="p-2 text-center">${item.resposta === 'Não' ? '❌' : ''}</td>
-              `;
-              tabelaComp.appendChild(tr);
-            });
-          }
-
-          const modal = document.getElementById("modal-avaliacao-detalhada");
-          modal.classList.remove("hidden");
-          setTimeout(() => {
-            modal.classList.remove("opacity-0");
-            modal.querySelector("div").classList.remove("scale-95");
-          }, 10);
-
+        if (resJSON.success) {
+          mostrarNotificacao(`Aula "${tituloAula}" cancelada com sucesso!`, "sucesso");
+          carregarHistoricoDeAulas();
         } else {
-          mostrarNotificacao(json.message || "Ficha técnica não encontrada.", "erro");
+          mostrarNotificacao(resJSON.message || "Erro ao efetuar cancelamento.", "erro");
         }
       } catch (err) {
-        console.error("Erro ao abrir ficha:", err);
-        mostrarNotificacao("Não foi possível carregar a avaliação detalhada.", "erro");
+        console.error("Falha ao cancelar aula:", err);
+        mostrarNotificacao("Erro de comunicação ao cancelar aula.", "erro");
+      }
+    }
+
+    async function obterEDetalharAvaliacao(aulaId, titulo, data, nota, obs, detalhesEscapados) {
+      mostrarNotificacao("Carregando ficha de avaliação...", "info");
+      
+      const modal = document.getElementById("modal-avaliacao-detalhada");
+      document.getElementById("detalhes-aluno-sub").textContent = `Aula: ${titulo} • Data: ${data}`;
+      document.getElementById("detalhes-nota-geral").textContent = `${parseFloat(nota).toFixed(1)} / 10.0`;
+      document.getElementById("detalhes-feedback-texto").textContent = obs || "Nenhum feedback registrado.";
+
+      const tbodyPedagogico = document.getElementById("linhas-avaliacao-tabela");
+      const tbodyComportamental = document.getElementById("linhas-comportamental-tabela");
+      
+      tbodyPedagogico.innerHTML = `<tr><td colspan="6" class="p-4 text-center">Buscando critérios do servidor...</td></tr>`;
+      tbodyComportamental.innerHTML = "";
+
+      let detalhesObj = {};
+      try {
+        detalhesObj = JSON.parse(decodeURIComponent(detalhesEscapados));
+      } catch (err) {
+        console.warn("Nenhum detalhe de avaliação anterior cadastrado.");
+      }
+
+      try {
+        const response = await fetch(`${SCRIPT_URL_PLANILHA}?action=buscarQuestoesDeAula&titulo=${encodeURIComponent(titulo)}`);
+        const criterios = await response.json();
+
+        tbodyPedagogico.innerHTML = "";
+
+        criterios.forEach((itemObj) => {
+          const item = itemObj.descricao;
+          const letter = itemObj.colLetter;
+          const categoria = obterCategoriaDoItem(item);
+          const valorSelecionado = detalhesObj[`pedagogico_${letter}`] || "";
+          const tr = document.createElement("tr");
+
+          if (letter === 'W') {
+            tr.className = "bg-yellow-100 font-bold border-b";
+          }
+
+          tr.innerHTML = `
+            <td class="p-2 border-r border-slate-200">${categoria}</td>
+            <td class="p-2 border-r border-slate-200">${item}</td>
+            <td class="p-2 border-r border-slate-200 text-center text-sm">${valorSelecionado === "insuficiente" ? "❌" : ""}</td>
+            <td class="p-2 border-r border-slate-200 text-center text-sm">${valorSelecionado === "regular" ? "⚠️" : ""}</td>
+            <td class="p-2 border-r border-slate-200 text-center text-sm">${valorSelecionado === "bom" ? "✔️" : ""}</td>
+            <td class="p-2 text-center text-sm">${valorSelecionado === "muitobom" ? "⭐" : ""}</td>
+          `;
+          tbodyPedagogico.appendChild(tr);
+        });
+
+        ITENS_COMPORTAMENTAIS.forEach((item, idx) => {
+          const valorSelecionado = detalhesObj[`comportamental_${idx}`] || "";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="p-2 border-r border-slate-200">${item}</td>
+            <td class="p-2 border-r border-slate-200 text-center text-sm">${valorSelecionado === "sim" ? "✔️" : ""}</td>
+            <td class="p-2 text-center text-sm">${valorSelecionado === "nao" ? "❌" : ""}</td>
+          `;
+          tbodyComportamental.appendChild(tr);
+        });
+
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+          modal.classList.remove("opacity-0");
+          modal.querySelector("div").classList.remove("scale-95");
+        }, 10);
+
+      } catch (err) {
+        console.error("Erro ao carregar avaliação detalhada:", err);
+        mostrarNotificacao("Houve uma falha ao renderizar a avaliação técnica.", "erro");
       }
     }
 
@@ -2017,112 +2328,147 @@
     async function carregarAgendaInstrutor() {
       const loader = document.getElementById("loader-instrutor");
       const vazio = document.getElementById("vazio-instrutor");
-      const cardTabela = document.getElementById("card-tabela-instrutor");
-      const linhasTabela = document.getElementById("tabela-linhas-instrutor");
+      const tabela = document.getElementById("card-tabela-instrutor");
+      const tbody = document.getElementById("tabela-linhas-instrutor");
 
       loader.classList.remove("hidden");
       vazio.classList.add("hidden");
-      cardTabela.classList.add("hidden");
-      linhasTabela.innerHTML = "";
+      tabela.classList.add("hidden");
+      tbody.innerHTML = "";
 
       try {
-        const urlAgenda = `${SCRIPT_URL_PLANILHA}?action=buscarAgendaInstrutor&instrutorCpf=${dadosUsuario.cpf}`;
+        const urlAgenda = `${SCRIPT_URL_PLANILHA}?action=buscarAgendaInstrutor&instrutor=${encodeURIComponent(dadosUsuario.nome)}`;
         const res = await fetch(urlAgenda);
         const aulas = await res.json();
 
-        loader.classList.add("hidden");
-
         if (aulas && aulas.length > 0) {
-          cardTabela.classList.remove("hidden");
+          loader.classList.add("hidden");
+          tabela.classList.remove("hidden");
 
           aulas.forEach(aula => {
-            let badgeStatusHtml = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-700 border border-amber-200">Agendada</span>`;
-            if (aula.status === "Concluída" || aula.status === "Avaliada") {
-              badgeStatusHtml = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">Avaliada (Nota: ${aula.nota || '--'})</span>`;
-            }
+            const dataFormatada = formatarData(aula.data);
+            const isConcluida = aula.nota && aula.nota !== "Pendente";
+            
+            let statusBadge = "";
+            let acaoBotao = "";
 
-            let btnAcao = "";
-            if (aula.status === "Concluída" || aula.status === "Avaliada") {
-              btnAcao = `<span class="text-[11px] text-slate-400 font-bold italic">Ficha Preenchida ✅</span>`;
+            if (isConcluida) {
+              statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-100">Concluída (${parseFloat(aula.nota).toFixed(1)})</span>`;
+              acaoBotao = `
+                <button onclick="obterEDetalharAvaliacao('${aula.id}', '${aula.titulo}', '${dataFormatada}', '${aula.nota}', '${aula.obs}', '${encodeURIComponent(aula.detalhes)}')"
+                  class="px-3 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 text-xs font-bold rounded-xl border border-teal-100 transition flex items-center gap-1">
+                  <i data-lucide="eye" class="w-3.5 h-3.5"></i> Ver Avaliação
+                </button>
+              `;
             } else {
-              btnAcao = `
-                <button onclick="abrirFormularioAvaliacao('${aula.id}', '${aula.alunoNome}', '${aula.modeloAula || 'Aula Prática Padrão'}', '${aula.titulo}')"
-                  class="px-3 py-1.5 bg-[#f26522] hover:bg-[#d94f10] text-white rounded-xl font-bold text-xs transition shadow-sm flex items-center gap-1">
-                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Avaliar Aluno
+              statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-100">Agendada</span>`;
+              acaoBotao = `
+                <button onclick="abrirModalPreencherAvaliacao('${aula.id}', '${aula.alunoNome}', '${aula.titulo}')"
+                  class="px-4 py-2 text-xs font-bold bg-[#f26522] hover:bg-[#d94f10] text-white rounded-xl shadow-lg shadow-orange-100 transition flex items-center gap-1.5">
+                  <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i> Iniciar Avaliação
                 </button>
               `;
             }
 
             const tr = document.createElement("tr");
-            tr.className = "hover:bg-slate-50 transition";
+            tr.className = "hover:bg-slate-50/50 transition";
             tr.innerHTML = `
-              <td class="p-4 font-bold text-slate-900">${aula.alunoNome} <br><span class="text-[10px] text-slate-400 font-normal">CPF: ${aula.alunoCpf}</span></td>
-              <td class="p-4">${aula.titulo} <br><span class="text-[10px] text-[#0d6c60] font-bold">${aula.modeloAula || 'Padrão'}</span></td>
-              <td class="p-4">${aula.data} às ${aula.horario}</td>
-              <td class="p-4">${badgeStatusHtml}</td>
-              <td class="p-4">${btnAcao}</td>
+              <td class="p-4">
+                <div class="font-bold text-slate-900 text-sm">${aula.alunoNome}</div>
+                <div class="text-xs text-slate-400 font-semibold mt-0.5">Contato: ${aula.telefone}</div>
+              </td>
+              <td class="p-4">
+                <div class="font-semibold text-slate-800 text-sm">${aula.titulo}</div>
+                <div class="text-xs text-slate-400 font-medium">📍 ${aula.local || "Não informado"}</div>
+              </td>
+              <td class="p-4">
+                <div class="font-semibold text-slate-800">${dataFormatada}</div>
+                <div class="text-xs text-slate-400 font-semibold">${aula.inicio} às ${aula.fim}</div>
+              </td>
+              <td class="p-4">
+                ${statusBadge}
+              </td>
+              <td class="p-4">
+                ${acaoBotao}
+              </td>
             `;
-            linhasTabela.appendChild(tr);
+            tbody.appendChild(tr);
           });
-
           lucide.createIcons();
         } else {
+          loader.classList.add("hidden");
           vazio.classList.remove("hidden");
         }
       } catch (err) {
-        console.error("Erro ao carregar agenda do instrutor:", err);
+        console.error("Erro ao buscar agenda do instrutor:", err);
         loader.classList.add("hidden");
-        mostrarNotificacao("Erro ao carregar sua agenda.", "erro");
+        vazio.classList.remove("hidden");
       }
     }
 
-    async function abrirFormularioAvaliacao(aulaId, alunoNome, modeloAula, tituloAula) {
+    async function abrirModalPreencherAvaliacao(aulaId, alunoNome, tituloAula) {
+      mostrarNotificacao("Buscando critérios avaliativos...", "info");
+
       document.getElementById("preencher-aula-id").value = aulaId;
       document.getElementById("preencher-aula-titulo").value = tituloAula;
-      document.getElementById("preencher-aluno-sub").textContent = `Aluno: ${alunoNome} | Modelo: ${modeloAula}`;
+      document.getElementById("preencher-aluno-sub").textContent = `Aluno: ${alunoNome} | Modelo: ${tituloAula}`;
+      document.getElementById("campo-nota-final-preview").textContent = "--";
+      document.getElementById("campo-feedback-final").value = "";
 
-      mostrarNotificacao("Carregando grade pedagógica do modelo de aula...", "info");
+      const pedagogicoCorpo = document.getElementById("preencher-pedagogico-corpo");
+      const comportamentalCorpo = document.getElementById("preencher-comportamental-corpo");
+
+      pedagogicoCorpo.innerHTML = `<tr><td colspan="6" class="p-4 text-center">Buscando critérios do servidor...</td></tr>`;
+      comportamentalCorpo.innerHTML = "";
 
       try {
-        const res = await fetch(`${SCRIPT_URL_PLANILHA}?action=buscarItensModelo&modelo=${encodeURIComponent(modeloAula)}`);
-        const itensPedagogicos = await res.json();
+        const response = await fetch(`${SCRIPT_URL_PLANILHA}?action=buscarQuestoesDeAula&titulo=${encodeURIComponent(tituloAula)}`);
+        const criterios = await response.json();
 
-        const corpoPedag = document.getElementById("preencher-pedagogico-corpo");
-        corpoPedag.innerHTML = "";
+        pedagogicoCorpo.innerHTML = "";
 
-        if (itensPedagogicos && itensPedagogicos.length > 0) {
-          itensPedagogicos.forEach((item, idx) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td class="p-2 border-r border-slate-200 font-bold text-slate-700">${item.categoria || 'Geral'}</td>
-              <td class="p-2 border-r border-slate-200 text-slate-800">${item.nome}</td>
-              <td class="p-2 border-r border-slate-200 text-center"><input type="radio" name="pedag_${idx}" value="1" required onchange="calcularMediaNotaPreview()"></td>
-              <td class="p-2 border-r border-slate-200 text-center"><input type="radio" name="pedag_${idx}" value="2" onchange="calcularMediaNotaPreview()"></td>
-              <td class="p-2 border-r border-slate-200 text-center"><input type="radio" name="pedag_${idx}" value="3" onchange="calcularMediaNotaPreview()"></td>
-              <td class="p-2 text-center"><input type="radio" name="pedag_${idx}" value="4" onchange="calcularMediaNotaPreview()"></td>
-            `;
-            tr.dataset.itemNome = item.nome;
-            tr.dataset.categoria = item.categoria || 'Geral';
-            corpoPedag.appendChild(tr);
-          });
-        }
-
-        const corpoComp = document.getElementById("preencher-comportamental-corpo");
-        corpoComp.innerHTML = "";
-
-        ITENS_COMPORTAMENTAIS.forEach((compItem, idx) => {
+        criterios.forEach((itemObj) => {
+          const item = itemObj.descricao;
+          const letter = itemObj.colLetter;
+          const categoria = obterCategoriaDoItem(item);
           const tr = document.createElement("tr");
+
+          if (letter === 'W') {
+            tr.className = "bg-yellow-100 font-bold border-b";
+          }
+          
           tr.innerHTML = `
-            <td class="p-2 border-r border-slate-200 text-slate-800">${compItem}</td>
-            <td class="p-2 border-r border-slate-200 text-center"><input type="radio" name="comp_${idx}" value="Sim" required></td>
-            <td class="p-2 text-center"><input type="radio" name="comp_${idx}" value="Não"></td>
+            <td class="p-2 border-r border-slate-200">${categoria}</td>
+            <td class="p-2 border-r border-slate-200">${item}</td>
+            <td class="p-2 border-r border-slate-200 text-center">
+              <input type="radio" name="pedagogico_${letter}" value="insuficiente" required onclick="calcularNotaMediaDinamica()" class="w-4 h-4 text-[#0d6c60] focus:ring-[#0d6c60]">
+            </td>
+            <td class="p-2 border-r border-slate-200 text-center">
+              <input type="radio" name="pedagogico_${letter}" value="regular" required onclick="calcularNotaMediaDinamica()" class="w-4 h-4 text-[#0d6c60] focus:ring-[#0d6c60]">
+            </td>
+            <td class="p-2 border-r border-slate-200 text-center">
+              <input type="radio" name="pedagogico_${letter}" value="bom" required onclick="calcularNotaMediaDinamica()" class="w-4 h-4 text-[#0d6c60] focus:ring-[#0d6c60]">
+            </td>
+            <td class="p-2 text-center">
+              <input type="radio" name="pedagogico_${letter}" value="muitobom" required onclick="calcularNotaMediaDinamica()" class="w-4 h-4 text-[#0d6c60] focus:ring-[#0d6c60]">
+            </td>
           `;
-          tr.dataset.compNome = compItem;
-          corpoComp.appendChild(tr);
+          pedagogicoCorpo.appendChild(tr);
         });
 
-        document.getElementById("campo-nota-final-preview").textContent = "--";
-        document.getElementById("campo-feedback-final").value = "";
+        ITENS_COMPORTAMENTAIS.forEach((item, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="p-2 border-r border-slate-200">${item}</td>
+            <td class="p-2 border-r border-slate-200 text-center">
+              <input type="radio" name="comportamental_${idx}" value="sim" required class="w-4 h-4 text-[#0d6c60] focus:ring-[#0d6c60]">
+            </td>
+            <td class="p-2 text-center">
+              <input type="radio" name="comportamental_${idx}" value="nao" required class="w-4 h-4 text-[#0d6c60] focus:ring-[#0d6c60]">
+            </td>
+          `;
+          comportamentalCorpo.appendChild(tr);
+        });
 
         const modal = document.getElementById("modal-preencher-avaliacao");
         modal.classList.remove("hidden");
@@ -2132,8 +2478,28 @@
         }, 10);
 
       } catch (err) {
-        console.error("Erro ao carregar formulario:", err);
-        mostrarNotificacao("Erro ao carregar itens de avaliação.", "erro");
+        console.error("Erro ao montar formulário dinâmico:", err);
+        mostrarNotificacao("Erro ao carregar critérios.", "erro");
+      }
+    }
+
+    function calcularNotaMediaDinamica() {
+      let soma = 0;
+      let preenchidos = 0;
+      const checkedRadios = document.querySelectorAll(`input[name^="pedagogico_"]:checked`);
+
+      checkedRadios.forEach(selecionado => {
+        preenchidos++;
+        const val = selecionado.value;
+        if (val === "muitobom") soma += 10;
+        else if (val === "bom") soma += 8;
+        else if (val === "regular") soma += 5;
+        else if (val === "insuficiente") soma += 2;
+      });
+
+      if (preenchidos > 0) {
+        const media = (soma / preenchidos).toFixed(1);
+        document.getElementById("campo-nota-final-preview").textContent = `${media} / 10.0`;
       }
     }
 
@@ -2144,113 +2510,138 @@
       setTimeout(() => modal.classList.add("hidden"), 200);
     }
 
-    function calcularMediaNotaPreview() {
-      const linhas = document.querySelectorAll("#preencher-pedagogico-corpo tr");
-      let soma = 0;
-      let selecionados = 0;
-
-      linhas.forEach((tr, idx) => {
-        const checked = tr.querySelector(`input[name="pedag_${idx}"]:checked`);
-        if (checked) {
-          soma += parseInt(checked.value, 10);
-          selecionados++;
-        }
-      });
-
-      if (selecionados > 0) {
-        const media = (soma / selecionados).toFixed(1);
-        document.getElementById("campo-nota-final-preview").textContent = `${media} / 4.0`;
-      } else {
-        document.getElementById("campo-nota-final-preview").textContent = "--";
-      }
-    }
-
     async function enviarAvaliacaoPratica(event) {
       event.preventDefault();
 
       const aulaId = document.getElementById("preencher-aula-id").value;
       const feedback = document.getElementById("campo-feedback-final").value;
-      const btnSalvar = document.getElementById("btn-salvar-form-avaliacao");
+      const botao = document.getElementById("btn-salvar-form-avaliacao");
 
-      const linhasPedag = document.querySelectorAll("#preencher-pedagogico-corpo tr");
-      const itensPedagogicos = [];
+      const detalhesObj = {};
       let somaNotas = 0;
+      let contadorNotas = 0;
 
-      linhasPedag.forEach((tr, idx) => {
-        const checked = tr.querySelector(`input[name="pedag_${idx}"]:checked`);
-        if (checked) {
-          const val = parseInt(checked.value, 10);
-          somaNotas += val;
-          itensPedagogicos.push({
-            categoria: tr.dataset.categoria,
-            item: tr.dataset.itemNome,
-            nota: val
-          });
-        }
+      const radioCheckedList = document.querySelectorAll(`input[name^="pedagogico_"]:checked`);
+      
+      radioCheckedList.forEach(radio => {
+        const letter = radio.name.replace("pedagogico_", "");
+        detalhesObj[`pedagogico_${letter}`] = radio.value;
+        
+        const val = radio.value;
+        if (val === "muitobom") somaNotas += 10.0;
+        else if (val === "bom") somaNotas += 8.0;
+        else if (val === "regular") somaNotas += 5.0;
+        else if (val === "insuficiente") somaNotas += 2.0;
+
+        contadorNotas++;
       });
 
-      const notaFinalCalculada = linhasPedag.length > 0 ? (somaNotas / linhasPedag.length).toFixed(1) : "0.0";
+      const notaCalculada = contadorNotas > 0 ? (somaNotas / contadorNotas).toFixed(1) : "10.0";
 
-      const linhasComp = document.querySelectorAll("#preencher-comportamental-corpo tr");
-      const itensComportamentais = [];
-
-      linhasComp.forEach((tr, idx) => {
-        const checked = tr.querySelector(`input[name="comp_${idx}"]:checked`);
-        if (checked) {
-          itensComportamentais.push({
-            item: tr.dataset.compNome,
-            resposta: checked.value
-          });
-        }
+      ITENS_COMPORTAMENTAIS.forEach((_, cIdx) => {
+        const selecionado = document.querySelector(`input[name="comportamental_${cIdx}"]:checked`);
+        detalhesObj[`comportamental_${cIdx}`] = selecionado ? selecionado.value : "";
       });
 
-      const payload = {
-        aulaId: aulaId,
-        instrutorCpf: dadosUsuario.cpf,
-        notaFinal: notaFinalCalculada,
-        feedbackGeral: feedback,
-        itensPedagogicos: itensPedagogicos,
-        itensComportamentais: itensComportamentais
-      };
-
-      btnSalvar.disabled = true;
-      btnSalvar.textContent = "Salvando Avaliação...";
+      botao.disabled = true;
+      botao.innerHTML = `<span class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span> Gravando...`;
 
       try {
-        const res = await fetch(`${SCRIPT_URL_PLANILHA}?action=salvarAvaliacaoPratica`, {
+const dados = {
+  action: "avaliarAula",
+  aulaId: idDaAula,          // Certifique-se de que a variável do ID está com o nome correto
+  nota: valorDaNota,         // <-- ESTA É A LINHA CRUCIAL: o 'nota' precisa ser exatamente assim
+  feedback: feedbackTexto,
+  detalhes: JSON.stringify(detalhesAvaliacao)
+};
+
+        const resposta = await fetch(SCRIPT_URL_PLANILHA, {
           method: "POST",
-          headers: { "Content-Type": "text/plain" },
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: JSON.stringify(payload)
         });
+        const resJSON = await resposta.json();
 
-        const json = await res.json();
-
-        if (json.success) {
-          mostrarNotificacao("Avaliação prática salva e registrada com sucesso!", "sucesso");
+        if (resJSON.success) {
+          mostrarNotificacao(`Ficha avaliada com sucesso! Nota Média: ${notaCalculada}`, "sucesso");
           fecharModalPreencherAvaliacao();
           carregarAgendaInstrutor();
         } else {
-          mostrarNotificacao(json.message || "Erro ao salvar avaliação.", "erro");
+          mostrarNotificacao(resJSON.message || "Erro ao gravar feedback.", "erro");
         }
       } catch (err) {
-        console.error("Erro ao enviar avaliação:", err);
-        mostrarNotificacao("Falha ao comunicar com o servidor.", "erro");
+        console.error("Falha ao salvar avaliação:", err);
+        mostrarNotificacao("Erro de conexão.", "erro");
       } finally {
-        btnSalvar.disabled = false;
-        btnSalvar.textContent = "Finalizar e Registrar Aula";
+        botao.disabled = false;
+        botao.innerHTML = `Finalizar e Registrar Aula`;
       }
     }
 
+    function formatarData(dataString) {
+      if (!dataString) return "--/--/----";
+      const dataLimpa = dataString.split("T")[0];
+      const partes = dataLimpa.split("-");
+      if (partes.length !== 3) {
+        return dataString;
+      }
+      return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
     function fazerLogout() {
-      pedirConfirmacao("Sair do Sistema", "Você deseja realmente sair do portal?", () => {
-        dadosUsuario = null;
-        document.getElementById("portal-dashboard").classList.add("hidden");
-        document.getElementById("tela-login").classList.remove("hidden");
-        document.getElementById("login-cpf").value = "";
-        document.getElementById("login-senha").value = "";
-        mostrarNotificacao("Sessão encerrada com segurança.", "info");
-      });
+      pedirConfirmacao(
+        "Encerrar Sessão",
+        "Você realmente deseja sair do Portal?",
+        () => {
+          dadosUsuario = null;
+          document.getElementById("login-cpf").value = "";
+          document.getElementById("login-senha").value = "";
+          document.getElementById("portal-dashboard").classList.add("hidden");
+          document.getElementById("tela-login").classList.remove("hidden");
+          document.getElementById("alerta-seguranca-geral").classList.add("hidden");
+          mostrarNotificacao("Sessão encerrada com sucesso.", "info");
+        }
+      );
     }
   </script>
+<!-- COLE O CÓDIGO ABAIXO AQUI -->
+
+  <!-- Banner/Aviso de Instalação -->
+  <div id="install-banner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #000; color: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; text-align: center; width: 90%; max-width: 400px;">
+    <p style="margin: 0 0 10px 0; font-size: 14px;">Deseja instalar nosso aplicativo para acesso rápido?</p>
+    <button id="btn-install" style="background-color: #25d366; color: white; border: none; padding: 8px 16px; border-radius: 5px; font-weight: bold; cursor: pointer;">Instalar Aplicativo</button>
+    <button id="btn-close" style="background-color: transparent; color: #ccc; border: none; margin-left: 10px; cursor: pointer;">Agora não</button>
+  </div>
+
+  <!-- Script para controlar o Prompt de Instalação -->
+  <script>
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+    const btnInstall = document.getElementById('btn-install');
+    const btnClose = document.getElementById('btn-close');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBanner.style.display = 'block';
+    });
+
+    btnInstall.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        installBanner.style.display = 'none';
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Resposta do usuário: ${outcome}`);
+        deferredPrompt = null;
+      }
+    });
+
+    btnClose.addEventListener('click', () => {
+      installBanner.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
 </body>
 </html>
