@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravação de Câmera</title>
+    <title>Gravação Dupla Câmera</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        video { width: 100%; max-width: 400px; background: #000; border-radius: 8px; margin-bottom: 15px; }
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
+        
+        /* O canvas é onde vamos desenhar as duas câmeras juntas (ou uma só) */
+        canvas, video { width: 100%; max-width: 400px; background: #000; border-radius: 8px; margin-bottom: 15px; }
+        
+        /* Escondemos os vídeos originais, mostraremos apenas o canvas resultante */
+        #videoBack, #videoFront { display: none; }
+        
         button { padding: 15px 25px; font-size: 16px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; color: white;}
         #btnStart { background-color: #28a745; }
         #btnStop { background-color: #dc3545; display: none; }
@@ -15,40 +21,97 @@
 </head>
 <body>
 
-    <h2>Gravar e Enviar para Planilha</h2>
+    <h2>Gravação (Tentativa de Dupla Câmera)</h2>
     
-    <!-- O playsinline é crucial para o iOS não abrir o vídeo em tela cheia -->
-    <video id="preview" autoplay muted playsinline></video>
+    <!-- Elementos de vídeo ocultos para captar as câmeras -->
+    <video id="videoBack" autoplay muted playsinline></video>
+    <video id="videoFront" autoplay muted playsinline></video>
+    
+    <!-- Tela visível onde as imagens serão unidas -->
+    <canvas id="previewCanvas" width="640" height="480"></canvas>
+    
     <br>
-    <button id="btnStart">Iniciar Câmera e Gravação</button>
+    <button id="btnStart">Iniciar Câmeras e Gravação</button>
     <button id="btnStop">Parar e Enviar</button>
-    <div id="status"></div>
+    <div id="status">Aguardando...</div>
 
     <script>
-        // O SEU LINK FOI INSERIDO AQUI:
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9Tr05zqfTScZ-ByPo0AJ1MTSB44HufJfnhtsw0m1DxkpVDEHwXXA9TduY23XvobNW/exec';
 
         let mediaRecorder;
         let recordedChunks = [];
-        let videoElement = document.getElementById('preview');
-        let btnStart = document.getElementById('btnStart');
-        let btnStop = document.getElementById('btnStop');
-        let statusDiv = document.getElementById('status');
+        let streamBack, streamFront, finalStream;
+        let isRecording = false;
+        let dualCameraActive = false;
+
+        const videoBack = document.getElementById('videoBack');
+        const videoFront = document.getElementById('videoFront');
+        const canvas = document.getElementById('previewCanvas');
+        const ctx = canvas.getContext('2d');
+        const statusDiv = document.getElementById('status');
+        const btnStart = document.getElementById('btnStart');
+        const btnStop = document.getElementById('btnStop');
+
+        // Função que desenha os vídeos no Canvas em tempo real
+        function drawCanvas() {
+            if (!isRecording) return;
+
+            if (dualCameraActive) {
+                // Desenha a câmera traseira na metade esquerda
+                ctx.drawImage(videoBack, 0, 0, canvas.width / 2, canvas.height);
+                // Desenha a câmera frontal na metade direita
+                ctx.drawImage(videoFront, canvas.width / 2, 0, canvas.width / 2, canvas.height);
+            } else {
+                // Se só tiver uma câmera, preenche o canvas todo com ela
+                ctx.drawImage(videoBack, 0, 0, canvas.width, canvas.height);
+            }
+
+            // Cria um loop infinito para manter o vídeo rodando
+            requestAnimationFrame(drawCanvas);
+        }
 
         btnStart.addEventListener('click', async () => {
+            statusDiv.innerText = "Solicitando permissões...";
+            
             try {
-                // Solicita a câmera traseira (environment)
-                const stream = await navigator.mediaDevices.getUserMedia({
+                // 1. Tenta abrir a câmera traseira (com áudio)
+                streamBack = await navigator.mediaDevices.getUserMedia({
                     video: { facingMode: 'environment' },
                     audio: true
                 });
-                
-                videoElement.srcObject = stream;
-                
-                mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-                
-                // Limpa gravações anteriores
-                recordedChunks = []; 
+                videoBack.srcObject = streamBack;
+                await videoBack.play();
+
+                // 2. Tenta abrir a câmera frontal (SEM áudio para não dar eco)
+                try {
+                    streamFront = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'user' },
+                        audio: false 
+                    });
+                    videoFront.srcObject = streamFront;
+                    await videoFront.play();
+                    
+                    dualCameraActive = true;
+                    statusDiv.innerText = "Sucesso: Duas câmeras ativas! Gravando...";
+                } catch (frontError) {
+                    // Se o celular bloquear a segunda câmera, cai aqui
+                    console.log("O celular não suporta duas câmeras simultâneas no navegador.", frontError);
+                    dualCameraActive = false;
+                    statusDiv.innerText = "Gravando apenas com câmera traseira (Limite do celular).";
+                }
+
+                // 3. Pega o fluxo de vídeo juntado do Canvas
+                finalStream = canvas.captureStream(30); // 30 FPS
+
+                // 4. Adiciona o microfone (da câmera traseira) ao vídeo do Canvas (senão fica mudo)
+                const audioTracks = streamBack.getAudioTracks();
+                if (audioTracks.length > 0) {
+                    finalStream.addTrack(audioTracks[0]);
+                }
+
+                // 5. Prepara a gravação
+                mediaRecorder = new MediaRecorder(finalStream, { mimeType: 'video/webm' });
+                recordedChunks = [];
                 
                 mediaRecorder.ondataavailable = event => {
                     if (event.data.size > 0) recordedChunks.push(event.data);
@@ -58,14 +121,13 @@
                     statusDiv.innerText = "Processando e enviando vídeo...";
                     const blob = new Blob(recordedChunks, { type: 'video/webm' });
                     
-                    // Converte o arquivo para Base64
+                    // Converte para Base64
                     const reader = new FileReader();
                     reader.readAsDataURL(blob);
                     reader.onloadend = async () => {
                         const base64data = reader.result.split(',')[1];
                         
                         try {
-                            // Envia para o Google Apps Script
                             const response = await fetch(APPS_SCRIPT_URL, {
                                 method: 'POST',
                                 body: JSON.stringify({ videoBase64: base64data })
@@ -82,21 +144,25 @@
                         }
                     };
                     
-                    // Desliga a câmera
-                    stream.getTracks().forEach(track => track.stop());
+                    // Desliga as câmeras
+                    streamBack.getTracks().forEach(t => t.stop());
+                    if (streamFront) streamFront.getTracks().forEach(t => t.stop());
                 };
 
+                isRecording = true;
+                drawCanvas(); // Começa a desenhar os vídeos na tela
                 mediaRecorder.start();
+
                 btnStart.style.display = 'none';
                 btnStop.style.display = 'inline-block';
-                statusDiv.innerText = "Gravando...";
 
             } catch (error) {
-                statusDiv.innerText = "Erro ao acessar a câmera: " + error.message;
+                statusDiv.innerText = "Erro ao acessar a câmera principal: " + error.message;
             }
         });
 
         btnStop.addEventListener('click', () => {
+            isRecording = false;
             mediaRecorder.stop();
             btnStop.style.display = 'none';
             btnStart.style.display = 'inline-block';
