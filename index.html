@@ -3,76 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravação de Câmera com Alternância</title>
+    <title>Gravação Dupla Câmera</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
         
-        /* Contêiner para posicionar o botão sobre o vídeo */
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto 15px auto;
-        }
-
-        /* O canvas é onde desenhamos o vídeo final */
-        canvas { 
-            width: 100%; 
-            background: #000; 
-            border-radius: 8px; 
-            display: block;
-        }
+        /* O canvas é onde vamos desenhar as duas câmeras juntas (ou uma só) */
+        canvas, video { width: 100%; max-width: 400px; background: #000; border-radius: 8px; margin-bottom: 15px; }
         
-        /* Escondemos os vídeos originais */
+        /* Escondemos os vídeos originais, mostraremos apenas o canvas resultante */
         #videoBack, #videoFront { display: none; }
         
-        /* Estilo dos botões principais */
-        button { padding: 15px 25px; font-size: 16px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; color: white; font-weight: bold;}
+        button { padding: 15px 25px; font-size: 16px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; color: white;}
         #btnStart { background-color: #28a745; }
         #btnStop { background-color: #dc3545; display: none; }
-        
-        /* Estilo do botão circular de alternar câmera */
-        #btnSwitch {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            font-size: 24px;
-            border: 2px solid white;
-            cursor: pointer;
-            display: none; /* Só aparece quando a câmera ligar */
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
-            transition: background 0.3s;
-        }
-        #btnSwitch:active { background-color: rgba(255, 255, 255, 0.4); }
-
-        #status { margin-top: 15px; font-weight: bold; color: #333; }
+        #status { margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h2>Gravação de Vídeo</h2>
+    <h2>Gravação (Tentativa de Dupla Câmera)</h2>
     
-    <div class="video-container">
-        <!-- Telas ocultas -->
-        <video id="videoBack" autoplay muted playsinline></video>
-        <video id="videoFront" autoplay muted playsinline></video>
-        
-        <!-- Tela visível -->
-        <canvas id="previewCanvas" width="640" height="480"></canvas>
-        
-        <!-- Botão de alternar câmera -->
-        <button id="btnSwitch" title="Alternar Câmera">🔄</button>
-    </div>
+    <!-- Elementos de vídeo ocultos para captar as câmeras -->
+    <video id="videoBack" autoplay muted playsinline></video>
+    <video id="videoFront" autoplay muted playsinline></video>
     
-    <button id="btnStart">Iniciar Câmera e Gravar</button>
+    <!-- Tela visível onde as imagens serão unidas -->
+    <canvas id="previewCanvas" width="640" height="480"></canvas>
+    
+    <br>
+    <button id="btnStart">Iniciar Câmeras e Gravação</button>
     <button id="btnStop">Parar e Enviar</button>
     <div id="status">Aguardando...</div>
 
@@ -84,10 +43,6 @@
         let streamBack, streamFront, finalStream;
         let isRecording = false;
         let dualCameraActive = false;
-        
-        // Controle de qual câmera está ativa no modo único
-        let currentFacingMode = 'environment'; // começa com a traseira
-        let swapCameras = false; // Controle para inverter lados no modo Dual
 
         const videoBack = document.getElementById('videoBack');
         const videoFront = document.getElementById('videoFront');
@@ -96,92 +51,38 @@
         const statusDiv = document.getElementById('status');
         const btnStart = document.getElementById('btnStart');
         const btnStop = document.getElementById('btnStop');
-        const btnSwitch = document.getElementById('btnSwitch');
 
-        // Função para desenhar os quadros de vídeo no Canvas
+        // Função que desenha os vídeos no Canvas em tempo real
         function drawCanvas() {
             if (!isRecording) return;
 
-            // Limpa o frame anterior
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             if (dualCameraActive) {
-                // Se as duas estão ativas, desenha lado a lado
-                if (!swapCameras) {
-                    ctx.drawImage(videoBack, 0, 0, canvas.width / 2, canvas.height);
-                    ctx.drawImage(videoFront, canvas.width / 2, 0, canvas.width / 2, canvas.height);
-                } else {
-                    ctx.drawImage(videoFront, 0, 0, canvas.width / 2, canvas.height);
-                    ctx.drawImage(videoBack, canvas.width / 2, 0, canvas.width / 2, canvas.height);
-                }
+                // Desenha a câmera traseira na metade esquerda
+                ctx.drawImage(videoBack, 0, 0, canvas.width / 2, canvas.height);
+                // Desenha a câmera frontal na metade direita
+                ctx.drawImage(videoFront, canvas.width / 2, 0, canvas.width / 2, canvas.height);
             } else {
-                // Se for câmera única
-                if (currentFacingMode === 'user') {
-                    // Efeito espelho (Flip) para a câmera frontal ficar natural
-                    ctx.save();
-                    ctx.scale(-1, 1);
-                    ctx.drawImage(videoBack, -canvas.width, 0, canvas.width, canvas.height);
-                    ctx.restore();
-                } else {
-                    // Câmera traseira normal
-                    ctx.drawImage(videoBack, 0, 0, canvas.width, canvas.height);
-                }
+                // Se só tiver uma câmera, preenche o canvas todo com ela
+                ctx.drawImage(videoBack, 0, 0, canvas.width, canvas.height);
             }
 
+            // Cria um loop infinito para manter o vídeo rodando
             requestAnimationFrame(drawCanvas);
         }
 
-        // --- LÓGICA DO BOTÃO DE ALTERNAR CÂMERA ---
-        btnSwitch.addEventListener('click', async () => {
-            if (dualCameraActive) {
-                // Inverte as posições na tela se as duas câmeras estiverem ativas
-                swapCameras = !swapCameras;
-            } else {
-                // Troca a câmera no modo único
-                btnSwitch.disabled = true; // Evita cliques múltiplos rápidos
-                currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
-                
-                try {
-                    // Pede a nova câmera
-                    const newStream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: currentFacingMode }
-                    });
-                    
-                    const newVideoTrack = newStream.getVideoTracks()[0];
-                    const oldVideoTrack = streamBack.getVideoTracks()[0];
-                    
-                    // Substitui a trilha de vídeo antiga pela nova, mantendo o áudio intacto
-                    streamBack.removeTrack(oldVideoTrack);
-                    oldVideoTrack.stop(); // Desliga a luz da câmera antiga
-                    streamBack.addTrack(newVideoTrack);
-                    
-                    // Atualiza o reprodutor oculto
-                    videoBack.srcObject = streamBack;
-                    await videoBack.play();
-                    
-                } catch (error) {
-                    alert("Acesso à outra câmera negado ou indisponível.");
-                    // Reverte a variável em caso de erro
-                    currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
-                }
-                btnSwitch.disabled = false;
-            }
-        });
-
-        // --- INICIAR GRAVAÇÃO ---
         btnStart.addEventListener('click', async () => {
             statusDiv.innerText = "Solicitando permissões...";
             
             try {
-                // 1. Tenta abrir a câmera selecionada (inicialmente traseira) com áudio
+                // 1. Tenta abrir a câmera traseira (com áudio)
                 streamBack = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: currentFacingMode },
+                    video: { facingMode: 'environment' },
                     audio: true
                 });
                 videoBack.srcObject = streamBack;
                 await videoBack.play();
 
-                // 2. Tenta abrir a outra câmera (só vídeo) para o modo Duplo
+                // 2. Tenta abrir a câmera frontal (SEM áudio para não dar eco)
                 try {
                     streamFront = await navigator.mediaDevices.getUserMedia({
                         video: { facingMode: 'user' },
@@ -191,25 +92,24 @@
                     await videoFront.play();
                     
                     dualCameraActive = true;
-                    statusDiv.innerText = "Modo Duplo Ativo! Gravando...";
+                    statusDiv.innerText = "Sucesso: Duas câmeras ativas! Gravando...";
                 } catch (frontError) {
+                    // Se o celular bloquear a segunda câmera, cai aqui
+                    console.log("O celular não suporta duas câmeras simultâneas no navegador.", frontError);
                     dualCameraActive = false;
-                    statusDiv.innerText = "Gravando... (Câmera Única)";
+                    statusDiv.innerText = "Gravando apenas com câmera traseira (Limite do celular).";
                 }
 
-                // Exibe o botão de alternar câmera
-                btnSwitch.style.display = 'flex';
+                // 3. Pega o fluxo de vídeo juntado do Canvas
+                finalStream = canvas.captureStream(30); // 30 FPS
 
-                // 3. Captura o fluxo visual do Canvas a 30 FPS
-                finalStream = canvas.captureStream(30);
-
-                // 4. Injeta o áudio original da primeira requisição no vídeo final
+                // 4. Adiciona o microfone (da câmera traseira) ao vídeo do Canvas (senão fica mudo)
                 const audioTracks = streamBack.getAudioTracks();
                 if (audioTracks.length > 0) {
                     finalStream.addTrack(audioTracks[0]);
                 }
 
-                // 5. Prepara e Inicia o Gravador
+                // 5. Prepara a gravação
                 mediaRecorder = new MediaRecorder(finalStream, { mimeType: 'video/webm' });
                 recordedChunks = [];
                 
@@ -218,9 +118,10 @@
                 };
 
                 mediaRecorder.onstop = async () => {
-                    statusDiv.innerText = "Enviando vídeo para o Google Planilhas...";
+                    statusDiv.innerText = "Processando e enviando vídeo...";
                     const blob = new Blob(recordedChunks, { type: 'video/webm' });
                     
+                    // Converte para Base64
                     const reader = new FileReader();
                     reader.readAsDataURL(blob);
                     reader.onloadend = async () => {
@@ -234,7 +135,7 @@
                             
                             const result = await response.json();
                             if(result.status === 'sucesso') {
-                                statusDiv.innerText = "Enviado com sucesso! Link salvo.";
+                                statusDiv.innerText = "Enviado com sucesso! Link salvo na planilha.";
                             } else {
                                 statusDiv.innerText = "Erro no servidor: " + result.mensagem;
                             }
@@ -243,29 +144,27 @@
                         }
                     };
                     
-                    // Desliga as câmeras no final
+                    // Desliga as câmeras
                     streamBack.getTracks().forEach(t => t.stop());
                     if (streamFront) streamFront.getTracks().forEach(t => t.stop());
                 };
 
                 isRecording = true;
-                drawCanvas(); // Inicia o motor gráfico de renderização
+                drawCanvas(); // Começa a desenhar os vídeos na tela
                 mediaRecorder.start();
 
                 btnStart.style.display = 'none';
                 btnStop.style.display = 'inline-block';
 
             } catch (error) {
-                statusDiv.innerText = "Erro ao acessar a câmera: Permissão negada.";
+                statusDiv.innerText = "Erro ao acessar a câmera principal: " + error.message;
             }
         });
 
-        // --- PARAR GRAVAÇÃO ---
         btnStop.addEventListener('click', () => {
             isRecording = false;
             mediaRecorder.stop();
             btnStop.style.display = 'none';
-            btnSwitch.style.display = 'none';
             btnStart.style.display = 'inline-block';
         });
     </script>
