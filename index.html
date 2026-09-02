@@ -1,172 +1,258 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravação Dupla Câmera</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
-        
-        /* O canvas é onde vamos desenhar as duas câmeras juntas (ou uma só) */
-        canvas, video { width: 100%; max-width: 400px; background: #000; border-radius: 8px; margin-bottom: 15px; }
-        
-        /* Escondemos os vídeos originais, mostraremos apenas o canvas resultante */
-        #videoBack, #videoFront { display: none; }
-        
-        button { padding: 15px 25px; font-size: 16px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; color: white;}
-        #btnStart { background-color: #28a745; }
-        #btnStop { background-color: #dc3545; display: none; }
-        #status { margin-top: 15px; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Previa Treinamentos - Portal de Ensino Prático</title>
+
+  <!-- Cor da barra de navegação/status no celular -->
+  <meta name="theme-color" content="#042e2a">
+
+  <!-- ======================================================= -->
+  <!-- META TAGS OPEN GRAPH (CARD DE PREVIEW PARA O WHATSAPP)  -->
+  <!-- ======================================================= -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Previa Treinamentos - Portal de Ensino Prático">
+  <meta property="og:description" content="Acesse nossa plataforma de ensino e agendamento de aulas.">
+  <meta property="og:image" content="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
+  <meta property="og:url" content="https://previatreinamentos.github.io/agendamento/">
+
+  <!-- Meta tags adicionais para redes sociais -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Previa Treinamentos - Portal de Ensino Prático">
+  <meta name="twitter:image" content="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
+
+  <!-- 1. Ícone padrão para navegadores (Favicon) -->
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
+
+  <!-- 2. Ícone para iOS (iPhone / iPad - Tela Inicial) -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
+
+  <!-- Meta tags específicas do iOS para PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Previa">
+
+  <!-- 3. Web App Manifest Gerado Dinamicamente -->
+  <script>
+    const myManifest = {
+      "name": "Previa Treinamentos",
+      "short_name": "Previa",
+      "start_url": "./",
+      "display": "standalone",
+      "background_color": "#ffffff",
+      "theme_color": "#042e2a",
+      "icons": [
+        {
+          "src": "https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any maskable"
+        }
+      ]
+    };
+
+    const stringManifest = JSON.stringify(myManifest);
+    const blob = new Blob([stringManifest], {type: 'application/json'});
+    const manifestURL = URL.createObjectURL(blob);
+    const linkManifest = document.createElement('link');
+    linkManifest.rel = 'manifest';
+    linkManifest.href = manifestURL;
+    document.head.appendChild(linkManifest);
+  </script>
+
+  <!-- Estilos da Página -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Faixa Verde Superior de ~2cm sem sombra */
+    .top-bar {
+      width: 100%;
+      height: 75px; 
+      background-color: #042e2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    /* Container para o Link Incorporado (iframe) */
+    .content-frame {
+      width: 100%;
+      height: calc(100% - 75px);
+      border: none;
+      display: block;
+    }
+
+    /* ========================================== */
+    /* BANNER FLUTUANTE DE INSTALAÇÃO DO PWA      */
+    /* ========================================== */
+    .install-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+      background-color: #000000;
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      display: none; /* Ativado via JavaScript quando acessado no navegador */
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .install-banner p {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .install-banner-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .btn-install {
+      background-color: #00e676;
+      color: #000000;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      flex: 1;
+      max-width: 180px;
+    }
+
+    .btn-dismiss {
+      background: transparent;
+      color: #cccccc;
+      border: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 8px 12px;
+    }
+  </style>
 </head>
 <body>
 
-    <h2>Gravação (Tentativa de Dupla Câmera)</h2>
-    
-    <!-- Elementos de vídeo ocultos para captar as câmeras -->
-    <video id="videoBack" autoplay muted playsinline></video>
-    <video id="videoFront" autoplay muted playsinline></video>
-    
-    <!-- Tela visível onde as imagens serão unidas -->
-    <canvas id="previewCanvas" width="640" height="480"></canvas>
-    
-    <br>
-    <button id="btnStart">Iniciar Câmeras e Gravação</button>
-    <button id="btnStop">Parar e Enviar</button>
-    <div id="status">Aguardando...</div>
+  <!-- Faixa Verde no topo (#042e2a) -->
+  <header class="top-bar">
+    AUTOESCOLA DIGITAL PREVIA TREINAMENTOS
+  </header>
 
-    <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9Tr05zqfTScZ-ByPo0AJ1MTSB44HufJfnhtsw0m1DxkpVDEHwXXA9TduY23XvobNW/exec';
+  <!-- Substitua o atributo 'src' abaixo pelo link que você quer incorporar -->
+  <iframe 
+    class="content-frame" 
+    src="https://script.google.com/macros/s/AKfycby-R3MXQ2lu1J1BXbzyj3k2qyJ52vdAoG-AkaZA8hyYrHqX_A6ivWnaRaEtBFjrq_RMoA/exec" 
+    title="Conteúdo Incorporado"
+    allow="fullscreen">
+  </iframe>
 
-        let mediaRecorder;
-        let recordedChunks = [];
-        let streamBack, streamFront, finalStream;
-        let isRecording = false;
-        let dualCameraActive = false;
+  <!-- POP-UP DE INSTALAÇÃO DO APP -->
+  <div id="pwaBanner" class="install-banner">
+    <p>Deseja instalar nosso aplicativo para acesso rápido?</p>
+    <div class="install-banner-buttons">
+      <button id="btnInstall" class="btn-install">Instalar Aplicativo</button>
+      <button id="btnDismiss" class="btn-dismiss">Agora não</button>
+    </div>
+  </div>
 
-        const videoBack = document.getElementById('videoBack');
-        const videoFront = document.getElementById('videoFront');
-        const canvas = document.getElementById('previewCanvas');
-        const ctx = canvas.getContext('2d');
-        const statusDiv = document.getElementById('status');
-        const btnStart = document.getElementById('btnStart');
-        const btnStop = document.getElementById('btnStop');
+  <!-- 4. LÓGICA DE INSTALAÇÃO & SERVICE WORKER -->
+  <script>
+    let deferredPrompt;
+    const banner = document.getElementById('pwaBanner');
+    const btnInstall = document.getElementById('btnInstall');
+    const btnDismiss = document.getElementById('btnDismiss');
 
-        // Função que desenha os vídeos no Canvas em tempo real
-        function drawCanvas() {
-            if (!isRecording) return;
+    // Identifica se já está aberto diretamente pelo app (Standalone)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-            if (dualCameraActive) {
-                // Desenha a câmera traseira na metade esquerda
-                ctx.drawImage(videoBack, 0, 0, canvas.width / 2, canvas.height);
-                // Desenha a câmera frontal na metade direita
-                ctx.drawImage(videoFront, canvas.width / 2, 0, canvas.width / 2, canvas.height);
-            } else {
-                // Se só tiver uma câmera, preenche o canvas todo com ela
-                ctx.drawImage(videoBack, 0, 0, canvas.width, canvas.height);
-            }
+    // Se NÃO for o aplicativo instalado, exibe o aviso sempre
+    if (!isStandalone) {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        banner.style.display = 'flex';
+      });
 
-            // Cria um loop infinito para manter o vídeo rodando
-            requestAnimationFrame(drawCanvas);
-        }
+      // Exibe também no iOS ou navegadores que não disparam o 'beforeinstallprompt'
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          if (!deferredPrompt && !isStandalone) {
+            banner.style.display = 'flex';
+          }
+        }, 1200);
+      });
+    }
 
-        btnStart.addEventListener('click', async () => {
-            statusDiv.innerText = "Solicitando permissões...";
-            
-            try {
-                // 1. Tenta abrir a câmera traseira (com áudio)
-                streamBack = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' },
-                    audio: true
-                });
-                videoBack.srcObject = streamBack;
-                await videoBack.play();
+    // Clique em "Instalar Aplicativo"
+    btnInstall.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        banner.style.display = 'none';
+      } else {
+        alert('Para instalar no iPhone (iOS):\n1. Toque no ícone de Compartilhar.\n2. Escolha "Adicionar à Tela de Início".');
+      }
+    });
 
-                // 2. Tenta abrir a câmera frontal (SEM áudio para não dar eco)
-                try {
-                    streamFront = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'user' },
-                        audio: false 
-                    });
-                    videoFront.srcObject = streamFront;
-                    await videoFront.play();
-                    
-                    dualCameraActive = true;
-                    statusDiv.innerText = "Sucesso: Duas câmeras ativas! Gravando...";
-                } catch (frontError) {
-                    // Se o celular bloquear a segunda câmera, cai aqui
-                    console.log("O celular não suporta duas câmeras simultâneas no navegador.", frontError);
-                    dualCameraActive = false;
-                    statusDiv.innerText = "Gravando apenas com câmera traseira (Limite do celular).";
-                }
+    // Clique em "Agora não"
+    btnDismiss.addEventListener('click', () => {
+      banner.style.display = 'none';
+    });
 
-                // 3. Pega o fluxo de vídeo juntado do Canvas
-                finalStream = canvas.captureStream(30); // 30 FPS
+    // Registro do Service Worker obrigatório do PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swCode = `
+          self.addEventListener('install', (e) => self.skipWaiting());
+          self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+          self.addEventListener('fetch', (e) => {
+            e.respondWith(fetch(e.request).catch(() => new Response('Sem conexão')));
+          });
+        `;
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
 
-                // 4. Adiciona o microfone (da câmera traseira) ao vídeo do Canvas (senão fica mudo)
-                const audioTracks = streamBack.getAudioTracks();
-                if (audioTracks.length > 0) {
-                    finalStream.addTrack(audioTracks[0]);
-                }
-
-                // 5. Prepara a gravação
-                mediaRecorder = new MediaRecorder(finalStream, { mimeType: 'video/webm' });
-                recordedChunks = [];
-                
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data.size > 0) recordedChunks.push(event.data);
-                };
-
-                mediaRecorder.onstop = async () => {
-                    statusDiv.innerText = "Processando e enviando vídeo...";
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    
-                    // Converte para Base64
-                    const reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = async () => {
-                        const base64data = reader.result.split(',')[1];
-                        
-                        try {
-                            const response = await fetch(APPS_SCRIPT_URL, {
-                                method: 'POST',
-                                body: JSON.stringify({ videoBase64: base64data })
-                            });
-                            
-                            const result = await response.json();
-                            if(result.status === 'sucesso') {
-                                statusDiv.innerText = "Enviado com sucesso! Link salvo na planilha.";
-                            } else {
-                                statusDiv.innerText = "Erro no servidor: " + result.mensagem;
-                            }
-                        } catch (fetchError) {
-                            statusDiv.innerText = "Erro de conexão ao enviar o vídeo.";
-                        }
-                    };
-                    
-                    // Desliga as câmeras
-                    streamBack.getTracks().forEach(t => t.stop());
-                    if (streamFront) streamFront.getTracks().forEach(t => t.stop());
-                };
-
-                isRecording = true;
-                drawCanvas(); // Começa a desenhar os vídeos na tela
-                mediaRecorder.start();
-
-                btnStart.style.display = 'none';
-                btnStop.style.display = 'inline-block';
-
-            } catch (error) {
-                statusDiv.innerText = "Erro ao acessar a câmera principal: " + error.message;
-            }
-        });
-
-        btnStop.addEventListener('click', () => {
-            isRecording = false;
-            mediaRecorder.stop();
-            btnStop.style.display = 'none';
-            btnStart.style.display = 'inline-block';
-        });
-    </script>
+        navigator.serviceWorker.register(swUrl)
+          .then(() => console.log('Service Worker registrado com sucesso.'))
+          .catch(err => console.log('Erro ao registrar Service Worker:', err));
+      });
+    }
+  </script>
 </body>
 </html>
