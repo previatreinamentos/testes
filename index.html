@@ -3,254 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Previa Treinamentos - Portal de Ensino Prático</title>
-
-  <!-- Cor da barra de navegação/status no celular -->
-  <meta name="theme-color" content="#042e2a">
-
-  <!-- ======================================================= -->
-  <!-- META TAGS OPEN GRAPH (CARD DE PREVIEW PARA O WHATSAPP)  -->
-  <!-- ======================================================= -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Previa Treinamentos - Portal de Ensino Prático">
-  <meta property="og:description" content="Acesse nossa plataforma de ensino e agendamento de aulas.">
-  <meta property="og:image" content="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
-  <meta property="og:url" content="https://previatreinamentos.github.io/agendamento/">
-
-  <!-- Meta tags adicionais para redes sociais -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Previa Treinamentos - Portal de Ensino Prático">
-  <meta name="twitter:image" content="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
-
-  <!-- 1. Ícone padrão para navegadores (Favicon) -->
-  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
-
-  <!-- 2. Ícone para iOS (iPhone / iPad - Tela Inicial) -->
-  <link rel="apple-touch-icon" sizes="180x180" href="https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0">
-
-  <!-- Meta tags específicas do iOS para PWA -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Previa">
-
-  <!-- 3. Web App Manifest Gerado Dinamicamente -->
-  <script>
-    const myManifest = {
-      "name": "Previa Treinamentos",
-      "short_name": "Previa",
-      "start_url": "./",
-      "display": "standalone",
-      "background_color": "#ffffff",
-      "theme_color": "#042e2a",
-      "icons": [
-        {
-          "src": "https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0",
-          "sizes": "192x192",
-          "type": "image/png",
-          "purpose": "any maskable"
-        },
-        {
-          "src": "https://lh3.googleusercontent.com/pw/AP1GczOHQW3vNgak5n6o5ao_2xrU1jg939u8uya5WNvo9AcA8vATPtKCFkZ7yag8Z53i0T4y14Z4_kgtCSydvki-SqzzprLY09tnJTxG2tdbAgqJjv3fHNffJnHp2aRdyszqR6eMSL3iVpDPIQGRCrOoSp3y=w599-h599-s-no-gm?authuser=0",
-          "sizes": "512x512",
-          "type": "image/png",
-          "purpose": "any maskable"
-        }
-      ]
-    };
-
-    const stringManifest = JSON.stringify(myManifest);
-    const blob = new Blob([stringManifest], {type: 'application/json'});
-    const manifestURL = URL.createObjectURL(blob);
-    const linkManifest = document.createElement('link');
-    linkManifest.rel = 'manifest';
-    linkManifest.href = manifestURL;
-    document.head.appendChild(linkManifest);
-  </script>
-
-  <!-- Estilos da Página -->
+  <title>Upload de Vídeo - Google Drive & Sheets</title>
   <style>
-    * {
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      padding: 20px;
     }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #ffffff;
-      font-family: Arial, sans-serif;
-    }
-
-    /* Faixa Verde Superior de ~2cm sem sombra */
-    .top-bar {
-      width: 100%;
-      height: 75px; 
-      background-color: #042e2a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 1.1rem;
-      text-align: center;
-      padding: 0 10px;
-    }
-
-    /* Container para o Link Incorporado (iframe) */
-    .content-frame {
-      width: 100%;
-      height: calc(100% - 75px);
-      border: none;
-      display: block;
-    }
-
-    /* ========================================== */
-    /* BANNER FLUTUANTE DE INSTALAÇÃO DO PWA      */
-    /* ========================================== */
-    .install-banner {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 400px;
-      background-color: #000000;
-      color: #ffffff;
+    .card {
+      background: #ffffff;
+      padding: 30px;
       border-radius: 12px;
-      padding: 18px 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      z-index: 9999;
-      display: none; /* Ativado via JavaScript quando acessado no navegador */
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .install-banner p {
-      font-size: 0.95rem;
-      font-weight: 500;
-      margin-bottom: 14px;
-      line-height: 1.3;
-    }
-
-    .install-banner-buttons {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       width: 100%;
+      max-width: 480px;
     }
-
-    .btn-install {
-      background-color: #00e676;
-      color: #000000;
+    h2 { margin-top: 0; color: #1a73e8; }
+    p { color: #5f6368; font-size: 14px; }
+    .form-group { margin-bottom: 20px; }
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      background: #f8f9fa;
+    }
+    button {
+      width: 100%;
+      background-color: #1a73e8;
+      color: white;
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
       font-weight: bold;
-      font-size: 0.9rem;
+      border-radius: 6px;
       cursor: pointer;
-      flex: 1;
-      max-width: 180px;
+      transition: background 0.2s;
     }
-
-    .btn-dismiss {
-      background: transparent;
-      color: #cccccc;
-      border: none;
-      font-size: 0.9rem;
-      cursor: pointer;
-      padding: 8px 12px;
-    }
+    button:hover { background-color: #1557b0; }
+    button:disabled { background-color: #bdc1c6; cursor: not-allowed; }
+    #status { margin-top: 15px; font-weight: bold; font-size: 14px; }
+    #result { margin-top: 15px; word-break: break-all; font-size: 14px; }
+    a { color: #1a73e8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
-  <!-- Faixa Verde no topo (#042e2a) -->
-  <header class="top-bar">
-    AUTOESCOLA DIGITAL PREVIA TREINAMENTOS
-  </header>
-
-  <!-- Substitua o atributo 'src' abaixo pelo link que você quer incorporar -->
-  <iframe 
-    class="content-frame" 
-    src="https://script.google.com/macros/s/AKfycbz_0kykLkOrj4TLi9t-EJcFbdlLtT4c1iiz47m3Za554Urs_03FhbFcuGuaSU0_XN01Ig/exec" 
-    title="Conteúdo Incorporado"
-    allow="fullscreen">
-  </iframe>
-
-  <!-- POP-UP DE INSTALAÇÃO DO APP -->
-  <div id="pwaBanner" class="install-banner">
-    <p>Deseja instalar nosso aplicativo para acesso rápido?</p>
-    <div class="install-banner-buttons">
-      <button id="btnInstall" class="btn-install">Instalar Aplicativo</button>
-      <button id="btnDismiss" class="btn-dismiss">Agora não</button>
+  <div class="card">
+    <h2>Upload de Vídeo</h2>
+    <p>Selecione um arquivo de vídeo para salvar no Google Drive e registrar na Planilha.</p>
+    
+    <div class="form-group">
+      <input type="file" id="videoFile" accept="video/*">
     </div>
+
+    <button id="btnSubmit" onclick="fazerUpload()">Enviar e Gerar Link</button>
+
+    <div id="status"></div>
+    <div id="result"></div>
   </div>
 
-  <!-- 4. LÓGICA DE INSTALAÇÃO & SERVICE WORKER -->
   <script>
-    let deferredPrompt;
-    const banner = document.getElementById('pwaBanner');
-    const btnInstall = document.getElementById('btnInstall');
-    const btnDismiss = document.getElementById('btnDismiss');
+    // ⚠️ SUBSTITUA COM A SUA URL DO WEB APP TERMINADA EM /exec
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzWl3zOtmX85GbFcihzmgzPlHr5KYctyILCMWo5YDqi89ndAvZz-iYI1DDxIhxhik2SuQ/exec';
 
-    // Identifica se já está aberto diretamente pelo app (Standalone)
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    async function fazerUpload() {
+      const fileInput = document.getElementById('videoFile');
+      const statusDiv = document.getElementById('status');
+      const resultDiv = document.getElementById('result');
+      const btn = document.getElementById('btnSubmit');
 
-    // Se NÃO for o aplicativo instalado, exibe o aviso sempre
-    if (!isStandalone) {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        banner.style.display = 'flex';
-      });
+      if (!fileInput.files.length) {
+        alert("Por favor, selecione um arquivo de vídeo!");
+        return;
+      }
 
-      // Exibe também no iOS ou navegadores que não disparam o 'beforeinstallprompt'
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          if (!deferredPrompt && !isStandalone) {
-            banner.style.display = 'flex';
-          }
-        }, 1200);
-      });
+      const file = fileInput.files[0];
+      
+      statusDiv.style.color = "#1a73e8";
+      statusDiv.innerText = "Lendo arquivo de vídeo...";
+      btn.disabled = true;
+      resultDiv.innerHTML = "";
+
+      try {
+        // Converte o vídeo em Base64
+        const base64Data = await convertBase64(file);
+        
+        statusDiv.innerText = "Enviando para o Drive e registrando na Planilha...";
+
+        const payload = {
+          fileName: file.name,
+          mimeType: file.type,
+          fileData: base64Data.split(',')[1] // Separa o conteúdo base64
+        };
+
+        // Envia para a URL do Web App (.../exec)
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          statusDiv.style.color = "green";
+          statusDiv.innerText = "Sucesso! Vídeo salvo e cadastrado na planilha.";
+          resultDiv.innerHTML = `<strong>Link Compartilhável:</strong><br><a href="${data.url}" target="_blank">${data.url}</a>`;
+          fileInput.value = ""; 
+        } else {
+          throw new Error(data.message);
+        }
+
+      } catch (error) {
+        console.error(error);
+        statusDiv.style.color = "red";
+        statusDiv.innerText = "Erro ao enviar: " + error.message;
+      } finally {
+        btn.disabled = false;
+      }
     }
 
-    // Clique em "Instalar Aplicativo"
-    btnInstall.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        banner.style.display = 'none';
-      } else {
-        alert('Para instalar no iPhone (iOS):\n1. Toque no ícone de Compartilhar.\n2. Escolha "Adicionar à Tela de Início".');
-      }
-    });
-
-    // Clique em "Agora não"
-    btnDismiss.addEventListener('click', () => {
-      banner.style.display = 'none';
-    });
-
-    // Registro do Service Worker obrigatório do PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        const swCode = `
-          self.addEventListener('install', (e) => self.skipWaiting());
-          self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
-          self.addEventListener('fetch', (e) => {
-            e.respondWith(fetch(e.request).catch(() => new Response('Sem conexão')));
-          });
-        `;
-        const blob = new Blob([swCode], { type: 'application/javascript' });
-        const swUrl = URL.createObjectURL(blob);
-
-        navigator.serviceWorker.register(swUrl)
-          .then(() => console.log('Service Worker registrado com sucesso.'))
-          .catch(err => console.log('Erro ao registrar Service Worker:', err));
+    // Converter arquivo para Base64
+    function convertBase64(file) {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => resolve(fileReader.result);
+        fileReader.onerror = (error) => reject(error);
       });
     }
   </script>
