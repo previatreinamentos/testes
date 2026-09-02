@@ -22,7 +22,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
     }
     h2 { margin-top: 0; color: #1a73e8; }
     p { color: #5f6368; font-size: 14px; }
@@ -34,7 +34,7 @@
       border-radius: 6px;
       background: #f8f9fa;
     }
-    button {
+    .btn-main {
       width: 100%;
       background-color: #1a73e8;
       color: white;
@@ -46,11 +46,41 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    button:hover { background-color: #1557b0; }
-    button:disabled { background-color: #bdc1c6; cursor: not-allowed; }
+    .btn-main:hover { background-color: #1557b0; }
+    .btn-main:disabled { background-color: #bdc1c6; cursor: not-allowed; }
+    
     #status { margin-top: 15px; font-weight: bold; font-size: 14px; }
-    #result { margin-top: 15px; word-break: break-all; font-size: 14px; }
-    a { color: #1a73e8; text-decoration: none; }
+    
+    /* Área do Link e Botão de Copiar */
+    .link-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .link-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      font-size: 13px;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .btn-copy {
+      background-color: #34a853;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-copy:hover { background-color: #2d8e47; }
+    
+    a { color: #1a73e8; text-decoration: none; word-break: break-all; }
     a:hover { text-decoration: underline; }
   </style>
 </head>
@@ -64,7 +94,7 @@
       <input type="file" id="videoFile" accept="video/*">
     </div>
 
-    <button id="btnSubmit" onclick="fazerUpload()">Enviar e Gerar Link</button>
+    <button id="btnSubmit" class="btn-main" onclick="fazerUpload()">Enviar e Gerar Link</button>
 
     <div id="status"></div>
     <div id="result"></div>
@@ -72,7 +102,7 @@
 
   <script>
     // ⚠️ SUBSTITUA COM A SUA URL DO WEB APP TERMINADA EM /exec
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzWl3zOtmX85GbFcihzmgzPlHr5KYctyILCMWo5YDqi89ndAvZz-iYI1DDxIhxhik2SuQ/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/SUA_CHAVE_AQUI/exec';
 
     async function fazerUpload() {
       const fileInput = document.getElementById('videoFile');
@@ -117,8 +147,19 @@
         if (data.status === 'success') {
           statusDiv.style.color = "green";
           statusDiv.innerText = "Sucesso! Vídeo salvo e cadastrado na planilha.";
-          resultDiv.innerHTML = `<strong>Link Compartilhável:</strong><br><a href="${data.url}" target="_blank">${data.url}</a>`;
-          fileInput.value = ""; 
+          
+          // Renderiza a caixa com o link e o botão de copiar
+          resultDiv.innerHTML = `
+            <div style="margin-top: 15px;">
+              <strong>Link Compartilhável:</strong>
+              <div class="link-container">
+                <input type="text" id="shareableLink" class="link-input" value="${data.url}" readonly>
+                <button class="btn-copy" id="btnCopy" onclick="copiarLink()">Copiar</button>
+              </div>
+            </div>
+          `;
+          
+          fileInput.value = ""; // Limpa o campo de arquivo
         } else {
           throw new Error(data.message);
         }
@@ -130,6 +171,30 @@
       } finally {
         btn.disabled = false;
       }
+    }
+
+    // Função para copiar o link para a área de transferência
+    function copiarLink() {
+      const copyText = document.getElementById("shareableLink");
+      const btnCopy = document.getElementById("btnCopy");
+
+      // Seleciona o texto do input
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // Para dispositivos móveis
+
+      // Copia o texto usando a API da área de transferência
+      navigator.clipboard.writeText(copyText.value).then(() => {
+        // Feedback visual no botão
+        btnCopy.innerText = "Copiado!";
+        btnCopy.style.backgroundColor = "#1e8e3e";
+
+        setTimeout(() => {
+          btnCopy.innerText = "Copiar";
+          btnCopy.style.backgroundColor = "#34a853";
+        }, 2500);
+      }).catch(err => {
+        alert("Erro ao copiar o link: " + err);
+      });
     }
 
     // Converter arquivo para Base64
