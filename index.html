@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Calendário de Trânsito - Prévia Treinamentos</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0284c7">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -174,7 +172,7 @@
     }
 
     .day:hover:not(.empty) {
-      transform: scale(1.18);
+      transform: scale(1.12);
       z-index: 50;
       border-color: var(--primary);
       border-width: 2px;
@@ -236,7 +234,7 @@
     @media (max-width: 860px) {
       .days-grid { gap: 5px; }
       .day, .day.empty { min-height: 105px; padding: 4px; }
-      .day:hover:not(.empty) { transform: scale(1.06); }
+      .day:hover:not(.empty) { transform: scale(1.05); }
       .day-number { font-size: 0.72rem; }
       .day-event-title { font-size: 0.64rem; }
     }
@@ -376,7 +374,6 @@
 
     .btn-whatsapp { background: var(--whatsapp); }
     .btn-instagram { background: var(--instagram); }
-    .btn-copy { background: #475569; }
   </style>
 </head>
 <body>
@@ -412,7 +409,7 @@
   </div>
 </div>
 
-<!-- MODAL VISUALIZAÇÃO -->
+<!-- MODAL SMARTPHONE -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal-phone-card">
     <div class="modal-top-bar">
@@ -431,7 +428,6 @@
       <div class="modal-actions">
         <button class="btn btn-whatsapp" onclick="shareWhatsApp()">Compartilhar no WhatsApp</button>
         <button class="btn btn-instagram" onclick="shareInstagram()">Compartilhar no Instagram</button>
-        <button class="btn btn-copy" onclick="testNotification()">🔔 Testar Notificação com Foto</button>
       </div>
     </div>
   </div>
@@ -441,26 +437,21 @@
   // CONFIGURAÇÃO DO CLOUDINARY
   const CLOUD_NAME = "hwcvtcnt";
 
-  // DETEÇÃO AUTOMÁTICA DA PASTA DO INSTRUTOR
   function getInstructorFolder() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('id')) {
       return urlParams.get('id');
     }
+    const path = window.location.pathname.toLowerCase();
     const ref = document.referrer.toLowerCase();
-    if (ref.includes('agendamento')) {
+    if (path.includes('agendamento') || ref.includes('agendamento')) {
       return 'agendamento';
     }
-    return 'agendamento'; // Predefinição baseada na ligação fornecida
+    return 'agendamento';
   }
 
   const currentFolder = getInstructorFolder();
   document.getElementById('app-subtitle').innerText = `Pasta ativa: ${currentFolder}`;
-
-  // REGISTO DO SERVICE WORKER (NOTIFICAÇÕES PWA)
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
-  }
 
   async function enableNotifications() {
     if (!('Notification' in window)) return;
@@ -473,7 +464,6 @@
     }
   }
 
-  // DATAS OFICIAIS E IMAGENS DE CONTINGÊNCIA (FALLBACK)
   const officialEvents = {
     "0-22": { title: "Criação do CTB", desc: "Promulgação da Lei nº 9.503/1997 que instituiu o Código de Trânsito Brasileiro.", fallback: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80" },
     "1-17": { title: "Carnaval e Trânsito Seguro", desc: "Operação da Lei Seca. Se beber, não dirija.", fallback: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80" },
@@ -483,7 +473,7 @@
     "5-19": { title: "Aniversário da Lei Seca", desc: "Tolerância zero para o álcool ao volante (Lei nº 11.705/2008).", fallback: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&auto=format&fit=crop&q=80" },
     "6-25": { title: "Dia do Motorista", desc: "Homenagem aos condutores que transportam pessoas e riquezas pelo país.", fallback: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&auto=format&fit=crop&q=80" },
     "6-27": { title: "Dia do Motociclista", desc: "Atenção redobrada a pontos cegos e uso de equipamentos certificados.", fallback: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800&auto=format&fit=crop&q=80" },
-    "7-8":  { title: "Dia do Pedestre", desc: "Prioridade ao elemento mais frágil da via. Dê preferência na faixa.", fallback: "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?w=800&auto=format&fit=crop&q=80" },
+    "7-8":  { title: "Dia do Pedestre", desc: "Prioridade ao pedestre na faixa (Art. 70 do CTB).", fallback: "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?w=800&auto=format&fit=crop&q=80" },
     "8-18": { title: "Semana Nacional de Trânsito", desc: "Início oficial da Semana Nacional de Trânsito (18 a 25 de setembro).", fallback: "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=800&auto=format&fit=crop&q=80" },
     "8-22": { title: "Dia Mundial Sem Carro", desc: "Incentivo a meios de locomoção alternativos e sustentáveis.", fallback: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&auto=format&fit=crop&q=80" },
     "8-25": { title: "Dia Nacional do Trânsito", desc: "Encerramento da Semana Nacional com foco no respeito mútuo e cidadania.", fallback: "https://images.unsplash.com/photo-1494526585095-c41746248156?w=800&auto=format&fit=crop&q=80" },
@@ -495,6 +485,39 @@
   let currentDate = new Date();
   let currentActiveModalData = null;
   const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+  // Monta lista de URLs candidatas no Cloudinary para evitar erros de extensão/pasta
+  function getCandidateUrls(isoDate) {
+    return [
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}.jpg`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}.png`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}.jpg.png`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}.jpg.png`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}.png`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}.jpg`,
+      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}`
+    ];
+  }
+
+  // Testa as URLs em cascata e devolve a primeira válida
+  function resolveImageUrl(candidateUrls, fallbackUrl, callback) {
+    let index = 0;
+    function tryNext() {
+      if (index >= candidateUrls.length) {
+        callback(fallbackUrl);
+        return;
+      }
+      const img = new Image();
+      img.onload = () => callback(candidateUrls[index]);
+      img.onerror = () => {
+        index++;
+        tryNext();
+      };
+      img.src = candidateUrls[index];
+    }
+    tryNext();
+  }
 
   function renderCalendar() {
     const year = currentDate.getFullYear();
@@ -521,19 +544,14 @@
       const official = officialEvents[officialKey];
       const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-      // LIGAÇÃO DIRETA AO CLOUDINARY
-      const cloudinaryUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/calendario/${currentFolder}/${isoDate}.jpg`;
       const fallbackUrl = official ? official.fallback : "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80";
+      const candidates = getCandidateUrls(isoDate);
 
-      // Tentativa de carregar a imagem do Cloudinary com suporte a fallback
-      const testImg = new Image();
-      testImg.src = cloudinaryUrl;
-      testImg.onload = () => {
-        dayDiv.style.backgroundImage = `url('${cloudinaryUrl}')`;
-      };
-      testImg.onerror = () => {
-        dayDiv.style.backgroundImage = `url('${fallbackUrl}')`;
-      };
+      // Define imagem do cartão de forma resiliente
+      resolveImageUrl(candidates, fallbackUrl, (finalUrl) => {
+        dayDiv.style.backgroundImage = `url('${finalUrl}')`;
+        dayDiv.onclick = () => openModal(isoDate, month, day, finalUrl);
+      });
 
       const topRow = document.createElement("div");
       topRow.className = "day-top-row";
@@ -560,7 +578,6 @@
         dayDiv.appendChild(bottomInfo);
       }
 
-      dayDiv.onclick = () => openModal(isoDate, month, day, cloudinaryUrl, fallbackUrl);
       grid.appendChild(dayDiv);
     }
   }
@@ -570,30 +587,24 @@
     renderCalendar();
   }
 
-  function openModal(isoDate, month, day, cloudUrl, fallbackUrl) {
+  function openModal(isoDate, month, day, activeImgUrl) {
     const [y, m, d] = isoDate.split("-");
     const official = officialEvents[`${month}-${day}`];
 
     const title = official ? official.title : "Direção Defensiva";
-    const desc = official ? official.desc : "A segurança viária depende da atenção e cuidado de todos nós.";
+    const desc = official ? official.desc : "A segurança viária depende da atenção e responsabilidade de todos.";
 
     currentActiveModalData = {
       dateFormatted: `${d}/${m}/${y}`,
       title,
       desc,
-      imgUrl: cloudUrl
+      imgUrl: activeImgUrl
     };
 
     document.getElementById("modal-header-title").innerText = `${d}/${m}/${y} - CAMPANHA`;
     document.getElementById("modal-title").innerText = title;
     document.getElementById("modal-desc").innerText = desc;
-
-    const modalImg = document.getElementById("modal-img");
-    modalImg.onerror = function() {
-      this.src = fallbackUrl;
-      currentActiveModalData.imgUrl = fallbackUrl;
-    };
-    modalImg.src = cloudUrl;
+    document.getElementById("modal-img").src = activeImgUrl;
 
     document.getElementById("modal-overlay").style.display = "flex";
   }
@@ -621,27 +632,7 @@
       try { await navigator.share({ title: currentActiveModalData.title, text }); } catch (e) {}
     } else {
       navigator.clipboard.writeText(text);
-      alert("Texto copiado! Pode agora colá-lo na publicação do Instagram.");
-    }
-  }
-
-  function testNotification() {
-    if (!currentActiveModalData) return;
-    if (Notification.permission !== 'granted') {
-      enableNotifications();
-      return;
-    }
-    if (navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({
-        type: 'NOTIFICAR_CAMPANHA',
-        payload: {
-          title: `Hoje: ${currentActiveModalData.title}`,
-          desc: currentActiveModalData.desc.slice(0, 100) + '...',
-          image: currentActiveModalData.imgUrl,
-          url: window.location.href
-        }
-      });
-      alert('Notificação enviada para a barra de estado do dispositivo!');
+      alert("Texto copiado! Pode colar na publicação do Instagram.");
     }
   }
 
