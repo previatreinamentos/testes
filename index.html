@@ -8,6 +8,7 @@
   <style>
     :root {
       --primary: #0284c7;
+      --primary-dark: #0369a1;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #0f172a;
@@ -39,36 +40,62 @@
 
     .top-bar {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
       background: var(--card-bg);
       padding: 12px 18px;
       border-radius: 14px;
       border: 1px solid var(--border-color);
       margin-bottom: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
     .top-bar h1 {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
 
-    .btn-voltar {
-      background: #f1f5f9;
-      color: var(--text-main);
-      text-decoration: none;
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action {
+      border: none;
       padding: 8px 14px;
       border-radius: 8px;
-      font-size: 0.82rem;
+      cursor: pointer;
       font-weight: 700;
-      border: 1px solid var(--border-color);
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s;
     }
+
+    .btn-refresh {
+      background: #e0f2fe;
+      color: var(--primary-dark);
+      border: 1px solid #bae6fd;
+    }
+    .btn-refresh:hover { background: #bae6fd; }
+
+    .btn-notif {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+    .btn-notif:hover { background: #fde68a; }
 
     .cal-container {
       background: var(--card-bg);
       border-radius: 16px;
       padding: 16px;
       border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
 
     .cal-header {
@@ -92,6 +119,7 @@
       cursor: pointer;
       font-weight: 700;
     }
+    .btn-nav:hover { background: #e2e8f0; }
 
     .weekdays {
       display: grid;
@@ -123,7 +151,7 @@
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .day::before {
@@ -138,6 +166,7 @@
       transform: scale(1.04);
       z-index: 10;
       border-color: var(--primary);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
     }
 
     .day.empty {
@@ -212,6 +241,7 @@
       display: flex;
       flex-direction: column;
       max-height: 90vh;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     }
 
     .modal-header {
@@ -299,8 +329,17 @@
 
 <div class="container">
   <div class="top-bar">
-    <h1 id="top-title">Calendário de Postagens</h1>
-    <a href="https://previatreinamentos.github.io/agendamento/" id="link-voltar" class="btn-voltar">← Voltar à Lista</a>
+    <h1>Calendário de Postagens</h1>
+    <div class="header-actions">
+      <!-- BOTÃO ATUALIZAR IMAGENS -->
+      <button class="btn-action btn-refresh" id="btn-refresh-images" onclick="refreshDriveImages()">
+        🔄 Atualizar Imagens
+      </button>
+      <!-- BOTÃO LEMBRETES/NOTIFICAÇÕES -->
+      <button class="btn-action btn-notif" id="btn-request-notif" onclick="enableNotifications()">
+        🔔 Ativar Lembretes
+      </button>
+    </div>
   </div>
 
   <div class="cal-container">
@@ -318,7 +357,7 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL SMARTPHONE -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal-card">
     <div class="modal-header">
@@ -348,27 +387,80 @@
   const FALLBACK_DEFAULT = "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80";
 
   const officialEvents = {
-    "8-18": { title: "Semana Nacional de Trânsito", desc: "Início oficial da Semana Nacional de Trânsito." },
-    "8-22": { title: "Dia Mundial Sem Carro", desc: "Incentivo a mobilidade sustentável." },
-    "8-25": { title: "Dia Nacional do Trânsito", desc: "Atenção e respeito pela vida no trânsito." }
+    "0-22": { title: "Criação do CTB", desc: "Promulgação da Lei nº 9.503/1997 que instituiu o Código de Trânsito Brasileiro." },
+    "1-17": { title: "Carnaval e Trânsito Seguro", desc: "Operação da Lei Seca. Se beber, não dirija." },
+    "2-8":  { title: "Dia Internacional da Mulher", desc: "Ações de respeito e valorização de motoristas mulheres." },
+    "3-15": { title: "Dia do Ciclista", desc: "Distância mínima de 1,5 metro ao ultrapassar (Art. 201 do CTB)." },
+    "4-1":  { title: "Abertura do Maio Amarelo", desc: "Mobilização mundial pela segurança e preservação de vidas no trânsito." },
+    "5-19": { title: "Aniversário da Lei Seca", desc: "Tolerância zero para o álcool ao volante (Lei nº 11.705/2008)." },
+    "6-25": { title: "Dia do Motorista", desc: "Homenagem aos condutores que transportam pessoas e riquezas pelo país." },
+    "6-27": { title: "Dia do Motociclista", desc: "Atenção redobrada a pontos cegos e uso de equipamentos certificados." },
+    "7-8":  { title: "Dia do Pedestre", desc: "Prioridade ao pedestre na faixa (Art. 70 do CTB)." },
+    "8-18": { title: "Semana Nacional de Trânsito", desc: "Início oficial da Semana Nacional de Trânsito (18 a 25 de setembro)." },
+    "8-22": { title: "Dia Mundial Sem Carro", desc: "Incentivo a meios de locomoção alternativos e sustentáveis." },
+    "8-25": { title: "Dia Nacional do Trânsito", desc: "Encerramento da Semana Nacional com foco no respeito mútuo e cidadania." },
+    "9-12": { title: "Dia das Crianças e Segurança", desc: "Uso correto de cadeirinhas, bebê-conforto e assentos de elevação." },
+    "10-15":{ title: "Memória das Vítimas de Trânsito", desc: "Ação de conscientização sobre as consequências de imprudências ao volante." },
+    "11-25":{ title: "Operação Fim de Ano", desc: "Revisão veicular preventiva e paragens de descanso em trajetos longos." }
   };
 
-  let driveImagesMap = {}; // Armazena as imagens encontradas no Google Drive { "2026-09-25": "https://..." }
+  let driveImagesMap = {};
   let currentDate = new Date();
   let currentActiveModalData = null;
   const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-  // Busca a lista de imagens da pasta do Google Drive
+  // SISTEMA DE NOTIFICAÇÕES / LEMBRETES
+  async function enableNotifications() {
+    if (!('Notification' in window)) {
+      alert("Seu navegador não suporta notificações de área de trabalho.");
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    const btn = document.getElementById('btn-request-notif');
+    if (perm === 'granted') {
+      btn.innerText = '🔔 Lembretes Ativos';
+      btn.style.background = '#dcfce7';
+      btn.style.color = '#15803d';
+      btn.style.borderColor = '#86efac';
+
+      // Envia uma notificação de boas-vindas / teste imediato
+      new Notification("🚦 Lembretes Ativados!", {
+        body: "Você receberá avisos diários sobre as campanhas educativas de trânsito.",
+        icon: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=128&auto=format&fit=crop&q=80"
+      });
+    } else {
+      alert("Permissão de notificação negada ou não concedida.");
+    }
+  }
+
+  // ATUALIZAÇÃO MANUAL DAS IMAGENS DO DRIVE
+  async function refreshDriveImages() {
+    const btn = document.getElementById('btn-refresh-images');
+    const originalText = btn.innerText;
+    btn.innerText = '⏳ Atualizando...';
+    btn.disabled = true;
+
+    await loadDriveImages();
+
+    btn.innerText = '✅ Atualizado!';
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.disabled = false;
+    }, 1500);
+  }
+
+  // CARREGA LISTA DE IMAGENS DO DRIVE
   async function loadDriveImages() {
     if (!DRIVE_API_URL || DRIVE_API_URL.includes("COLE_AQUI")) {
       renderCalendar();
       return;
     }
     try {
-      const res = await fetch(DRIVE_API_URL);
+      // Adiciona timestamp para furar qualquer cache de rede
+      const res = await fetch(`${DRIVE_API_URL}?t=${new Date().getTime()}`);
       driveImagesMap = await res.json();
     } catch (e) {
-      console.log("Erro ao carregar imagens do Drive, usando imagens padrão:", e);
+      console.log("Erro ao carregar imagens do Drive:", e);
     }
     renderCalendar();
   }
@@ -398,7 +490,7 @@
       const official = officialEvents[officialKey];
       const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-      // Verifica se existe uma imagem com essa data no Google Drive
+      // Localiza imagem correspondente no Google Drive pelo formato AAAA-MM-DD
       const imgUrl = driveImagesMap[isoDate] || FALLBACK_DEFAULT;
 
       dayDiv.style.backgroundImage = `url('${imgUrl}')`;
@@ -481,7 +573,7 @@
     alert("Texto da campanha copiado com sucesso! Agora basta colar no Instagram.");
   }
 
-  // Inicia carregando as imagens do Google Drive
+  // Inicializa buscando as imagens
   loadDriveImages();
 </script>
 
