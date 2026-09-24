@@ -3,16 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Calendário de Trânsito - Prévia Treinamentos</title>
-
-  <meta name="theme-color" content="#0284c7">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Calendário de Postagens</title>
 
   <style>
     :root {
       --primary: #0284c7;
-      --primary-dark: #0369a1;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #0f172a;
@@ -37,95 +32,65 @@
       min-height: 100vh;
     }
 
-    .top-bar {
-      max-width: 1400px;
-      margin: 0 auto 16px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: var(--card-bg);
-      padding: 14px 20px;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-icon {
-      background: #e0f2fe;
-      color: var(--primary);
-      font-size: 1.3rem;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-    }
-
-    .brand-title h1 {
-      font-size: 1.15rem;
-      font-weight: 800;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-notif {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fde68a;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-
     .container {
       max-width: 1400px;
       margin: 0 auto;
     }
 
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 14px;
+    }
+
+    .top-bar h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .btn-voltar {
+      background: #f1f5f9;
+      color: var(--text-main);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+    }
+
     .cal-container {
       background: var(--card-bg);
-      border-radius: 18px;
-      padding: 20px 16px;
+      border-radius: 16px;
+      padding: 16px;
       border: 1px solid var(--border-color);
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
     }
 
     .cal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .cal-header h2 {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 800;
       text-transform: capitalize;
     }
 
-    .btn-nav-month {
+    .btn-nav {
       background: #f8fafc;
       border: 1px solid var(--border-color);
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.85rem;
     }
 
     .weekdays {
@@ -134,77 +99,72 @@
       text-align: center;
       font-weight: 800;
       color: var(--text-muted);
-      margin-bottom: 10px;
-      font-size: 0.82rem;
-      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
     }
 
     .days-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .day {
-      min-height: 160px;
-      border-radius: 12px;
+      min-height: 140px;
+      border-radius: 10px;
       cursor: pointer;
       border: 1px solid var(--border-color);
       background-color: #0f172a;
       background-size: cover;
       background-position: center;
-      padding: 8px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.28s ease, border-color 0.2s ease;
-      will-change: transform;
+      transition: transform 0.2s ease;
     }
 
     .day::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.1) 40%, rgba(15, 23, 42, 0.90) 100%);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.85) 100%);
       z-index: 1;
     }
 
     .day:hover:not(.empty) {
-      transform: scale(1.12);
-      z-index: 50;
+      transform: scale(1.04);
+      z-index: 10;
       border-color: var(--primary);
-      border-width: 2px;
-      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
     }
 
     .day.empty {
       background: transparent;
       border-color: transparent;
       cursor: default;
-      min-height: 160px;
+      min-height: 140px;
     }
     .day.empty::before { display: none; }
 
     .day-top-row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       z-index: 2;
     }
 
     .day-number {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 800;
       color: #0f172a;
-      background: rgba(255, 255, 255, 0.92);
-      padding: 2px 7px;
-      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2px 6px;
+      border-radius: 4px;
     }
 
-    .badge-clean {
-      font-size: 0.62rem;
+    .badge-marco {
+      font-size: 0.6rem;
       font-weight: 800;
       color: #ffffff;
       background: var(--primary);
@@ -214,37 +174,28 @@
 
     .day-bottom-info {
       z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
     }
 
     .day-event-title {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 800;
       color: #ffffff;
-      line-height: 1.25;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      line-height: 1.2;
     }
 
     @media (max-width: 860px) {
-      .days-grid { gap: 5px; }
-      .day, .day.empty { min-height: 105px; padding: 4px; }
-      .day:hover:not(.empty) { transform: scale(1.05); }
-      .day-number { font-size: 0.72rem; }
-      .day-event-title { font-size: 0.64rem; }
+      .days-grid { gap: 4px; }
+      .day, .day.empty { min-height: 95px; padding: 4px; }
+      .day-number { font-size: 0.7rem; }
+      .day-event-title { font-size: 0.6rem; }
     }
 
-    /* MODAL SMARTPHONE */
+    /* MODAL */
     .modal-overlay {
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -252,124 +203,92 @@
       padding: 10px;
     }
 
-    .modal-phone-card {
+    .modal-card {
       background: #ffffff;
       width: 100%;
-      max-width: 395px;
-      height: 90vh;
-      max-height: 740px;
-      border-radius: 26px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      max-width: 380px;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      border: 3px solid #e2e8f0;
+      max-height: 90vh;
     }
 
-    .modal-top-bar {
+    .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 18px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border-color);
-      flex-shrink: 0;
     }
 
-    .modal-top-bar h4 {
+    .modal-header h4 {
       font-size: 0.85rem;
       font-weight: 800;
       color: var(--primary);
     }
 
-    .modal-close-btn {
+    .modal-close {
       background: #f1f5f9;
       border: none;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      font-size: 1rem;
       cursor: pointer;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-weight: 700;
     }
 
-    .modal-scrollable-content {
+    .modal-content {
       overflow-y: auto;
-      flex: 1;
-      padding-bottom: 18px;
+      padding-bottom: 16px;
     }
 
-    .modal-phone-img-container {
+    .modal-img-wrap {
       width: 100%;
-      height: 260px;
+      height: 240px;
       background: #e2e8f0;
     }
 
-    .modal-phone-img-container img {
+    .modal-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
-    .modal-info-padding {
-      padding: 14px 18px 0;
+    .modal-body {
+      padding: 14px 16px;
     }
 
-    .modal-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #e0f2fe;
-      color: var(--primary-dark);
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 0.72rem;
+    .modal-title {
+      font-size: 1.15rem;
       font-weight: 800;
       margin-bottom: 8px;
     }
 
-    .modal-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .modal-box-desc {
+    .modal-desc {
       background: #f8fafc;
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 0.86rem;
-      line-height: 1.55;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.85rem;
+      line-height: 1.45;
       color: #334155;
-      white-space: pre-line;
-      margin-bottom: 16px;
-    }
-
-    .modal-actions {
-      padding: 0 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 11px 16px;
+      display: block;
+      width: 100%;
+      padding: 10px;
       border: none;
       border-radius: 8px;
-      color: white;
+      color: #ffffff;
       font-weight: 700;
       cursor: pointer;
-      font-size: 0.88rem;
-      width: 100%;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 8px;
+      text-decoration: none;
     }
 
     .btn-whatsapp { background: var(--whatsapp); }
@@ -378,27 +297,17 @@
 </head>
 <body>
 
-<div class="top-bar">
-  <div class="brand-title">
-    <div class="brand-icon">🚦</div>
-    <div>
-      <h1 id="app-title">Calendário de Trânsito</h1>
-      <p id="app-subtitle" style="font-size: 0.75rem; color: var(--text-muted);">Painel do Instrutor</p>
-    </div>
-  </div>
-  <div class="header-actions">
-    <button class="btn-notif" id="btn-request-notif" onclick="enableNotifications()">
-      🔔 Ativar Lembretes
-    </button>
-  </div>
-</div>
-
 <div class="container">
+  <div class="top-bar">
+    <h1 id="top-title">Calendário de Postagens</h1>
+    <a href="https://previatreinamentos.github.io/agendamento/" id="link-voltar" class="btn-voltar">← Voltar à Lista</a>
+  </div>
+
   <div class="cal-container">
     <div class="cal-header">
-      <button class="btn-nav-month" onclick="changeMonth(-1)">◀ Anterior</button>
+      <button class="btn-nav" onclick="changeMonth(-1)">◀ Anterior</button>
       <h2 id="cal-month-title">Mês Ano</h2>
-      <button class="btn-nav-month" onclick="changeMonth(1)">Próximo ▶</button>
+      <button class="btn-nav" onclick="changeMonth(1)">Próximo ▶</button>
     </div>
 
     <div class="weekdays">
@@ -409,114 +318,59 @@
   </div>
 </div>
 
-<!-- MODAL SMARTPHONE -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
-  <div class="modal-phone-card">
-    <div class="modal-top-bar">
-      <h4 id="modal-header-title">CAMPANHA DO DIA</h4>
-      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+  <div class="modal-card">
+    <div class="modal-header">
+      <h4 id="modal-date-tag">CAMPANHA DO DIA</h4>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="modal-scrollable-content">
-      <div class="modal-phone-img-container">
-        <img id="modal-img" src="" alt="Pôster" crossorigin="anonymous">
+    <div class="modal-content">
+      <div class="modal-img-wrap">
+        <img id="modal-img" src="" alt="Campanha">
       </div>
-      <div class="modal-info-padding">
-        <div class="modal-pill" id="modal-pill">🚦 SEGURANÇA VIÁRIA</div>
+      <div class="modal-body">
         <h3 class="modal-title" id="modal-title">Título</h3>
-        <div class="modal-box-desc" id="modal-desc">Descrição...</div>
-      </div>
-      <div class="modal-actions">
+        <div class="modal-desc" id="modal-desc">Descrição...</div>
         <button class="btn btn-whatsapp" onclick="shareWhatsApp()">Compartilhar no WhatsApp</button>
-        <button class="btn btn-instagram" onclick="shareInstagram()">Compartilhar no Instagram</button>
+        <button class="btn btn-instagram" onclick="shareInstagram()">Copiar Legenda Instagram</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // CONFIGURAÇÃO DO CLOUDINARY
-  const CLOUD_NAME = "hwcvtcnt";
+  /* =========================================================================
+     CONFIGURAÇÃO DO GOOGLE DRIVE (COLE A URL DO APPS SCRIPT AQUI)
+     ========================================================================= */
+  const DRIVE_API_URL = "https://script.google.com/macros/s/AKfycbyttorLvRothU_Ch5lMRTxvWZL3hzYlddsdondxgATkDwvj8BArSGNTH_OolkG16kmy/exec";
 
-  function getInstructorFolder() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('id')) {
-      return urlParams.get('id');
-    }
-    const path = window.location.pathname.toLowerCase();
-    const ref = document.referrer.toLowerCase();
-    if (path.includes('agendamento') || ref.includes('agendamento')) {
-      return 'agendamento';
-    }
-    return 'agendamento';
-  }
-
-  const currentFolder = getInstructorFolder();
-  document.getElementById('app-subtitle').innerText = `Pasta ativa: ${currentFolder}`;
-
-  async function enableNotifications() {
-    if (!('Notification' in window)) return;
-    const perm = await Notification.requestPermission();
-    if (perm === 'granted') {
-      const btn = document.getElementById('btn-request-notif');
-      btn.innerText = '🔔 Lembretes Ativos';
-      btn.style.background = '#dcfce7';
-      btn.style.color = '#15803d';
-    }
-  }
+  const FALLBACK_DEFAULT = "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80";
 
   const officialEvents = {
-    "0-22": { title: "Criação do CTB", desc: "Promulgação da Lei nº 9.503/1997 que instituiu o Código de Trânsito Brasileiro.", fallback: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80" },
-    "1-17": { title: "Carnaval e Trânsito Seguro", desc: "Operação da Lei Seca. Se beber, não dirija.", fallback: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80" },
-    "2-8":  { title: "Dia Internacional da Mulher", desc: "Ações de respeito e valorização de motoristas mulheres.", fallback: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80" },
-    "3-15": { title: "Dia do Ciclista", desc: "Distância mínima de 1,5 metro ao ultrapassar (Art. 201 do CTB).", fallback: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=800&auto=format&fit=crop&q=80" },
-    "4-1":  { title: "Abertura do Maio Amarelo", desc: "Mobilização mundial pela segurança e preservação de vidas no trânsito.", fallback: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&auto=format&fit=crop&q=80" },
-    "5-19": { title: "Aniversário da Lei Seca", desc: "Tolerância zero para o álcool ao volante (Lei nº 11.705/2008).", fallback: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&auto=format&fit=crop&q=80" },
-    "6-25": { title: "Dia do Motorista", desc: "Homenagem aos condutores que transportam pessoas e riquezas pelo país.", fallback: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&auto=format&fit=crop&q=80" },
-    "6-27": { title: "Dia do Motociclista", desc: "Atenção redobrada a pontos cegos e uso de equipamentos certificados.", fallback: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800&auto=format&fit=crop&q=80" },
-    "7-8":  { title: "Dia do Pedestre", desc: "Prioridade ao pedestre na faixa (Art. 70 do CTB).", fallback: "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?w=800&auto=format&fit=crop&q=80" },
-    "8-18": { title: "Semana Nacional de Trânsito", desc: "Início oficial da Semana Nacional de Trânsito (18 a 25 de setembro).", fallback: "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=800&auto=format&fit=crop&q=80" },
-    "8-22": { title: "Dia Mundial Sem Carro", desc: "Incentivo a meios de locomoção alternativos e sustentáveis.", fallback: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&auto=format&fit=crop&q=80" },
-    "8-25": { title: "Dia Nacional do Trânsito", desc: "Encerramento da Semana Nacional com foco no respeito mútuo e cidadania.", fallback: "https://images.unsplash.com/photo-1494526585095-c41746248156?w=800&auto=format&fit=crop&q=80" },
-    "9-12": { title: "Dia das Crianças e Segurança", desc: "Uso correto de cadeirinhas, bebê-conforto e assentos de elevação.", fallback: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&auto=format&fit=crop&q=80" },
-    "10-15":{ title: "Memória das Vítimas de Trânsito", desc: "Ação de conscientização sobre as consequências de imprudências ao volante.", fallback: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80" },
-    "11-25":{ title: "Operação Fim de Ano", desc: "Revisão veicular preventiva e paragens de descanso em trajetos longos.", fallback: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800&auto=format&fit=crop&q=80" }
+    "8-18": { title: "Semana Nacional de Trânsito", desc: "Início oficial da Semana Nacional de Trânsito." },
+    "8-22": { title: "Dia Mundial Sem Carro", desc: "Incentivo a mobilidade sustentável." },
+    "8-25": { title: "Dia Nacional do Trânsito", desc: "Atenção e respeito pela vida no trânsito." }
   };
 
+  let driveImagesMap = {}; // Armazena as imagens encontradas no Google Drive { "2026-09-25": "https://..." }
   let currentDate = new Date();
   let currentActiveModalData = null;
   const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-  // Monta lista de URLs candidatas no Cloudinary para evitar erros de extensão/pasta
-  function getCandidateUrls(isoDate) {
-    return [
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}.jpg`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}.png`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}.jpg.png`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/calendario/${currentFolder}/${isoDate}`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}.jpg.png`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}.png`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}.jpg`,
-      `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/${isoDate}`
-    ];
-  }
-
-  // Testa as URLs em cascata e devolve a primeira válida
-  function resolveImageUrl(candidateUrls, fallbackUrl, callback) {
-    let index = 0;
-    function tryNext() {
-      if (index >= candidateUrls.length) {
-        callback(fallbackUrl);
-        return;
-      }
-      const img = new Image();
-      img.onload = () => callback(candidateUrls[index]);
-      img.onerror = () => {
-        index++;
-        tryNext();
-      };
-      img.src = candidateUrls[index];
+  // Busca a lista de imagens da pasta do Google Drive
+  async function loadDriveImages() {
+    if (!DRIVE_API_URL || DRIVE_API_URL.includes("COLE_AQUI")) {
+      renderCalendar();
+      return;
     }
-    tryNext();
+    try {
+      const res = await fetch(DRIVE_API_URL);
+      driveImagesMap = await res.json();
+    } catch (e) {
+      console.log("Erro ao carregar imagens do Drive, usando imagens padrão:", e);
+    }
+    renderCalendar();
   }
 
   function renderCalendar() {
@@ -544,14 +398,11 @@
       const official = officialEvents[officialKey];
       const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-      const fallbackUrl = official ? official.fallback : "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80";
-      const candidates = getCandidateUrls(isoDate);
+      // Verifica se existe uma imagem com essa data no Google Drive
+      const imgUrl = driveImagesMap[isoDate] || FALLBACK_DEFAULT;
 
-      // Define imagem do cartão de forma resiliente
-      resolveImageUrl(candidates, fallbackUrl, (finalUrl) => {
-        dayDiv.style.backgroundImage = `url('${finalUrl}')`;
-        dayDiv.onclick = () => openModal(isoDate, month, day, finalUrl);
-      });
+      dayDiv.style.backgroundImage = `url('${imgUrl}')`;
+      dayDiv.onclick = () => openModal(isoDate, day, official, imgUrl);
 
       const topRow = document.createElement("div");
       topRow.className = "day-top-row";
@@ -562,7 +413,7 @@
 
       if (official) {
         const badge = document.createElement("span");
-        badge.className = "badge-clean";
+        badge.className = "badge-marco";
         badge.innerText = "MARCO";
         topRow.appendChild(badge);
       }
@@ -587,12 +438,10 @@
     renderCalendar();
   }
 
-  function openModal(isoDate, month, day, activeImgUrl) {
+  function openModal(isoDate, day, official, activeImgUrl) {
     const [y, m, d] = isoDate.split("-");
-    const official = officialEvents[`${month}-${day}`];
-
-    const title = official ? official.title : "Direção Defensiva";
-    const desc = official ? official.desc : "A segurança viária depende da atenção e responsabilidade de todos.";
+    const title = official ? official.title : "Direção Defensiva Diária";
+    const desc = official ? official.desc : "A segurança viária depende da atenção e cuidado de todos nós.";
 
     currentActiveModalData = {
       dateFormatted: `${d}/${m}/${y}`,
@@ -601,7 +450,7 @@
       imgUrl: activeImgUrl
     };
 
-    document.getElementById("modal-header-title").innerText = `${d}/${m}/${y} - CAMPANHA`;
+    document.getElementById("modal-date-tag").innerText = `${d}/${m}/${y} - CAMPANHA`;
     document.getElementById("modal-title").innerText = title;
     document.getElementById("modal-desc").innerText = desc;
     document.getElementById("modal-img").src = activeImgUrl;
@@ -618,7 +467,7 @@
   }
 
   function getShareText() {
-    return `🚦 *Campanha Educativa de Trânsito*\n📅 *Data:* ${currentActiveModalData.dateFormatted}\n📌 *${currentActiveModalData.title}*\n\n${currentActiveModalData.desc}\n\nJuntos salvamos vidas!`;
+    return `🚦 *Campanha de Trânsito*\n📅 *Data:* ${currentActiveModalData.dateFormatted}\n📌 *${currentActiveModalData.title}*\n\n${currentActiveModalData.desc}\n\nJuntos salvamos vidas!`;
   }
 
   function shareWhatsApp() {
@@ -626,17 +475,14 @@
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   }
 
-  async function shareInstagram() {
+  function shareInstagram() {
     const text = getShareText();
-    if (navigator.share) {
-      try { await navigator.share({ title: currentActiveModalData.title, text }); } catch (e) {}
-    } else {
-      navigator.clipboard.writeText(text);
-      alert("Texto copiado! Pode colar na publicação do Instagram.");
-    }
+    navigator.clipboard.writeText(text);
+    alert("Texto da campanha copiado com sucesso! Agora basta colar no Instagram.");
   }
 
-  renderCalendar();
+  // Inicia carregando as imagens do Google Drive
+  loadDriveImages();
 </script>
 
 </body>
