@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Calendário e Editor de Postagens de Trânsito</title>
+  <title>Calendário de Postagens de Trânsito</title>
 
   <style>
     :root {
@@ -11,12 +11,10 @@
       --primary-dark: #0369a1;
       --bg: #090e17;
       --card-bg: #131d2e;
-      --card-bg-light: #1e293b;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border-color: #27354a;
       --whatsapp: #25d366;
-      --instagram: #e1306c;
       --accent: #38bdf8;
     }
 
@@ -40,7 +38,6 @@
       margin: 0 auto;
     }
 
-    /* Barra Superior Principal */
     .top-bar {
       display: flex;
       flex-wrap: wrap;
@@ -61,7 +58,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      letter-spacing: -0.3px;
     }
 
     .header-actions {
@@ -84,20 +80,11 @@
       transition: all 0.2s ease;
     }
 
-    .btn-refresh {
-      background: #0284c7;
-      color: #ffffff;
-    }
+    .btn-refresh { background: #0284c7; color: #ffffff; }
     .btn-refresh:hover { background: #0369a1; }
-
-    .btn-notif {
-      background: #1e293b;
-      color: #fde68a;
-      border: 1px solid #334155;
-    }
+    .btn-notif { background: #1e293b; color: #fde68a; border: 1px solid #334155; }
     .btn-notif:hover { background: #334155; }
 
-    /* Calendário */
     .cal-container {
       background: var(--card-bg);
       border-radius: 18px;
@@ -117,7 +104,6 @@
       font-size: 1.35rem;
       font-weight: 800;
       text-transform: capitalize;
-      letter-spacing: -0.5px;
     }
 
     .btn-nav {
@@ -217,10 +203,7 @@
       letter-spacing: 0.5px;
     }
 
-    .day-bottom-info {
-      z-index: 2;
-    }
-
+    .day-bottom-info { z-index: 2; }
     .day-event-title {
       font-size: 0.76rem;
       font-weight: 700;
@@ -237,7 +220,7 @@
       .badge-marco { font-size: 0.55rem; padding: 2px 4px; }
     }
 
-    /* Modal do Editor */
+    /* Modal Simplificado para Visualização e Download */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -247,50 +230,43 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      padding: 12px;
+      padding: 14px;
     }
 
     .modal-card {
       background: #131d2e;
       width: 100%;
-      max-width: 960px;
-      border-radius: 22px;
+      max-width: 460px;
+      border-radius: 20px;
       border: 1px solid var(--border-color);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      max-height: 95vh;
+      max-height: 92vh;
       box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-      animation: modalFadeIn 0.22s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.97); }
-      to { opacity: 1; transform: scale(1); }
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
+      padding: 12px 18px;
       background: #090e17;
       border-bottom: 1px solid var(--border-color);
     }
 
     .modal-header h4 {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 800;
       color: var(--accent);
-      letter-spacing: 0.5px;
     }
 
     .modal-close {
       background: #1e293b;
       color: #cbd5e1;
       border: none;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       cursor: pointer;
       font-weight: 700;
@@ -298,199 +274,75 @@
     }
     .modal-close:hover { background: #ef4444; color: #fff; }
 
-    .modal-content-grid {
-      display: grid;
-      grid-template-columns: 430px 1fr;
-      overflow-y: auto;
-      max-height: calc(95vh - 65px);
-    }
-
-    @media (max-width: 860px) {
-      .modal-content-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Coluna do Canvas Preview */
-    .preview-pane {
-      background: #070c14;
+    .modal-body {
       padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-right: 1px solid var(--border-color);
-    }
-
-    .canvas-container {
-      width: 100%;
-      max-width: 340px;
-      position: relative;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      border: 1px solid #27354a;
-      background: #000;
-    }
-
-    #post-canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-      aspect-ratio: 4 / 5;
-    }
-
-    .canvas-tip {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    /* Coluna de Ferramentas */
-    .editor-pane {
-      padding: 20px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 14px;
-      background: #131d2e;
-      overflow-y: auto;
     }
 
-    .editor-section-title {
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: #94a3b8;
-      margin-bottom: 6px;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .input-field {
+    .modal-img-wrap {
       width: 100%;
-      padding: 10px 12px;
-      background: #090e17;
-      border: 1px solid #27354a;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 0.88rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .input-field:focus {
-      border-color: var(--accent);
-    }
-
-    /* Upload */
-    .upload-btn-wrap {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-file-upload {
-      flex: 1;
-      background: #1e293b;
-      border: 1px dashed #475569;
-      color: #cbd5e1;
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      transition: 0.2s;
-    }
-    .btn-file-upload:hover {
-      background: #334155;
-      border-color: var(--accent);
-      color: #fff;
-    }
-
-    /* Paletas de Cores */
-    .palette-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
-    }
-
-    .palette-btn {
-      height: 38px;
-      border-radius: 8px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.15s ease, border-color 0.2s;
-    }
-    .palette-btn:hover {
-      transform: scale(1.08);
-    }
-    .palette-btn.active {
-      border-color: #ffffff;
-      box-shadow: 0 0 10px rgba(255,255,255,0.45);
-    }
-
-    /* WhatsApp Controles */
-    .whatsapp-input-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .toggle-pill {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #070c14;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      user-select: none;
-      background: #090e17;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #27354a;
-      white-space: nowrap;
+      justify-content: center;
+      max-height: 480px;
     }
 
-    .toggle-pill input {
-      accent-color: var(--whatsapp);
-      cursor: pointer;
+    .modal-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
     }
 
-    /* Botões de Ação */
-    .actions-grid {
+    .modal-details {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 6px;
     }
 
-    .btn {
+    .modal-campaign-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .modal-campaign-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      background: #090e17;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-download-direct {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       width: 100%;
-      padding: 11px;
-      border: none;
-      border-radius: 10px;
+      background: #0284c7;
       color: #ffffff;
       font-weight: 800;
       cursor: pointer;
-      font-size: 0.88rem;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.1s;
+      font-size: 1rem;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
     }
-    .btn:hover { opacity: 0.92; }
-    .btn:active { transform: scale(0.98); }
+    .btn-download-direct:hover { background: #0369a1; transform: translateY(-1px); }
+    .btn-download-direct:active { transform: translateY(0); }
 
-    .btn-download { background: #0284c7; }
-    .btn-whatsapp { background: var(--whatsapp); color: #052e16; }
-    .btn-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-
-    /* Toast */
     .toast-msg {
       position: fixed;
       bottom: 25px;
@@ -538,7 +390,7 @@
   </div>
 </div>
 
-<!-- Modal do Editor (Canvas 4:5 - 1080x1350) -->
+<!-- Modal Direto de Visualização e Download -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal-card">
     <div class="modal-header">
@@ -546,145 +398,55 @@
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
 
-    <div class="modal-content-grid">
-      <!-- Coluna da Prévia do Canvas -->
-      <div class="preview-pane">
-        <div class="canvas-container">
-          <canvas id="post-canvas" width="1080" height="1350"></canvas>
-        </div>
-        <div class="canvas-tip">Formato 4:5 (1080x1350) - Imagem Ampla + Faixas Otimizadas</div>
+    <div class="modal-body">
+      <div class="modal-img-wrap">
+        <img id="modal-display-img" src="" alt="Arte da Campanha">
       </div>
 
-      <!-- Coluna de Controles -->
-      <div class="editor-pane">
-        <div>
-          <div class="editor-section-title">🖼️ Imagem da Postagem</div>
-          <div class="upload-btn-wrap">
-            <label class="btn-file-upload">
-              📁 Escolher Minha Própria Imagem / Foto
-              <input type="file" id="user-custom-image-file" accept="image/*" style="display:none" onchange="handleUserCustomUpload(event)">
-            </label>
-            <button class="btn-nav" style="font-size:0.8rem; padding:8px 12px;" onclick="resetToOriginalDateImage()">Resetar</button>
-          </div>
-        </div>
-
-        <div>
-          <div class="editor-section-title">✏️ Topo: Nome do Instrutor / Autoescola</div>
-          <input type="text" id="edit-custom-title" class="input-field" placeholder="Ex: CFC Exemplo / Prof. Carlos" oninput="updateCanvasPreview()">
-        </div>
-
-        <div>
-          <div class="editor-section-title">📱 Base: WhatsApp do Instrutor</div>
-          <div class="whatsapp-input-row">
-            <input type="text" id="edit-whatsapp-num" class="input-field" value="(99) 99999-9999" oninput="updateCanvasPreview()">
-            <label class="toggle-pill">
-              <input type="checkbox" id="edit-show-whatsapp-icon" checked onchange="updateCanvasPreview()">
-              Ícone
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <div class="editor-section-title">🎨 Paleta de Cores do Card</div>
-          <div class="palette-grid">
-            <button class="palette-btn active" style="background: #0284c7;" data-theme="blue" title="Azul Trânsito" onclick="setPalette('blue', this)"></button>
-            <button class="palette-btn" style="background: #eab308;" data-theme="yellow" title="Amarelo Atenção" onclick="setPalette('yellow', this)"></button>
-            <button class="palette-btn" style="background: #10b981;" data-theme="green" title="Verde WhatsApp" onclick="setPalette('green', this)"></button>
-            <button class="palette-btn" style="background: #ef4444;" data-theme="red" title="Vermelho Alerta" onclick="setPalette('red', this)"></button>
-            <button class="palette-btn" style="background: #8b5cf6;" data-theme="purple" title="Roxo Moderno" onclick="setPalette('purple', this)"></button>
-            <button class="palette-btn" style="background: #f97316;" data-theme="orange" title="Laranja Ação" onclick="setPalette('orange', this)"></button>
-          </div>
-        </div>
-
-        <div class="actions-grid">
-          <button class="btn btn-download" onclick="downloadEditedImage()">
-            📥 Baixar Imagem Pronta (PNG)
-          </button>
-          <button class="btn btn-whatsapp" onclick="openShareOptionsModal()">
-            💬 Compartilhar no WhatsApp (Imagem + Legenda)
-          </button>
-          <button class="btn btn-instagram" onclick="shareInstagram()">
-            📸 Copiar Legenda do Instagram
-          </button>
-        </div>
+      <div class="modal-details">
+        <div class="modal-campaign-title" id="modal-title">Título da Campanha</div>
+        <div class="modal-campaign-desc" id="modal-desc">Descrição...</div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal de Escolha de Compartilhamento WhatsApp -->
-<div class="modal-overlay" id="share-modal-overlay" style="z-index: 1200;" onclick="closeShareModalOutside(event)">
-  <div class="modal-card" style="max-width: 440px; padding: 22px; background: #0f172a; border: 1px solid #334155;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
-      <h3 style="font-size: 1.05rem; font-weight:800; color:#38bdf8; display:flex; align-items:center; gap:8px;">
-        📲 Compartilhar no WhatsApp
-      </h3>
-      <button class="modal-close" onclick="closeShareModal()">✕</button>
-    </div>
-
-    <p style="font-size: 0.85rem; color:#94a3b8; line-height: 1.4; margin-bottom: 16px;">
-      Escolha como deseja enviar sua postagem. No celular, o compartilhamento envia a <strong>imagem + legenda juntos</strong> permitindo escolher entre <strong>Status</strong> ou <strong>Conversa/Grupo</strong>.
-    </p>
-
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-      <button class="btn" style="background: #25d366; color: #042f1a;" onclick="shareNativeImageAndText()">
-        🚀 Enviar Imagem + Legenda (Status ou Conversa)
-      </button>
-
-      <button class="btn" style="background: #1e293b; color: #f8fafc; border: 1px solid #334155;" onclick="shareTextOnlyWhatsApp()">
-        💬 Enviar Somente Texto da Campanha
-      </button>
-
-      <button class="btn" style="background: #0284c7; color: #ffffff;" onclick="downloadAndPromptWhatsAppWeb()">
-        💻 Usando no Computador (Baixar + WhatsApp Web)
+      <button class="btn-download-direct" id="btn-download-action" onclick="downloadCampaignImage()">
+        📥 Baixar Imagem (Download)
       </button>
     </div>
   </div>
 </div>
 
-<div class="toast-msg" id="toast-message">Mensagem de aviso</div>
+<div class="toast-msg" id="toast-message"></div>
 
 <script>
-  /* =========================================================================
-     CONFIGURAÇÃO DO GOOGLE DRIVE & EVENTOS DE TRÂNSITO
-     ========================================================================= */
   const DRIVE_API_URL = "https://script.google.com/macros/s/AKfycbyttorLvRothU_Ch5lMRTxvWZL3hzYlddsdondxgATkDwvj8BArSGNTH_OolkG16kmy/exec";
 
-  // Imagens temáticas diretas com links estáveis e confiáveis para cada evento
+  const DEFAULT_CAMPAIGN_PHOTOS = [
+    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1080&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1080&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1508974239320-0a029497e820?w=1080&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1080&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1600320254374-ce2d293c324e?w=1080&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1080&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1080&auto=format&fit=crop&q=80"
+  ];
+
   const dateThematicImages = {
-    // 22 de Janeiro - Criação do CTB (Lei e Trânsito)
     "0-22": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1080&auto=format&fit=crop&q=80",
-    // 17 de Fevereiro - Carnaval e Lei Seca
     "1-17": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=1080&auto=format&fit=crop&q=80",
-    // 8 de Março - Dia Internacional da Mulher (Condutora consciente)
     "2-8":  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1080&auto=format&fit=crop&q=80",
-    // 15 de Abril - Dia do Ciclista (Distância de 1,5m)
     "3-15": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=1080&auto=format&fit=crop&q=80",
-    // 1 de Maio - Maio Amarelo (Atenção pela vida)
     "4-1":  "https://images.unsplash.com/photo-1508974239320-0a029497e820?w=1080&auto=format&fit=crop&q=80",
-    // 19 de Junho - Aniversário da Lei Seca (Fiscalização)
     "5-19": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1080&auto=format&fit=crop&q=80",
-    // 25 de Julho - Dia do Motorista
     "6-25": "https://images.unsplash.com/photo-1600320254374-ce2d293c324e?w=1080&auto=format&fit=crop&q=80",
-    // 27 de Julho - Dia do Motociclista (Capacete e segurança)
     "6-27": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1080&auto=format&fit=crop&q=80",
-    // 8 de Agosto - Dia do Pedestre (Travessia na faixa)
     "7-8":  "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1080&auto=format&fit=crop&q=80",
-    // 18 de Setembro - Semana Nacional de Trânsito
     "8-18": "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1080&auto=format&fit=crop&q=80",
-    // 22 de Setembro - Dia Mundial Sem Carro (Mobilidade urbana)
     "8-22": "https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=1080&auto=format&fit=crop&q=80",
-    // 25 de Setembro - Dia Nacional do Trânsito
     "8-25": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1080&auto=format&fit=crop&q=80",
-    // 12 de Outubro - Dia das Crianças e Segurança (Cadeirinha infantil)
     "9-12": "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?w=1080&auto=format&fit=crop&q=80",
-    // 15 de Novembro - Memória das Vítimas de Trânsito
     "10-15":"https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1080&auto=format&fit=crop&q=80",
-    // 25 de Dezembro - Operação Fim de Ano (Viagem Segura)
     "11-25":"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1080&auto=format&fit=crop&q=80"
   };
-
-  const FALLBACK_DEFAULT = "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?w=1080&auto=format&fit=crop&q=80";
 
   const officialEvents = {
     "0-22": { title: "Criação do CTB", desc: "Promulgação da Lei nº 9.503/1997 que instituiu o Código de Trânsito Brasileiro." },
@@ -704,66 +466,42 @@
     "11-25":{ title: "Operação Fim de Ano", desc: "Revisão veicular preventiva e paradas para descanso em viagens longas." }
   };
 
-  const PALETTES = {
-    blue:   { primary: "#0284c7", dark: "#0369a1", light: "#38bdf8", contrast: "#ffffff", border: "#38bdf8" },
-    yellow: { primary: "#eab308", dark: "#ca8a04", light: "#fef08a", contrast: "#111827", border: "#fde047" },
-    green:  { primary: "#10b981", dark: "#059669", light: "#6ee7b7", contrast: "#ffffff", border: "#34d399" },
-    red:    { primary: "#ef4444", dark: "#dc2626", light: "#fca5a5", contrast: "#ffffff", border: "#f87171" },
-    purple: { primary: "#8b5cf6", dark: "#7c3aed", light: "#d8b4fe", contrast: "#ffffff", border: "#a78bfa" },
-    orange: { primary: "#f97316", dark: "#ea580c", light: "#fed7aa", contrast: "#ffffff", border: "#fb923c" }
-  };
-
-  let activeTheme = "blue";
   let driveImagesMap = {};
   let currentDate = new Date();
   let currentActiveModalData = null;
-  let currentImageSrc = "";
-  let loadedBgImage = new Image();
   const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
   function showToast(msg) {
     const toast = document.getElementById("toast-message");
     toast.innerText = msg;
     toast.style.display = "block";
-    setTimeout(() => { toast.style.display = "none"; }, 3200);
+    setTimeout(() => { toast.style.display = "none"; }, 3500);
   }
 
   async function enableNotifications() {
-    if (!('Notification' in window)) {
-      showToast("Navegador não suporta notificações.");
-      return;
-    }
+    if (!('Notification' in window)) return showToast("Navegador não suporta notificações.");
     const perm = await Notification.requestPermission();
     const btn = document.getElementById('btn-request-notif');
     if (perm === 'granted') {
       btn.innerText = '🔔 Lembretes Ativos';
       btn.style.background = '#065f46';
       btn.style.color = '#a7f3d0';
-
-      new Notification("🚦 Lembretes Ativados!", {
-        body: "Você receberá avisos sobre postagens de campanhas de trânsito.",
-        icon: FALLBACK_DEFAULT
-      });
-      showToast("Lembretes ativados com sucesso!");
+      new Notification("🚦 Lembretes Ativados!", { body: "Avisos de campanhas de trânsito ativos." });
+      showToast("Lembretes ativados!");
     } else {
-      showToast("Permissão de notificação negada.");
+      showToast("Permissão negada.");
     }
   }
 
   async function refreshDriveImages() {
     const btn = document.getElementById('btn-refresh-images');
-    const originalText = btn.innerText;
+    const orig = btn.innerText;
     btn.innerText = '⏳ Atualizando...';
     btn.disabled = true;
-
     await loadDriveImages();
-
     btn.innerText = '✅ Atualizado!';
-    showToast("Imagens sincronizadas com sucesso!");
-    setTimeout(() => {
-      btn.innerText = originalText;
-      btn.disabled = false;
-    }, 1500);
+    showToast("Imagens sincronizadas!");
+    setTimeout(() => { btn.innerText = orig; btn.disabled = false; }, 1500);
   }
 
   async function loadDriveImages() {
@@ -775,20 +513,48 @@
       const res = await fetch(`${DRIVE_API_URL}?t=${new Date().getTime()}`);
       driveImagesMap = await res.json();
     } catch (e) {
-      console.log("Erro ao carregar Drive:", e);
+      console.warn("Drive sync:", e);
     }
     renderCalendar();
   }
 
+  function formatDriveUrl(url) {
+    if (!url) return "";
+    if (url.includes("drive.google.com") && url.includes("/d/")) {
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+      }
+    }
+    return url;
+  }
+
+  function findImageInDriveMap(isoDate, month, day) {
+    if (!driveImagesMap || Object.keys(driveImagesMap).length === 0) return null;
+    const m2 = String(month + 1).padStart(2, '0');
+    const d2 = String(day).padStart(2, '0');
+    const m1 = String(month + 1);
+    const d1 = String(day);
+
+    const possibleKeys = [
+      isoDate, `${m2}-${d2}`, `${d2}-${m2}`, `${m1}-${d1}`, `${d1}-${m1}`,
+      `${month}-${day}`, `${m2}/${d2}`, `${d2}/${m2}`, `dia_${d2}`, `dia_${d1}`
+    ];
+
+    for (const key of possibleKeys) {
+      if (driveImagesMap[key]) return formatDriveUrl(driveImagesMap[key]);
+    }
+    return null;
+  }
+
   function getDayImage(isoDate, month, day) {
-    if (driveImagesMap[isoDate]) {
-      return driveImagesMap[isoDate];
-    }
+    const driveImg = findImageInDriveMap(isoDate, month, day);
+    if (driveImg) return driveImg;
+
     const officialKey = `${month}-${day}`;
-    if (dateThematicImages[officialKey]) {
-      return dateThematicImages[officialKey];
-    }
-    return FALLBACK_DEFAULT;
+    if (dateThematicImages[officialKey]) return dateThematicImages[officialKey];
+
+    return DEFAULT_CAMPAIGN_PHOTOS[day % DEFAULT_CAMPAIGN_PHOTOS.length];
   }
 
   function renderCalendar() {
@@ -818,7 +584,17 @@
       const imgUrl = getDayImage(isoDate, month, day);
 
       dayDiv.style.backgroundImage = `url('${imgUrl}')`;
-      dayDiv.onclick = () => openModal(isoDate, day, official, imgUrl);
+      dayDiv.setAttribute("data-img-url", imgUrl);
+
+      dayDiv.onclick = (e) => {
+        const clickedTarget = e.currentTarget;
+        let actualImg = clickedTarget.getAttribute("data-img-url");
+        if (!actualImg) {
+          const bgStyle = clickedTarget.style.backgroundImage;
+          actualImg = bgStyle.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+        }
+        openModal(isoDate, day, official, actualImg || imgUrl);
+      };
 
       const topRow = document.createElement("div");
       topRow.className = "day-top-row";
@@ -857,79 +633,22 @@
   function openModal(isoDate, day, official, activeImgUrl) {
     const [y, m, d] = isoDate.split("-");
     const monthIndex = parseInt(m, 10) - 1;
-    const dayNumber = parseInt(d, 10);
-    const officialKey = `${monthIndex}-${dayNumber}`;
-
-    // Garante prioridade para a imagem do dia ou do Drive, sem desvios
-    const definitiveImage = (driveImagesMap && driveImagesMap[isoDate]) 
-      || (dateThematicImages[officialKey]) 
-      || activeImgUrl 
-      || FALLBACK_DEFAULT;
-
-    const defaultTitle = official ? official.title : "Campanha de Conscientização";
-    const defaultDesc = official ? official.desc : "No trânsito, sua responsabilidade salva vidas.";
+    const title = official ? official.title : "Campanha de Trânsito";
+    const desc = official ? official.desc : "Atenção redobrada, respeito mútuo e cidadania salvam vidas diariamente no trânsito.";
 
     currentActiveModalData = {
       dateFormatted: `${d}/${m}/${y}`,
-      title: defaultTitle,
-      desc: defaultDesc,
-      originalImgUrl: definitiveImage
+      title,
+      desc,
+      originalImgUrl: activeImgUrl
     };
 
-    document.getElementById("modal-date-tag").innerText = `${d}/${m}/${y} - CAMPANHA DE TRÂNSITO`;
-    document.getElementById("edit-custom-title").value = defaultTitle;
-    document.getElementById("edit-whatsapp-num").value = "(99) 99999-9999";
+    document.getElementById("modal-date-tag").innerText = `${d}/${m}/${y} - CAMPANHA`;
+    document.getElementById("modal-title").innerText = title;
+    document.getElementById("modal-desc").innerText = desc;
+    document.getElementById("modal-display-img").src = activeImgUrl;
 
-    loadCanvasImage(definitiveImage);
     document.getElementById("modal-overlay").style.display = "flex";
-  }
-
-  function loadCanvasImage(url) {
-    currentImageSrc = url;
-    loadedBgImage = new Image();
-    
-    // Tenta primeiro com anonymous para permitir download direto
-    loadedBgImage.crossOrigin = "anonymous";
-    
-    loadedBgImage.onload = () => {
-      updateCanvasPreview();
-    };
-
-    // Caso ocorra restrição de CORS, carrega a MESMA imagem sem o cabeçalho anonymous
-    // em vez de forçar a imagem de motorista
-    loadedBgImage.onerror = () => {
-      console.warn("Retentando carregar a imagem correta sem anonymous para contornar CORS:", url);
-      const retryImg = new Image();
-      retryImg.onload = () => {
-        loadedBgImage = retryImg;
-        updateCanvasPreview();
-      };
-      retryImg.onerror = () => {
-        console.error("Falha ao renderizar imagem do evento:", url);
-      };
-      retryImg.src = url;
-    };
-
-    loadedBgImage.src = url;
-  }
-
-  function handleUserCustomUpload(event) {
-    const file = event.target.files && event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        loadCanvasImage(e.target.result);
-        showToast("Sua foto foi carregada no editor!");
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  function resetToOriginalDateImage() {
-    if (currentActiveModalData && currentActiveModalData.originalImgUrl) {
-      loadCanvasImage(currentActiveModalData.originalImgUrl);
-      showToast("Imagem original restaurada!");
-    }
   }
 
   function closeModal() {
@@ -940,327 +659,107 @@
     if (e.target.id === "modal-overlay") closeModal();
   }
 
-  function setPalette(theme, btnElem) {
-    activeTheme = theme;
-    document.querySelectorAll('.palette-btn').forEach(btn => btn.classList.remove('active'));
-    if (btnElem) btnElem.classList.add('active');
-    updateCanvasPreview();
-  }
-
-  function drawWhatsAppIcon(ctx, x, y, size) {
-    ctx.save();
-    ctx.translate(x, y);
-
-    // Círculo Verde
-    ctx.beginPath();
-    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-    ctx.fillStyle = "#25d366";
-    ctx.fill();
-
-    // Sombra sutil
-    ctx.strokeStyle = "rgba(255,255,255,0.4)";
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-
-    // Balão branco
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    const r = size * 0.28;
-    const cx = size / 2;
-    const cy = size / 2 - 2;
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Cauda
-    ctx.beginPath();
-    ctx.moveTo(cx - r * 0.6, cy + r * 0.6);
-    ctx.lineTo(cx - r * 1.0, cy + r * 1.1);
-    ctx.lineTo(cx - r * 0.15, cy + r * 0.88);
-    ctx.fill();
-
-    // Ponto interior verde
-    ctx.fillStyle = "#25d366";
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.45, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  /* =========================================================================
-     RENDERIZAÇÃO DO CANVAS EM FORMATO 4:5 (1080 x 1350 px)
-     - Faixa Superior Compacta (Top Bar Slim: 85px)
-     - Área Central Máxima para a Imagem da Campanha: ~1145px
-     - Faixa Inferior de Contato com WhatsApp (120px)
-     ========================================================================= */
-  function updateCanvasPreview() {
-    const canvas = document.getElementById("post-canvas");
-    const ctx = canvas.getContext("2d");
-    const theme = PALETTES[activeTheme];
-
-    const titleText = (document.getElementById("edit-custom-title").value || "Campanha de Conscientização").trim();
-    const rawZap = (document.getElementById("edit-whatsapp-num").value || "(99) 99999-9999").trim();
-    const showWaIcon = document.getElementById("edit-show-whatsapp-icon").checked;
-
-    const W = canvas.width;   // 1080
-    const H = canvas.height;  // 1350
-
-    // Dimensões exatas ajustadas para máxima visibilidade da imagem
-    const topBarHeight = 85;   // Faixa superior compacta
-    const footerHeight = 120;  // Faixa inferior elegante
-    const middleY = topBarHeight;
-    const middleHeight = H - topBarHeight - footerHeight; // 1145px de área útil
-
-    // Limpa o Canvas
-    ctx.clearRect(0, 0, W, H);
-
-    // 1. ÁREA CENTRAL: IMAGEM DA POSTAGEM
-    if (loadedBgImage.complete && loadedBgImage.naturalWidth > 0) {
-      const imgRatio = loadedBgImage.naturalWidth / loadedBgImage.naturalHeight;
-      const targetRatio = W / middleHeight;
-      let renderW, renderH, offsetX, offsetY;
-
-      // Preserva proporção com ajuste inteligente para nunca cortar artes pré-diagramadas
-      if (imgRatio > targetRatio) {
-        renderW = W;
-        renderH = W / imgRatio;
-        offsetX = 0;
-        offsetY = middleY + (middleHeight - renderH) / 2;
-      } else {
-        renderH = middleHeight;
-        renderW = middleHeight * imgRatio;
-        offsetX = (W - renderW) / 2;
-        offsetY = middleY;
-      }
-
-      // Fundo escuro neutro para artes em modo contain
-      ctx.fillStyle = "#0a0f18";
-      ctx.fillRect(0, middleY, W, middleHeight);
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, middleY, W, middleHeight);
-      ctx.clip();
-      ctx.drawImage(loadedBgImage, offsetX, offsetY, renderW, renderH);
-      ctx.restore();
-    } else {
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(0, middleY, W, middleHeight);
-    }
-
-    // 2. FAIXA SUPERIOR COMPACTA (TOP BAR SLIM)
-    ctx.fillStyle = theme.primary;
-    ctx.fillRect(0, 0, W, topBarHeight);
-
-    // Friso decorativo sutil no topo
-    ctx.fillStyle = theme.dark;
-    ctx.fillRect(0, 0, W, 8);
-
-    // Tag / Ícone e Nome do Instrutor / Título
-    ctx.fillStyle = theme.contrast;
-    ctx.font = "bold 34px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    let displayTitle = titleText.toUpperCase();
-    if (displayTitle.length > 42) {
-      displayTitle = displayTitle.substring(0, 39) + "...";
-    }
-    ctx.fillText(`🚦 ${displayTitle}`, W / 2, topBarHeight / 2 + 4);
-
-    // Linha inferior do topo
-    ctx.fillStyle = theme.dark;
-    ctx.fillRect(0, topBarHeight - 4, W, 4);
-
-    // 3. FAIXA INFERIOR DE CONTATO (BOTTOM BAR)
-    const footerY = H - footerHeight;
-
-    ctx.fillStyle = theme.primary;
-    ctx.fillRect(0, footerY, W, footerHeight);
-
-    // Divisória superior do rodapé
-    ctx.fillStyle = theme.dark;
-    ctx.fillRect(0, footerY, W, 6);
-
-    // Bloco arredondado do WhatsApp
-    const waBoxW = 740;
-    const waBoxH = 72;
-    const waBoxX = (W - waBoxW) / 2;
-    const waBoxY = footerY + (footerHeight - waBoxH) / 2;
-
-    ctx.fillStyle = "rgba(0, 0, 0, 0.42)";
-    ctx.beginPath();
-    ctx.roundRect(waBoxX, waBoxY, waBoxW, waBoxH, 36);
-    ctx.fill();
-
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    let textStartX = waBoxX + 45;
-
-    // Ícone oficial WhatsApp
-    if (showWaIcon) {
-      drawWhatsAppIcon(ctx, waBoxX + 16, waBoxY + 11, 50);
-      textStartX = waBoxX + 85;
-    }
-
-    // Número do WhatsApp com dígitos 9
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 38px sans-serif";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillText(rawZap || "(99) 99999-9999", textStartX, waBoxY + waBoxH / 2 + 2);
-
-    // Chamada à Ação no lado direito da barra
-    ctx.fillStyle = theme.light;
-    ctx.font = "bold 20px sans-serif";
-    ctx.textAlign = "right";
-    ctx.fillText("FALE COM O INSTRUTOR", waBoxX + waBoxW - 30, waBoxY + waBoxH / 2 + 2);
-
-    // Reset de alinhamento
-    ctx.textAlign = "left";
-    ctx.textBaseline = "alphabetic";
-  }
-
-  function downloadEditedImage() {
-    const canvas = document.getElementById("post-canvas");
-    try {
-      const link = document.createElement("a");
-      const cleanDate = (currentActiveModalData?.dateFormatted || "post").replace(/\//g, "-");
-      link.download = `campanha-transito-${cleanDate}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-      showToast("Download da imagem em alta resolução concluído!");
-    } catch (e) {
-      showToast("Erro ao baixar. Tente usar uma foto sua ou carregada localmente.");
-    }
-  }
-
   function getShareCaption() {
-    const title = document.getElementById("edit-custom-title").value;
-    const zap = document.getElementById("edit-whatsapp-num").value;
-    const date = currentActiveModalData ? currentActiveModalData.dateFormatted : "";
-    const desc = currentActiveModalData ? currentActiveModalData.desc : "";
-
+    if (!currentActiveModalData) return "";
+    const title = currentActiveModalData.title || "Campanha de Trânsito";
+    const date = currentActiveModalData.dateFormatted || "";
+    const desc = currentActiveModalData.desc || "";
     let text = `🚦 *${title.toUpperCase()}*\n`;
     if (date) text += `📅 *Data:* ${date}\n\n`;
     if (desc) text += `${desc}\n\n`;
-    if (zap) text += `📱 *Dúvidas ou Informações:* ${zap}\n\n`;
-    text += `Juntos salvamos vidas no trânsito! 🚗🚸\n#TransitoSeguro #DirecaoDefensiva #EducacaoNoTransito`;
+    text += `Juntos salvamos vidas no trânsito! 🚗🚸\n#TransitoSeguro #DirecaoDefensiva #Autoescola`;
     return text;
   }
 
   /* =========================================================================
-     COMPARTILHAMENTO DE IMAGEM + LEGENDA NO WHATSAPP (STATUS OU CONVERSA)
+     DOWNLOAD DIRETO FORÇADO (SEM REDIRECIONAR PARA O ARMAZENAMENTO)
      ========================================================================= */
-
-  function openShareOptionsModal() {
-    document.getElementById("share-modal-overlay").style.display = "flex";
-  }
-
-  function closeShareModal() {
-    document.getElementById("share-modal-overlay").style.display = "none";
-  }
-
-  function closeShareModalOutside(e) {
-    if (e.target.id === "share-modal-overlay") {
-      closeShareModal();
+  async function downloadCampaignImage() {
+    if (!currentActiveModalData || !currentActiveModalData.originalImgUrl) {
+      showToast("Nenhuma imagem selecionada para download.");
+      return;
     }
-  }
 
-  // Converte o canvas em um arquivo Blob/File
-  async function getCanvasFile() {
-    const canvas = document.getElementById("post-canvas");
-    return new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          resolve(null);
-          return;
-        }
-        const file = new File([blob], "campanha-transito.png", { type: "image/png" });
-        resolve(file);
-      }, "image/png");
-    });
-  }
+    const imgUrl = currentActiveModalData.originalImgUrl;
+    const cleanDate = (currentActiveModalData.dateFormatted || "post").replace(/\//g, "-");
+    const fileName = `campanha-transito-${cleanDate}.png`;
 
-  // Envia Imagem + Legenda juntos via Web Share API
-  async function shareNativeImageAndText() {
-    const caption = getShareCaption();
-    const title = (document.getElementById("edit-custom-title").value || "Campanha de Trânsito").trim();
+    showToast("⏳ Preparando download...");
+
+    // Se a imagem já for base64 / data URL, baixa direto
+    if (imgUrl.startsWith("data:")) {
+      triggerDirectFileDownload(imgUrl, fileName);
+      return;
+    }
 
     try {
-      const file = await getCanvasFile();
-      if (!file) {
-        showToast("Erro ao processar imagem para compartilhamento.");
-        return;
-      }
-
-      // Verifica se o navegador suporta compartilhamento nativo de arquivos
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        closeShareModal();
-        await navigator.share({
-          files: [file],
-          title: title,
-          text: caption
-        });
-        showToast("Post compartilhado com sucesso!");
-      } else {
-        // Fallback para navegadores sem suporte a files (ex: desktop)
-        showToast("Seu dispositivo não suporta envio direto de arquivo. Baixando imagem...");
-        downloadAndPromptWhatsAppWeb();
-      }
+      // 1. Tenta baixar os dados binários diretamente via fetch
+      const response = await fetch(imgUrl, { mode: 'cors' });
+      const blob = await response.blob();
+      const localBlobUrl = URL.createObjectURL(blob);
+      triggerDirectFileDownload(localBlobUrl, fileName);
+      setTimeout(() => URL.revokeObjectURL(localBlobUrl), 2000);
     } catch (err) {
-      if (err.name !== "AbortError") {
-        console.error("Erro no compartilhamento:", err);
-        showToast("Compartilhamento cancelado ou não suportado.");
+      // 2. Se houver bloqueio de CORS na origem, busca via proxy para transformar em Blob local
+      try {
+        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(imgUrl)}&output=png`;
+        const proxyRes = await fetch(proxyUrl);
+        const proxyBlob = await proxyRes.blob();
+        const localBlobUrl = URL.createObjectURL(proxyBlob);
+        triggerDirectFileDownload(localBlobUrl, fileName);
+        setTimeout(() => URL.revokeObjectURL(localBlobUrl), 2000);
+      } catch (proxyErr) {
+        // 3. Fallback de Canvas para conversão em base64 local
+        const offscreenImg = new Image();
+        offscreenImg.crossOrigin = "anonymous";
+        offscreenImg.onload = function() {
+          const offCanvas = document.createElement("canvas");
+          offCanvas.width = offscreenImg.naturalWidth || offscreenImg.width;
+          offCanvas.height = offscreenImg.naturalHeight || offscreenImg.height;
+          const ctx = offCanvas.getContext("2d");
+          ctx.drawImage(offscreenImg, 0, 0);
+          try {
+            const dataUrl = offCanvas.toDataURL("image/png");
+            triggerDirectFileDownload(dataUrl, fileName);
+          } catch(e) {
+            showToast("Não foi possível baixar essa imagem específica.");
+          }
+        };
+        offscreenImg.onerror = function() {
+          showToast("Erro ao processar imagem para download.");
+        };
+        offscreenImg.src = imgUrl;
       }
     }
   }
 
-  // Compartilha somente texto diretamente via link do WhatsApp
-  function shareTextOnlyWhatsApp() {
-    closeShareModal();
-    const text = encodeURIComponent(getShareCaption());
-    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-    showToast("Abrindo WhatsApp com o texto da campanha!");
+  function triggerDirectFileDownload(hrefUrl, fileName) {
+    const link = document.createElement('a');
+    link.href = hrefUrl;
+    link.download = fileName;
+    link.target = "_self"; // Impede de abrir nova aba ou navegar
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Copia a legenda para facilidade do usuário
+    const caption = getShareCaption();
+    copyTextToClipboard(caption);
+    showToast("📥 Imagem baixada com sucesso! Legenda copiada.");
   }
 
-  // Fallback guiado para computador: baixa a imagem e abre o WhatsApp Web
-  function downloadAndPromptWhatsAppWeb() {
-    closeShareModal();
-    downloadEditedImage();
-
-    // Copia a legenda para a área de transferência
-    const text = getShareCaption();
-    const tempInput = document.createElement("textarea");
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-
-    setTimeout(() => {
-      const textUrl = encodeURIComponent(text);
-      window.open(`https://web.whatsapp.com/send?text=${textUrl}`, '_blank');
-      showToast("Imagem baixada e legenda copiada! Cole na conversa ou Status do WhatsApp Web.");
-    }, 600);
-  }
-
-  function shareWhatsApp() {
-    openShareOptionsModal();
-  }
-
-  function shareInstagram() {
-    const text = getShareCaption();
-    const tempInput = document.createElement("textarea");
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-
-    showToast("Legenda para o Instagram copiada com sucesso!");
+  function copyTextToClipboard(text) {
+    try {
+      const temp = document.createElement("textarea");
+      temp.style.position = "fixed";
+      temp.style.opacity = "0";
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+    } catch (e) {}
   }
 
   window.onload = function() {
