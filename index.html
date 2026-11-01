@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Plataforma de Vídeos Interativos</title>
 
   <!-- Polyfill para Drag and Drop em telas Touch/Mobile -->
@@ -55,8 +54,8 @@
 
     .view-screen {
       width: 100%;
-      max-width: 850px;
-      padding: 15px;
+      max-width: 950px;
+      padding: 10px;
     }
 
     .hidden {
@@ -65,10 +64,10 @@
 
     .card {
       background: #ffffff;
-      padding: 20px;
+      padding: 16px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     h1, h2, h3 {
@@ -77,20 +76,20 @@
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     label {
       display: block;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       color: #333;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     input[type="text"], input[type="number"], select {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 14px;
@@ -100,27 +99,26 @@
       background: #1a73e8;
       color: white;
       border: none;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
       width: 100%;
-      margin-top: 10px;
-      font-size: 15px;
+      margin-top: 8px;
+      font-size: 14px;
       touch-action: manipulation;
     }
 
     .btn:hover { background: #1557b0; }
     .btn-secondary { background: #5f6368; }
     .btn-danger { background: #d93025; }
-    .btn-success { background: #188038; }
-    .btn-start { background: #34a853; font-size: 18px; padding: 15px 30px; width: auto; }
+    .btn-start { background: #34a853; font-size: 17px; padding: 14px 28px; width: auto; }
     .btn-start:hover { background: #2d9247; }
 
     .share-link-box {
       background: #e8f0fe;
       border: 1px solid #aecbfa;
-      padding: 12px;
+      padding: 10px;
       border-radius: 8px;
       display: flex;
       gap: 8px;
@@ -141,74 +139,157 @@
     .interaction-card {
       border-left: 4px solid #1a73e8;
       background: #f8f9fa;
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
       border-radius: 4px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      font-size: 14px;
+      font-size: 13px;
     }
 
+    /* Container do Player */
     .video-wrapper {
       position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
+      width: 100%;
+      margin: 0 auto;
       background: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
 
-    .video-wrapper iframe {
+    /* Proporção Padrão (Horizontal 16:9) */
+    .video-wrapper.ratio-horizontal {
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+
+    /* Proporção Vertical (Shorts/Celular 9:16) */
+    .video-wrapper.ratio-vertical {
+      max-width: 420px;
+      padding-bottom: 150%;
+      height: 0;
+    }
+
+    /* MODO TELA CHEIA (FULLSCREEN) TOTAL */
+    .video-wrapper:fullscreen, 
+    .video-wrapper:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      padding-bottom: 0 !important;
+      border-radius: 0 !important;
+      background: #000 !important;
+    }
+
+    .video-wrapper iframe, 
+    .video-wrapper #playerContainer,
+    .video-wrapper #player {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100% !important;
+      height: 100% !important;
       border: 0;
     }
 
+    /* Botão de Tela Cheia */
+    .fullscreen-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Overlays */
     .overlay {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.92);
+      background: rgba(0, 0, 0, 0.4);
       color: white;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end; /* Alinha as perguntas na parte de baixo para liberar o vídeo */
       align-items: center;
-      padding: 15px;
-      z-index: 10;
-      overflow-y: auto;
+      padding: 10px;
+      z-index: 20;
+      overflow: hidden;
     }
 
+    /* Overlay de Início centralizado */
+    #startOverlay {
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.85);
+    }
+
+    /* Painel de Perguntas Compacto na parte inferior */
     .quiz-box {
-      background: #202124;
-      padding: 20px;
+      background: rgba(24, 26, 30, 0.95);
+      padding: 14px 16px;
       border-radius: 12px;
       width: 100%;
-      max-width: 500px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      max-height: 100%;
-      overflow-y: auto;
-      text-align: center;
+      max-width: 520px;
+      max-height: 60%;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 5px;
+    }
+
+    .quiz-header {
+      margin-bottom: 8px;
+    }
+
+    .quiz-header h3 {
+      font-size: 15px;
+      line-height: 1.3;
+      margin: 0;
+      color: #fff;
+      text-align: left;
     }
 
     .quiz-options {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin: 15px 0;
+      gap: 6px;
+      margin: 6px 0;
+      overflow-y: auto;
+      max-height: 150px;
+      padding-right: 4px;
+    }
+
+    .quiz-options::-webkit-scrollbar {
+      width: 4px;
+    }
+    .quiz-options::-webkit-scrollbar-thumb {
+      background: #666;
+      border-radius: 4px;
     }
 
     .quiz-btn {
-      background: #3c4043;
-      color: white;
-      border: 2px solid #5f6368;
-      padding: 12px;
-      border-radius: 8px;
+      background: #2a2c30;
+      color: #f1f3f4;
+      border: 1px solid #4a4d52;
+      padding: 8px 12px;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 13px;
       text-align: left;
       display: flex;
       justify-content: space-between;
@@ -219,33 +300,34 @@
 
     .drag-item { cursor: grab; }
     .drag-item.dragging { opacity: 0.5; background: #1a73e8; }
-    .drag-handle { color: #9aa0a6; font-size: 20px; }
+    .drag-handle { color: #9aa0a6; font-size: 16px; }
 
     .feedback {
-      padding: 12px;
+      padding: 8px;
       border-radius: 6px;
       font-weight: bold;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
     }
     .feedback.correct { background: #137333; color: #e6f4ea; }
     .feedback.incorrect { background: #c5221f; color: #fce8e6; }
 
     .score-badge {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: bold;
       color: #34a853;
-      margin: 10px 0;
+      margin: 5px 0;
     }
 
     .score-details {
-      background: #303134;
-      padding: 15px;
+      background: #2a2c30;
+      padding: 10px;
       border-radius: 8px;
-      margin-bottom: 15px;
-      font-size: 15px;
-      line-height: 1.6;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: left;
     }
   </style>
 </head>
@@ -261,30 +343,28 @@
   <div id="screenConfig" class="view-screen hidden">
     
     <div class="card">
-      <h2>🔗 Link do Aluno & Exportação</h2>
-      <p style="font-size: 14px; color: #555;">
-        Para uso imediato em abas anônimas ou envio rápido, copie o link abaixo:
-      </p>
+      <h2>🔗 Link do Aluno</h2>
+      <p style="font-size: 13px; color: #555;">Copie o link abaixo para abrir em guia anônima ou celular:</p>
       <div class="share-link-box">
         <input type="text" id="studentShareUrl" readonly>
-        <button class="btn" style="width: auto; margin:0; padding: 10px 15px;" onclick="copyStudentLink()">Copiar Link</button>
-      </div>
-
-      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
-        <p style="font-size: 13px; color: #444; margin: 0 0 10px 0;">
-          <strong>Para o GitHub:</strong> Baixe o arquivo de dados e coloque-o na raiz do seu repositório como <code>video_data.json</code>. Assim qualquer visitante ou guia anônima abrirá com as configurações corretas por padrão.
-        </p>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn btn-success" style="margin: 0;" onclick="downloadDataJson()">📥 Baixar video_data.json</button>
-        </div>
+        <button class="btn" style="width: auto; margin:0; padding: 8px 14px;" onclick="copyStudentLink()">Copiar Link</button>
       </div>
     </div>
 
     <div class="card">
       <h2>1. Configurar Vídeo Principal</h2>
       <div class="form-group">
-        <label for="youtubeUrl">Link do Vídeo do YouTube:</label>
-        <input type="text" id="youtubeUrl" value="https://www.youtube.com/watch?v=M7lc1UVf-VE" oninput="saveDataToStorage()">
+        <label for="youtubeUrl">Cole o Link do YouTube ou o ID:</label>
+        <input type="text" id="youtubeUrl" placeholder="Ex: https://www.youtube.com/watch?v=..." oninput="onVideoInputChanged()">
+        <small id="detectedIdFeedback" style="color: #555; display: block; margin-top: 5px;"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="videoOrientation">Formato do Vídeo:</label>
+        <select id="videoOrientation" onchange="applyOrientation()">
+          <option value="vertical">📱 Vertical (Shorts / Gravado em Pé no Celular)</option>
+          <option value="horizontal">🖥️ Horizontal (Formato Padrão 16:9)</option>
+        </select>
       </div>
     </div>
 
@@ -306,7 +386,7 @@
 
       <div class="form-group">
         <label for="questionText">Pergunta / Instrução:</label>
-        <input type="text" id="questionText" placeholder="Ex: Arraste os passos para a ordem correta:">
+        <input type="text" id="questionText" placeholder="Ex: Selecione a alternativa correta:">
       </div>
 
       <div class="form-group">
@@ -315,7 +395,7 @@
         <button type="button" class="btn btn-secondary" onclick="addOptionInput()">+ Adicionar Opção</button>
       </div>
 
-      <div class="form-group" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+      <div class="form-group" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
         <label for="correctFeedback" style="color: #137333;">Mensagem para Resposta Correta:</label>
         <input type="text" id="correctFeedback" placeholder="Ex: ✨ Parabéns! Você acertou.">
       </div>
@@ -329,9 +409,9 @@
     </div>
 
     <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h2 style="margin: 0;">3. Dinâmicas Cadastradas Neste Repositório</h2>
-        <button class="btn btn-danger" style="width: auto; margin: 0;" onclick="clearAllData()">🗑️ Limpar Apenas Deste Repositório</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="margin: 0; font-size: 17px;">3. Dinâmicas Cadastradas</h2>
+        <button class="btn btn-danger" style="width: auto; margin: 0; padding: 6px 12px; font-size: 13px;" onclick="clearAllData()">🗑️ Limpar Tudo</button>
       </div>
       <div id="interactionsList">Nenhuma dinâmica cadastrada ainda.</div>
     </div>
@@ -340,17 +420,28 @@
   <!-- ================= TELA 2: ALUNO ================= -->
   <div id="screenStudent" class="view-screen">
     <div class="card">
-      <h2>Vídeo Interativo</h2>
-      <div class="video-wrapper">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="margin: 0; font-size: 18px;">Vídeo Interativo</h2>
+      </div>
+
+      <div class="video-wrapper ratio-vertical" id="videoWrapperContainer">
+        <!-- Botão de Expandir Tela -->
+        <button class="fullscreen-btn" onclick="toggleFullScreen()" title="Expandir Tela">
+          <span id="fullscreenIcon">⛶</span> Tela Cheia
+        </button>
+
         <div id="playerContainer"></div>
 
         <div id="startOverlay" class="overlay">
           <button class="btn btn-start" onclick="startStudentVideo()">▶ Iniciar Vídeo</button>
         </div>
 
+        <!-- Painel de Pergunta Compacto na parte inferior -->
         <div id="quizOverlay" class="overlay hidden">
           <div class="quiz-box">
-            <h3 id="displayQuestion" style="color:white; text-align: left;">Pergunta?</h3>
+            <div class="quiz-header">
+              <h3 id="displayQuestion">Pergunta?</h3>
+            </div>
             <div id="displayOptions" class="quiz-options"></div>
             <div id="displayFeedback" class="feedback hidden"></div>
             <button id="btnAction" class="btn" onclick="handleQuizSubmit()">Responder</button>
@@ -358,10 +449,11 @@
           </div>
         </div>
 
-        <div id="reportOverlay" class="overlay hidden">
-          <div class="quiz-box">
-            <h2>🎓 Aula Concluída!</h2>
-            <p>Confira seu resultado final:</p>
+        <!-- Relatório Final -->
+        <div id="reportOverlay" class="overlay hidden" style="justify-content: center;">
+          <div class="quiz-box" style="text-align: center;">
+            <h2 style="font-size: 18px; margin-bottom: 8px;">🎓 Aula Concluída!</h2>
+            <p style="font-size: 13px; margin: 0 0 10px 0;">Confira seu resultado final:</p>
             
             <div id="scorePercentage" class="score-badge">0%</div>
 
@@ -371,7 +463,7 @@
               <div>❌ <strong>Erros:</strong> <span id="incorrectAnswers">0</span></div>
             </div>
 
-            <p id="finalMessage" style="font-size: 14px; margin-bottom: 15px;"></p>
+            <p id="finalMessage" style="font-size: 13px; margin-bottom: 12px;"></p>
 
             <button class="btn" onclick="restartVideo()">🔄 Refazer Vídeo</button>
           </div>
@@ -382,10 +474,14 @@
   </div>
 
   <script>
+    const REPO_DEFAULT_VIDEO = ""; 
+    const REPO_DEFAULT_INTERACTIONS = []; 
+
     let interactions = []; 
     let currentInteraction = null;
     let player = null;
     let checkTimer = null;
+    let videoOrientation = "vertical"; // Padrão vertical para vídeos de celular
 
     let score = {
       correct: 0,
@@ -393,58 +489,141 @@
       total: 0
     };
 
-    // Gera uma chave única de LocalStorage baseada no caminho do repositório
-    function getStorageKey() {
-      const path = window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, '');
-      return 'interactive_video_' + (path || 'root');
+    function applyOrientation() {
+      videoOrientation = document.getElementById('videoOrientation').value;
+      const wrapper = document.getElementById('videoWrapperContainer');
+      if (videoOrientation === 'vertical') {
+        wrapper.classList.remove('ratio-horizontal');
+        wrapper.classList.add('ratio-vertical');
+      } else {
+        wrapper.classList.remove('ratio-vertical');
+        wrapper.classList.add('ratio-horizontal');
+      }
+      saveDataToStorage();
     }
 
-    window.onload = async function() {
+    // Alternar Tela Cheia Total no container do player
+    function toggleFullScreen() {
+      const container = document.getElementById('videoWrapperContainer');
+      const icon = document.getElementById('fullscreenIcon');
+
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
+        icon.innerText = "✖";
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+        icon.innerText = "⛶";
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const icon = document.getElementById('fullscreenIcon');
+      icon.innerText = document.fullscreenElement ? "✖" : "⛶";
+    });
+
+    function getRepoStorageKey() {
+      const cleanPath = window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, '');
+      return 'yt_quiz_data_' + (cleanPath || 'root');
+    }
+
+    function extractYouTubeId(url) {
+      if (!url) return null;
+      url = url.trim();
+
+      if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
+        return url;
+      }
+
+      const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+      const match = url.match(reg);
+      return match ? match[1] : null;
+    }
+
+    function onVideoInputChanged() {
+      const input = document.getElementById('youtubeUrl').value;
+      const detectedId = extractYouTubeId(input);
+      const feedback = document.getElementById('detectedIdFeedback');
+      
+      if (detectedId) {
+        feedback.innerText = `✅ Vídeo identificado com sucesso! ID: ${detectedId}`;
+        feedback.style.color = '#137333';
+      } else if (input.trim() !== '') {
+        feedback.innerText = `⚠️ Link não reconhecido como vídeo do YouTube.`;
+        feedback.style.color = '#d93025';
+      } else {
+        feedback.innerText = '';
+      }
+      saveDataToStorage();
+    }
+
+    window.onload = function() {
       const urlParams = new URLSearchParams(window.location.search);
       const viewMode = urlParams.get('view');
-      const encodedData = urlParams.get('data');
+      const paramVideo = urlParams.get('v');
+      const paramData = urlParams.get('d');
+      const paramOrient = urlParams.get('o');
 
       let loaded = false;
 
-      // Prioridade 1: Dados presentes na URL (funciona em aba anônima e links externos)
-      if (encodedData) {
+      if (paramOrient) {
+        videoOrientation = paramOrient;
+        document.getElementById('videoOrientation').value = paramOrient;
+      }
+
+      if (paramVideo) {
+        document.getElementById('youtubeUrl').value = paramVideo;
+        loaded = true;
+      }
+      if (paramData) {
         try {
-          const jsonString = decodeURIComponent(escape(atob(encodedData)));
-          const parsed = JSON.parse(jsonString);
-          if (parsed.youtubeUrl) document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
-          if (Array.isArray(parsed.interactions)) interactions = parsed.interactions;
+          interactions = JSON.parse(decodeURIComponent(escape(atob(paramData))));
           loaded = true;
-        } catch (e) {
-          console.warn("Erro ao decodificar parâmetro data da URL:", e);
+        } catch(e) {
+          console.error("Erro ao decodificar dados da URL", e);
         }
       }
 
-      // Prioridade 2: Se não veio na URL, tenta carregar o arquivo video_data.json do próprio repositório
       if (!loaded) {
-        try {
-          const response = await fetch('video_data.json', { cache: 'no-store' });
-          if (response.ok) {
-            const fileData = await response.json();
-            if (fileData.youtubeUrl) document.getElementById('youtubeUrl').value = fileData.youtubeUrl;
-            if (Array.isArray(fileData.interactions)) interactions = fileData.interactions;
-            loaded = true;
-          }
-        } catch (err) {
-          // Arquivo local opcional não encontrado, segue para LocalStorage
+        const saved = localStorage.getItem(getRepoStorageKey());
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed.youtubeUrl) {
+              document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
+              loaded = true;
+            }
+            if (parsed.orientation) {
+              videoOrientation = parsed.orientation;
+              document.getElementById('videoOrientation').value = parsed.orientation;
+            }
+            if (Array.isArray(parsed.interactions)) {
+              interactions = parsed.interactions;
+            }
+          } catch(e) {}
         }
       }
 
-      // Prioridade 3: LocalStorage isolado para esta URL
-      if (!loaded) {
-        loadDataFromStorage();
+      if (!loaded && REPO_DEFAULT_VIDEO) {
+        document.getElementById('youtubeUrl').value = REPO_DEFAULT_VIDEO;
+        interactions = REPO_DEFAULT_INTERACTIONS;
       }
 
+      applyOrientation();
       renderOptionsForm();
       updateInteractionsList();
 
       if (viewMode === 'config') {
         document.getElementById('instructorNav').classList.remove('hidden');
         switchScreen('config');
+        onVideoInputChanged();
       } else {
         document.getElementById('instructorNav').classList.add('hidden');
         switchScreen('student');
@@ -455,71 +634,48 @@
 
     function updateShareLink() {
       const baseUrl = window.location.href.split('?')[0];
-      const dataToSave = {
-        youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
-        interactions: interactions
-      };
+      const videoId = extractYouTubeId(document.getElementById('youtubeUrl').value);
       
-      const jsonString = JSON.stringify(dataToSave);
-      const encoded = btoa(unescape(encodeURIComponent(jsonString)));
+      if (!videoId) {
+        document.getElementById('studentShareUrl').value = 'Informe um vídeo válido para gerar o link.';
+        return;
+      }
 
-      document.getElementById('studentShareUrl').value = `${baseUrl}?view=student&data=${encodeURIComponent(encoded)}`;
+      const jsonInteractions = JSON.stringify(interactions);
+      const encodedInteractions = btoa(unescape(encodeURIComponent(jsonInteractions)));
+
+      document.getElementById('studentShareUrl').value = `${baseUrl}?view=student&v=${videoId}&o=${videoOrientation}&d=${encodeURIComponent(encodedInteractions)}`;
     }
 
     function copyStudentLink() {
       const copyText = document.getElementById('studentShareUrl');
+      if (!copyText.value.startsWith('http')) {
+        alert("Insira um link de vídeo válido primeiro!");
+        return;
+      }
       copyText.select();
       document.execCommand("copy");
-      alert("Link copiado com sucesso! Ele abre exatamente com este vídeo e dinâmicas, inclusive na guia anônima.");
-    }
-
-    function downloadDataJson() {
-      const dataToSave = {
-        youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
-        interactions: interactions
-      };
-      const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'video_data.json';
-      a.click();
-      URL.revokeObjectURL(a.href);
+      alert("Link copiado com sucesso!");
     }
 
     function saveDataToStorage() {
       const dataToSave = {
         youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
+        orientation: videoOrientation,
         interactions: interactions
       };
-      localStorage.setItem(getStorageKey(), JSON.stringify(dataToSave));
+      localStorage.setItem(getRepoStorageKey(), JSON.stringify(dataToSave));
       updateShareLink();
     }
 
-    function loadDataFromStorage() {
-      const saved = localStorage.getItem(getStorageKey());
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (parsed.youtubeUrl) {
-            document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
-          }
-          if (Array.isArray(parsed.interactions)) {
-            interactions = parsed.interactions;
-          }
-        } catch (e) {
-          console.error("Erro ao carregar dados locais", e);
-        }
-      }
-    }
-
     function clearAllData() {
-      if (confirm("Tem certeza de que deseja apagar as configurações deste repositório específico?")) {
+      if (confirm("Tem certeza que deseja apagar os dados configurados para este repositório?")) {
+        localStorage.removeItem(getRepoStorageKey());
         interactions = [];
-        localStorage.removeItem(getStorageKey());
-        document.getElementById('youtubeUrl').value = 'https://www.youtube.com/watch?v=M7lc1UVf-VE';
+        document.getElementById('youtubeUrl').value = '';
         updateInteractionsList();
         updateShareLink();
-        alert("Configurações deste repositório foram reiniciadas!");
+        alert("Dados deste repositório limpos!");
       }
     }
 
@@ -666,7 +822,7 @@
           <div>
             <strong>⏱️ ${item.time}s</strong> - [${item.type === 'choice' ? 'Múltipla Escolha' : 'Ordenar'}] ${item.question}
           </div>
-          <button class="btn btn-danger" style="width:auto; margin:0; padding: 6px 12px;" onclick="removeInteraction(${item.id})">Excluir</button>
+          <button class="btn btn-danger" style="width:auto; margin:0; padding: 4px 8px; font-size: 12px;" onclick="removeInteraction(${item.id})">Excluir</button>
         `;
         list.appendChild(div);
       });
@@ -678,17 +834,22 @@
       updateInteractionsList();
     }
 
-    function extractYouTubeId(url) {
-      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      const match = url.match(regExp);
-      return (match && match[2].length === 11) ? match[2] : null;
-    }
-
     function initStudentPlayer() {
-      const url = document.getElementById('youtubeUrl').value.trim();
-      const videoId = extractYouTubeId(url);
+      const urlOrId = document.getElementById('youtubeUrl').value.trim();
+      const videoId = extractYouTubeId(urlOrId);
 
-      if (!videoId) return alert('O link do vídeo do YouTube é inválido!');
+      const container = document.getElementById('playerContainer');
+
+      if (!videoId) {
+        container.innerHTML = `
+          <div style="color: white; text-align: center; padding-top: 20%;">
+            <h3>Nenhum vídeo configurado</h3>
+            <p>Acesse o painel com <code>?view=config</code> para configurar o vídeo.</p>
+          </div>
+        `;
+        document.getElementById('startOverlay').classList.add('hidden');
+        return;
+      }
 
       score = { correct: 0, incorrect: 0, total: interactions.length };
       interactions.forEach(i => i.triggered = false);
@@ -697,12 +858,10 @@
       document.getElementById('quizOverlay').classList.add('hidden');
       document.getElementById('reportOverlay').classList.add('hidden');
 
-      const container = document.getElementById('playerContainer');
       container.innerHTML = `
         <iframe id="player" 
-          src="https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&autoplay=0" 
+          src="https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          referrerpolicy="strict-origin-when-cross-origin" 
           allowfullscreen>
         </iframe>
       `;
@@ -711,9 +870,12 @@
         setupPlayerObject();
       } else {
         window.onYouTubeIframeAPIReady = setupPlayerObject;
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(tag);
+        if (!document.getElementById('ytApiScript')) {
+          const tag = document.createElement('script');
+          tag.id = 'ytApiScript';
+          tag.src = "https://www.youtube.com/iframe_api";
+          document.head.appendChild(tag);
+        }
       }
     }
 
@@ -773,8 +935,12 @@
           btn.className = 'quiz-btn';
           btn.innerText = opt.text;
           btn.onclick = () => {
-            document.querySelectorAll('.quiz-btn').forEach(b => b.style.borderColor = '#5f6368');
+            document.querySelectorAll('.quiz-btn').forEach(b => {
+              b.style.borderColor = '#4a4d52';
+              b.style.background = '#2a2c30';
+            });
             btn.style.borderColor = '#1a73e8';
+            btn.style.background = '#1557b0';
             selectedChoiceId = opt.id;
           };
           optionsBox.appendChild(btn);
