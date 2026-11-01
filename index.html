@@ -3,769 +3,860 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Calendário de Postagens de Trânsito</title>
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Plataforma de Vídeos Interativos</title>
+
+  <!-- Polyfill para Drag and Drop em telas Touch/Mobile -->
+  <script src="https://cdn.jsdelivr.net/npm/drag-drop-touch@1.3.0/DragDropTouch.js"></script>
 
   <style>
-    :root {
-      --primary: #0284c7;
-      --primary-dark: #0369a1;
-      --bg: #090e17;
-      --card-bg: #131d2e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #27354a;
-      --whatsapp: #25d366;
-      --accent: #38bdf8;
-    }
-
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text-main);
-      padding: 14px 10px;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
     }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .top-bar {
+    /* Navegação do Instrutor */
+    nav {
+      width: 100%;
+      background-color: #1a73e8;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: var(--card-bg);
-      padding: 14px 20px;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      margin-bottom: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .top-bar h1 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
+      justify-content: center;
       gap: 10px;
-      flex-wrap: wrap;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
-    .btn-action {
-      border: none;
-      padding: 9px 16px;
-      border-radius: 10px;
+    nav button {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
+      font-size: 14px;
     }
 
-    .btn-refresh { background: #0284c7; color: #ffffff; }
-    .btn-refresh:hover { background: #0369a1; }
-    .btn-notif { background: #1e293b; color: #fde68a; border: 1px solid #334155; }
-    .btn-notif:hover { background: #334155; }
+    nav button.active, nav button:hover {
+      background: white;
+      color: #1a73e8;
+    }
 
-    .cal-container {
-      background: var(--card-bg);
-      border-radius: 18px;
+    .view-screen {
+      width: 100%;
+      max-width: 850px;
+      padding: 15px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .card {
+      background: #ffffff;
       padding: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .cal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       margin-bottom: 20px;
     }
 
-    .cal-header h2 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      text-transform: capitalize;
+    h1, h2, h3 {
+      color: #1a73e8;
+      margin-top: 0;
     }
 
-    .btn-nav {
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1px solid var(--border-color);
-      padding: 8px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: 0.2s;
-    }
-    .btn-nav:hover { background: #334155; }
-
-    .weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      text-align: center;
-      font-weight: 800;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .form-group {
+      margin-bottom: 14px;
     }
 
-    .days-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-    }
-
-    .day {
-      min-height: 145px;
-      border-radius: 12px;
-      cursor: pointer;
-      border: 1px solid var(--border-color);
-      background-color: #0b111e;
-      background-size: cover;
-      background-position: center;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .day::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(9, 14, 23, 0.3) 0%, rgba(9, 14, 23, 0.94) 100%);
-      z-index: 1;
-    }
-
-    .day:hover:not(.empty) {
-      transform: translateY(-3px) scale(1.02);
-      z-index: 5;
-      border-color: var(--accent);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
-    }
-
-    .day.empty {
-      background: transparent;
-      border-color: transparent;
-      cursor: default;
-      min-height: 145px;
-    }
-    .day.empty::before { display: none; }
-
-    .day-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 2;
-    }
-
-    .day-number {
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: #090e17;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 3px 7px;
-      border-radius: 6px;
-    }
-
-    .badge-marco {
-      font-size: 0.62rem;
-      font-weight: 800;
-      color: #ffffff;
-      background: #e11d48;
-      padding: 3px 6px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .day-bottom-info { z-index: 2; }
-    .day-event-title {
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: #ffffff;
-      line-height: 1.25;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.85);
-    }
-
-    @media (max-width: 860px) {
-      .days-grid { gap: 6px; }
-      .day, .day.empty { min-height: 95px; padding: 5px; }
-      .day-number { font-size: 0.72rem; padding: 2px 5px; }
-      .day-event-title { font-size: 0.62rem; }
-      .badge-marco { font-size: 0.55rem; padding: 2px 4px; }
-    }
-
-    /* Modal Simplificado para Visualização e Download */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 7, 15, 0.88);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 14px;
-    }
-
-    .modal-card {
-      background: #131d2e;
-      width: 100%;
-      max-width: 460px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      max-height: 92vh;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 18px;
-      background: #090e17;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .modal-header h4 {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .modal-close {
-      background: #1e293b;
-      color: #cbd5e1;
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: 700;
-      transition: 0.2s;
-    }
-    .modal-close:hover { background: #ef4444; color: #fff; }
-
-    .modal-body {
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .modal-img-wrap {
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      background: #070c14;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      max-height: 480px;
-    }
-
-    .modal-img-wrap img {
-      width: 100%;
-      height: auto;
+    label {
       display: block;
-      object-fit: contain;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 14px;
     }
 
-    .modal-details {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
     }
 
-    .modal-campaign-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #ffffff;
+    .btn {
+      background: #1a73e8;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 15px;
+      touch-action: manipulation;
     }
 
-    .modal-campaign-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-      background: #090e17;
-      padding: 10px 12px;
+    .btn:hover { background: #1557b0; }
+    .btn-secondary { background: #5f6368; }
+    .btn-danger { background: #d93025; }
+    .btn-start { background: #34a853; font-size: 18px; padding: 15px 30px; width: auto; }
+    .btn-start:hover { background: #2d9247; }
+
+    .share-link-box {
+      background: #e8f0fe;
+      border: 1px solid #aecbfa;
+      padding: 12px;
       border-radius: 8px;
-      border: 1px solid var(--border-color);
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
-    .btn-download-direct {
+    .option-item {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      background: #0284c7;
-      color: #ffffff;
-      font-weight: 800;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      gap: 10px;
+      margin-bottom: 8px;
+      background: #f8f9fa;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
     }
-    .btn-download-direct:hover { background: #0369a1; transform: translateY(-1px); }
-    .btn-download-direct:active { transform: translateY(0); }
 
-    .toast-msg {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: #0f172a;
-      color: #f8fafc;
-      padding: 12px 20px;
-      border-radius: 10px;
-      border-left: 4px solid var(--accent);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      z-index: 2000;
-      display: none;
-      font-size: 0.9rem;
-      font-weight: 600;
+    .interaction-card {
+      border-left: 4px solid #1a73e8;
+      background: #f8f9fa;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    /* Player de Vídeo e Overlays */
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      z-index: 10;
+      overflow-y: auto;
+    }
+
+    .quiz-box {
+      background: #202124;
+      padding: 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      max-height: 100%;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .quiz-btn {
+      background: #3c4043;
+      color: white;
+      border: 2px solid #5f6368;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .drag-item { cursor: grab; }
+    .drag-item.dragging { opacity: 0.5; background: #1a73e8; }
+    .drag-handle { color: #9aa0a6; font-size: 20px; }
+
+    .feedback {
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .feedback.correct { background: #137333; color: #e6f4ea; }
+    .feedback.incorrect { background: #c5221f; color: #fce8e6; }
+
+    /* Relatório Final */
+    .score-badge {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #34a853;
+      margin: 10px 0;
+    }
+
+    .score-details {
+      background: #303134;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="top-bar">
-    <h1>🚦 Calendário de Postagens de Trânsito</h1>
-    <div class="header-actions">
-      <button class="btn-action btn-refresh" id="btn-refresh-images" onclick="refreshDriveImages()">
-        🔄 Atualizar Imagens
-      </button>
-      <button class="btn-action btn-notif" id="btn-request-notif" onclick="enableNotifications()">
-        🔔 Ativar Lembretes
-      </button>
-    </div>
-  </div>
+  <!-- Menu do Instrutor -->
+  <nav id="instructorNav" class="hidden">
+    <button id="navConfig" onclick="switchScreen('config')">⚙️ Configuração</button>
+    <button id="navStudent" onclick="switchScreen('student')">🎓 Preview do Aluno</button>
+  </nav>
 
-  <div class="cal-container">
-    <div class="cal-header">
-      <button class="btn-nav" onclick="changeMonth(-1)">◀ Anterior</button>
-      <h2 id="cal-month-title">Mês Ano</h2>
-      <button class="btn-nav" onclick="changeMonth(1)">Próximo ▶</button>
+  <!-- ================= TELA 1: CONFIGURAÇÃO ================= -->
+  <div id="screenConfig" class="view-screen hidden">
+    
+    <div class="card">
+      <h2>🔗 Link Direto para o Aluno</h2>
+      <p style="font-size: 14px; color: #555;">Copie o link abaixo e envie para os alunos ou abra na guia anônima. Ele já contém o vídeo e todas as perguntas gravadas na URL:</p>
+      <div class="share-link-box">
+        <input type="text" id="studentShareUrl" readonly>
+        <button class="btn" style="width: auto; margin:0; padding: 10px 15px;" onclick="copyStudentLink()">Copiar Link</button>
+      </div>
     </div>
 
-    <div class="weekdays">
-      <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+    <div class="card">
+      <h2>1. Configurar Vídeo Principal</h2>
+      <div class="form-group">
+        <label for="youtubeUrl">Link do Vídeo do YouTube:</label>
+        <input type="text" id="youtubeUrl" value="https://www.youtube.com/watch?v=M7lc1UVf-VE" oninput="saveDataToStorage()">
+      </div>
     </div>
 
-    <div class="days-grid" id="calendar-days"></div>
-  </div>
-</div>
-
-<!-- Modal Direto de Visualização e Download -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
-  <div class="modal-card">
-    <div class="modal-header">
-      <h4 id="modal-date-tag">CAMPANHA DO DIA</h4>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-
-    <div class="modal-body">
-      <div class="modal-img-wrap">
-        <img id="modal-display-img" src="" alt="Arte da Campanha">
+    <div class="card">
+      <h2>2. Adicionar Dinâmica / Pergunta</h2>
+      
+      <div class="form-group">
+        <label for="pauseTime">Pausar no Segundo:</label>
+        <input type="number" id="pauseTime" placeholder="Ex: 10" min="1">
       </div>
 
-      <div class="modal-details">
-        <div class="modal-campaign-title" id="modal-title">Título da Campanha</div>
-        <div class="modal-campaign-desc" id="modal-desc">Descrição...</div>
+      <div class="form-group">
+        <label for="quizType">Tipo de Dinâmica:</label>
+        <select id="quizType" onchange="renderOptionsForm()">
+          <option value="choice">Múltipla Escolha (1 Opção Correta)</option>
+          <option value="order">Ordenar Sequência (Arrastar e Soltar)</option>
+        </select>
       </div>
 
-      <button class="btn-download-direct" id="btn-download-action" onclick="downloadCampaignImage()">
-        📥 Baixar Imagem (Download)
-      </button>
+      <div class="form-group">
+        <label for="questionText">Pergunta / Instrução:</label>
+        <input type="text" id="questionText" placeholder="Ex: Arraste os passos para a ordem correta:">
+      </div>
+
+      <div class="form-group">
+        <label id="optionsLabel">Alternativas:</label>
+        <div id="optionsContainer"></div>
+        <button type="button" class="btn btn-secondary" onclick="addOptionInput()">+ Adicionar Opção</button>
+      </div>
+
+      <div class="form-group" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+        <label for="correctFeedback" style="color: #137333;">Mensagem para Resposta Correta:</label>
+        <input type="text" id="correctFeedback" placeholder="Ex: ✨ Parabéns! Você acertou.">
+      </div>
+
+      <div class="form-group">
+        <label for="incorrectFeedback" style="color: #c5221f;">Mensagem para Resposta Incorreta:</label>
+        <input type="text" id="incorrectFeedback" placeholder="Ex: ❌ Resposta Incorreta!">
+      </div>
+
+      <button type="button" class="btn" onclick="saveInteraction()">💾 Salvar Dinâmica neste Segundo</button>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h2 style="margin: 0;">3. Dinâmicas Cadastradas</h2>
+        <button class="btn btn-danger" style="width: auto; margin: 0;" onclick="clearAllData()">🗑️ Limpar Tudo</button>
+      </div>
+      <div id="interactionsList">Nenhuma dinâmica cadastrada ainda.</div>
     </div>
   </div>
-</div>
 
-<div class="toast-msg" id="toast-message"></div>
+  <!-- ================= TELA 2: ALUNO ================= -->
+  <div id="screenStudent" class="view-screen">
+    <div class="card">
+      <h2>Vídeo Interativo</h2>
+      <div class="video-wrapper">
+        <div id="playerContainer"></div>
 
-<script>
-  const DRIVE_API_URL = "https://script.google.com/macros/s/AKfycbyttorLvRothU_Ch5lMRTxvWZL3hzYlddsdondxgATkDwvj8BArSGNTH_OolkG16kmy/exec";
+        <div id="startOverlay" class="overlay">
+          <button class="btn btn-start" onclick="startStudentVideo()">▶ Iniciar Vídeo</button>
+        </div>
 
-  const DEFAULT_CAMPAIGN_PHOTOS = [
-    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1080&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1080&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1508974239320-0a029497e820?w=1080&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1080&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1600320254374-ce2d293c324e?w=1080&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1080&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1080&auto=format&fit=crop&q=80"
-  ];
+        <div id="quizOverlay" class="overlay hidden">
+          <div class="quiz-box">
+            <h3 id="displayQuestion" style="color:white; text-align: left;">Pergunta?</h3>
+            <div id="displayOptions" class="quiz-options"></div>
+            <div id="displayFeedback" class="feedback hidden"></div>
+            <button id="btnAction" class="btn" onclick="handleQuizSubmit()">Responder</button>
+            <button id="btnContinue" class="btn hidden" onclick="resumeVideo()">Continuar Vídeo ▶</button>
+          </div>
+        </div>
 
-  const dateThematicImages = {
-    "0-22": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1080&auto=format&fit=crop&q=80",
-    "1-17": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=1080&auto=format&fit=crop&q=80",
-    "2-8":  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1080&auto=format&fit=crop&q=80",
-    "3-15": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=1080&auto=format&fit=crop&q=80",
-    "4-1":  "https://images.unsplash.com/photo-1508974239320-0a029497e820?w=1080&auto=format&fit=crop&q=80",
-    "5-19": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1080&auto=format&fit=crop&q=80",
-    "6-25": "https://images.unsplash.com/photo-1600320254374-ce2d293c324e?w=1080&auto=format&fit=crop&q=80",
-    "6-27": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1080&auto=format&fit=crop&q=80",
-    "7-8":  "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1080&auto=format&fit=crop&q=80",
-    "8-18": "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1080&auto=format&fit=crop&q=80",
-    "8-22": "https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=1080&auto=format&fit=crop&q=80",
-    "8-25": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1080&auto=format&fit=crop&q=80",
-    "9-12": "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?w=1080&auto=format&fit=crop&q=80",
-    "10-15":"https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1080&auto=format&fit=crop&q=80",
-    "11-25":"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1080&auto=format&fit=crop&q=80"
-  };
+        <div id="reportOverlay" class="overlay hidden">
+          <div class="quiz-box">
+            <h2>🎓 Aula Concluída!</h2>
+            <p>Confira seu resultado final:</p>
+            
+            <div id="scorePercentage" class="score-badge">0%</div>
 
-  const officialEvents = {
-    "0-22": { title: "Criação do CTB", desc: "Promulgação da Lei nº 9.503/1997 que instituiu o Código de Trânsito Brasileiro." },
-    "1-17": { title: "Carnaval e Trânsito Seguro", desc: "Operação da Lei Seca. Se beber, nunca dirija." },
-    "2-8":  { title: "Dia Internacional da Mulher", desc: "Respeito, empatia e valorização das condutoras no trânsito." },
-    "3-15": { title: "Dia do Ciclista", desc: "Mantenha a distância mínima de 1,5 metro ao ultrapassar ciclistas." },
-    "4-1":  { title: "Abertura do Maio Amarelo", desc: "Mobilização mundial pela segurança e preservação de vidas no trânsito." },
-    "5-19": { title: "Aniversário da Lei Seca", desc: "Tolerância zero para álcool ao volante (Lei nº 11.705/2008)." },
-    "6-25": { title: "Dia do Motorista", desc: "Homenagem aos condutores que transportam com responsabilidade." },
-    "6-27": { title: "Dia do Motociclista", desc: "Atenção a pontos cegos e uso de equipamentos de proteção certificados." },
-    "7-8":  { title: "Dia do Pedestre", desc: "Prioridade total ao pedestre na faixa (Art. 70 do CTB)." },
-    "8-18": { title: "Semana Nacional de Trânsito", desc: "Início oficial da Semana Nacional de Trânsito (18 a 25 de setembro)." },
-    "8-22": { title: "Dia Mundial Sem Carro", desc: "Incentivo a meios de mobilidade sustentáveis e compartilhamento de vias." },
-    "8-25": { title: "Dia Nacional do Trânsito", desc: "Respeito mútuo, paciência e cidadania salvam vidas diariamente." },
-    "9-12": { title: "Dia das Crianças e Segurança", desc: "Uso correto e obrigatório de cadeirinhas e assentos de elevação." },
-    "10-15":{ title: "Memória das Vítimas de Trânsito", desc: "Conscientização sobre as consequências de imprudências ao volante." },
-    "11-25":{ title: "Operação Fim de Ano", desc: "Revisão veicular preventiva e paradas para descanso em viagens longas." }
-  };
+            <div class="score-details">
+              <div>🎯 <strong>Total de Atividades:</strong> <span id="totalQuestions">0</span></div>
+              <div>✅ <strong>Acertos:</strong> <span id="correctAnswers">0</span></div>
+              <div>❌ <strong>Erros:</strong> <span id="incorrectAnswers">0</span></div>
+            </div>
 
-  let driveImagesMap = {};
-  let currentDate = new Date();
-  let currentActiveModalData = null;
-  const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            <p id="finalMessage" style="font-size: 14px; margin-bottom: 15px;"></p>
 
-  function showToast(msg) {
-    const toast = document.getElementById("toast-message");
-    toast.innerText = msg;
-    toast.style.display = "block";
-    setTimeout(() => { toast.style.display = "none"; }, 3500);
-  }
+            <button class="btn" onclick="restartVideo()">🔄 Refazer Vídeo</button>
+          </div>
+        </div>
 
-  async function enableNotifications() {
-    if (!('Notification' in window)) return showToast("Navegador não suporta notificações.");
-    const perm = await Notification.requestPermission();
-    const btn = document.getElementById('btn-request-notif');
-    if (perm === 'granted') {
-      btn.innerText = '🔔 Lembretes Ativos';
-      btn.style.background = '#065f46';
-      btn.style.color = '#a7f3d0';
-      new Notification("🚦 Lembretes Ativados!", { body: "Avisos de campanhas de trânsito ativos." });
-      showToast("Lembretes ativados!");
-    } else {
-      showToast("Permissão negada.");
-    }
-  }
+      </div>
+    </div>
+  </div>
 
-  async function refreshDriveImages() {
-    const btn = document.getElementById('btn-refresh-images');
-    const orig = btn.innerText;
-    btn.innerText = '⏳ Atualizando...';
-    btn.disabled = true;
-    await loadDriveImages();
-    btn.innerText = '✅ Atualizado!';
-    showToast("Imagens sincronizadas!");
-    setTimeout(() => { btn.innerText = orig; btn.disabled = false; }, 1500);
-  }
+  <script>
+    let interactions = []; 
+    let currentInteraction = null;
+    let player = null;
+    let checkTimer = null;
 
-  async function loadDriveImages() {
-    if (!DRIVE_API_URL || DRIVE_API_URL.includes("COLE_AQUI")) {
-      renderCalendar();
-      return;
-    }
-    try {
-      const res = await fetch(`${DRIVE_API_URL}?t=${new Date().getTime()}`);
-      driveImagesMap = await res.json();
-    } catch (e) {
-      console.warn("Drive sync:", e);
-    }
-    renderCalendar();
-  }
-
-  function formatDriveUrl(url) {
-    if (!url) return "";
-    if (url.includes("drive.google.com") && url.includes("/d/")) {
-      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        return `https://drive.google.com/uc?export=download&id=${match[1]}`;
-      }
-    }
-    return url;
-  }
-
-  function findImageInDriveMap(isoDate, month, day) {
-    if (!driveImagesMap || Object.keys(driveImagesMap).length === 0) return null;
-    const m2 = String(month + 1).padStart(2, '0');
-    const d2 = String(day).padStart(2, '0');
-    const m1 = String(month + 1);
-    const d1 = String(day);
-
-    const possibleKeys = [
-      isoDate, `${m2}-${d2}`, `${d2}-${m2}`, `${m1}-${d1}`, `${d1}-${m1}`,
-      `${month}-${day}`, `${m2}/${d2}`, `${d2}/${m2}`, `dia_${d2}`, `dia_${d1}`
-    ];
-
-    for (const key of possibleKeys) {
-      if (driveImagesMap[key]) return formatDriveUrl(driveImagesMap[key]);
-    }
-    return null;
-  }
-
-  function getDayImage(isoDate, month, day) {
-    const driveImg = findImageInDriveMap(isoDate, month, day);
-    if (driveImg) return driveImg;
-
-    const officialKey = `${month}-${day}`;
-    if (dateThematicImages[officialKey]) return dateThematicImages[officialKey];
-
-    return DEFAULT_CAMPAIGN_PHOTOS[day % DEFAULT_CAMPAIGN_PHOTOS.length];
-  }
-
-  function renderCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-
-    document.getElementById("cal-month-title").innerText = `${monthNames[month]} ${year}`;
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
-    const grid = document.getElementById("calendar-days");
-    grid.innerHTML = "";
-
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement("div");
-      empty.className = "day empty";
-      grid.appendChild(empty);
-    }
-
-    for (let day = 1; day <= totalDays; day++) {
-      const dayDiv = document.createElement("div");
-      dayDiv.className = "day";
-
-      const officialKey = `${month}-${day}`;
-      const official = officialEvents[officialKey];
-      const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      const imgUrl = getDayImage(isoDate, month, day);
-
-      dayDiv.style.backgroundImage = `url('${imgUrl}')`;
-      dayDiv.setAttribute("data-img-url", imgUrl);
-
-      dayDiv.onclick = (e) => {
-        const clickedTarget = e.currentTarget;
-        let actualImg = clickedTarget.getAttribute("data-img-url");
-        if (!actualImg) {
-          const bgStyle = clickedTarget.style.backgroundImage;
-          actualImg = bgStyle.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
-        }
-        openModal(isoDate, day, official, actualImg || imgUrl);
-      };
-
-      const topRow = document.createElement("div");
-      topRow.className = "day-top-row";
-      const numSpan = document.createElement("span");
-      numSpan.className = "day-number";
-      numSpan.innerText = day;
-      topRow.appendChild(numSpan);
-
-      if (official) {
-        const badge = document.createElement("span");
-        badge.className = "badge-marco";
-        badge.innerText = "MARCO";
-        topRow.appendChild(badge);
-      }
-      dayDiv.appendChild(topRow);
-
-      if (official) {
-        const bottomInfo = document.createElement("div");
-        bottomInfo.className = "day-bottom-info";
-        const titleSpan = document.createElement("div");
-        titleSpan.className = "day-event-title";
-        titleSpan.innerText = official.title;
-        bottomInfo.appendChild(titleSpan);
-        dayDiv.appendChild(bottomInfo);
-      }
-
-      grid.appendChild(dayDiv);
-    }
-  }
-
-  function changeMonth(delta) {
-    currentDate.setMonth(currentDate.getMonth() + delta);
-    renderCalendar();
-  }
-
-  function openModal(isoDate, day, official, activeImgUrl) {
-    const [y, m, d] = isoDate.split("-");
-    const monthIndex = parseInt(m, 10) - 1;
-    const title = official ? official.title : "Campanha de Trânsito";
-    const desc = official ? official.desc : "Atenção redobrada, respeito mútuo e cidadania salvam vidas diariamente no trânsito.";
-
-    currentActiveModalData = {
-      dateFormatted: `${d}/${m}/${y}`,
-      title,
-      desc,
-      originalImgUrl: activeImgUrl
+    let score = {
+      correct: 0,
+      incorrect: 0,
+      total: 0
     };
 
-    document.getElementById("modal-date-tag").innerText = `${d}/${m}/${y} - CAMPANHA`;
-    document.getElementById("modal-title").innerText = title;
-    document.getElementById("modal-desc").innerText = desc;
-    document.getElementById("modal-display-img").src = activeImgUrl;
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const viewMode = urlParams.get('view');
+      const encodedData = urlParams.get('data');
 
-    document.getElementById("modal-overlay").style.display = "flex";
-  }
-
-  function closeModal() {
-    document.getElementById("modal-overlay").style.display = "none";
-  }
-
-  function closeModalOutside(e) {
-    if (e.target.id === "modal-overlay") closeModal();
-  }
-
-  function getShareCaption() {
-    if (!currentActiveModalData) return "";
-    const title = currentActiveModalData.title || "Campanha de Trânsito";
-    const date = currentActiveModalData.dateFormatted || "";
-    const desc = currentActiveModalData.desc || "";
-    let text = `🚦 *${title.toUpperCase()}*\n`;
-    if (date) text += `📅 *Data:* ${date}\n\n`;
-    if (desc) text += `${desc}\n\n`;
-    text += `Juntos salvamos vidas no trânsito! 🚗🚸\n#TransitoSeguro #DirecaoDefensiva #Autoescola`;
-    return text;
-  }
-
-  /* =========================================================================
-     DOWNLOAD DIRETO FORÇADO (SEM REDIRECIONAR PARA O ARMAZENAMENTO)
-     ========================================================================= */
-  async function downloadCampaignImage() {
-    if (!currentActiveModalData || !currentActiveModalData.originalImgUrl) {
-      showToast("Nenhuma imagem selecionada para download.");
-      return;
-    }
-
-    const imgUrl = currentActiveModalData.originalImgUrl;
-    const cleanDate = (currentActiveModalData.dateFormatted || "post").replace(/\//g, "-");
-    const fileName = `campanha-transito-${cleanDate}.png`;
-
-    showToast("⏳ Preparando download...");
-
-    // Se a imagem já for base64 / data URL, baixa direto
-    if (imgUrl.startsWith("data:")) {
-      triggerDirectFileDownload(imgUrl, fileName);
-      return;
-    }
-
-    try {
-      // 1. Tenta baixar os dados binários diretamente via fetch
-      const response = await fetch(imgUrl, { mode: 'cors' });
-      const blob = await response.blob();
-      const localBlobUrl = URL.createObjectURL(blob);
-      triggerDirectFileDownload(localBlobUrl, fileName);
-      setTimeout(() => URL.revokeObjectURL(localBlobUrl), 2000);
-    } catch (err) {
-      // 2. Se houver bloqueio de CORS na origem, busca via proxy para transformar em Blob local
-      try {
-        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(imgUrl)}&output=png`;
-        const proxyRes = await fetch(proxyUrl);
-        const proxyBlob = await proxyRes.blob();
-        const localBlobUrl = URL.createObjectURL(proxyBlob);
-        triggerDirectFileDownload(localBlobUrl, fileName);
-        setTimeout(() => URL.revokeObjectURL(localBlobUrl), 2000);
-      } catch (proxyErr) {
-        // 3. Fallback de Canvas para conversão em base64 local
-        const offscreenImg = new Image();
-        offscreenImg.crossOrigin = "anonymous";
-        offscreenImg.onload = function() {
-          const offCanvas = document.createElement("canvas");
-          offCanvas.width = offscreenImg.naturalWidth || offscreenImg.width;
-          offCanvas.height = offscreenImg.naturalHeight || offscreenImg.height;
-          const ctx = offCanvas.getContext("2d");
-          ctx.drawImage(offscreenImg, 0, 0);
-          try {
-            const dataUrl = offCanvas.toDataURL("image/png");
-            triggerDirectFileDownload(dataUrl, fileName);
-          } catch(e) {
-            showToast("Não foi possível baixar essa imagem específica.");
+      // 1. Tenta carregar os dados vindos pela própria URL (compartilhado ou aba anônima)
+      let loadedFromUrl = false;
+      if (encodedData) {
+        try {
+          const jsonString = decodeURIComponent(escape(atob(encodedData)));
+          const parsed = JSON.parse(jsonString);
+          if (parsed.youtubeUrl) {
+            document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
           }
-        };
-        offscreenImg.onerror = function() {
-          showToast("Erro ao processar imagem para download.");
-        };
-        offscreenImg.src = imgUrl;
+          if (Array.isArray(parsed.interactions)) {
+            interactions = parsed.interactions;
+          }
+          loadedFromUrl = true;
+        } catch (e) {
+          console.error("Falha ao decodificar dados da URL", e);
+        }
+      }
+
+      // 2. Se não veio dados na URL, busca do LocalStorage
+      if (!loadedFromUrl) {
+        loadDataFromStorage();
+      }
+
+      renderOptionsForm();
+
+      if (viewMode === 'config') {
+        document.getElementById('instructorNav').classList.remove('hidden');
+        switchScreen('config');
+      } else {
+        document.getElementById('instructorNav').classList.add('hidden');
+        switchScreen('student');
+      }
+
+      updateShareLink();
+    };
+
+    function updateShareLink() {
+      const baseUrl = window.location.href.split('?')[0];
+      const dataToSave = {
+        youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
+        interactions: interactions
+      };
+      
+      // Converte os dados em Base64 seguro para URL
+      const jsonString = JSON.stringify(dataToSave);
+      const encoded = btoa(unescape(encodeURIComponent(jsonString)));
+
+      document.getElementById('studentShareUrl').value = `${baseUrl}?view=student&data=${encodeURIComponent(encoded)}`;
+    }
+
+    function copyStudentLink() {
+      const copyText = document.getElementById('studentShareUrl');
+      copyText.select();
+      document.execCommand("copy");
+      alert("Link copiado! Você já pode abrir na guia anônima ou enviar para qualquer pessoa.");
+    }
+
+    function saveDataToStorage() {
+      const dataToSave = {
+        youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
+        interactions: interactions
+      };
+      localStorage.setItem('interactive_video_data', JSON.stringify(dataToSave));
+      updateShareLink();
+    }
+
+    function loadDataFromStorage() {
+      const saved = localStorage.getItem('interactive_video_data');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.youtubeUrl) {
+            document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
+          }
+          if (Array.isArray(parsed.interactions)) {
+            interactions = parsed.interactions;
+          }
+        } catch (e) {
+          console.error("Erro ao carregar dados", e);
+        }
+      }
+      updateInteractionsList();
+    }
+
+    function clearAllData() {
+      if (confirm("Tem certeza de que deseja apagar todas as dinâmicas cadastradas?")) {
+        interactions = [];
+        localStorage.removeItem('interactive_video_data');
+        updateInteractionsList();
+        updateShareLink();
+        alert("Todos os dados foram limpos!");
       }
     }
-  }
 
-  function triggerDirectFileDownload(hrefUrl, fileName) {
-    const link = document.createElement('a');
-    link.href = hrefUrl;
-    link.download = fileName;
-    link.target = "_self"; // Impede de abrir nova aba ou navegar
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    function switchScreen(screen) {
+      document.getElementById('screenConfig').classList.add('hidden');
+      document.getElementById('screenStudent').classList.add('hidden');
+      document.getElementById('navConfig').classList.remove('active');
+      document.getElementById('navStudent').classList.remove('active');
 
-    // Copia a legenda para facilidade do usuário
-    const caption = getShareCaption();
-    copyTextToClipboard(caption);
-    showToast("📥 Imagem baixada com sucesso! Legenda copiada.");
-  }
+      if (screen === 'config') {
+        document.getElementById('screenConfig').classList.remove('hidden');
+        document.getElementById('navConfig').classList.add('active');
+        if (player) clearInterval(checkTimer);
+      } else {
+        document.getElementById('screenStudent').classList.remove('hidden');
+        document.getElementById('navStudent').classList.add('active');
+        initStudentPlayer();
+      }
+    }
 
-  function copyTextToClipboard(text) {
-    try {
-      const temp = document.createElement("textarea");
-      temp.style.position = "fixed";
-      temp.style.opacity = "0";
-      temp.value = text;
-      document.body.appendChild(temp);
-      temp.focus();
-      temp.select();
-      document.execCommand("copy");
-      document.body.removeChild(temp);
-    } catch (e) {}
-  }
+    function renderOptionsForm() {
+      const type = document.getElementById('quizType').value;
+      const container = document.getElementById('optionsContainer');
+      const label = document.getElementById('optionsLabel');
+      container.innerHTML = '';
 
-  window.onload = function() {
-    loadDriveImages();
-  };
-</script>
+      if (type === 'choice') {
+        label.innerText = 'Alternativas (Marque a correta no botão redondo):';
+        container.appendChild(createChoiceInput(0, true));
+        container.appendChild(createChoiceInput(1, false));
+      } else {
+        label.innerText = 'Insira os itens NA ORDEM CORRETA (eles serão embaralhados para o aluno):';
+        container.appendChild(createOrderInput(0));
+        container.appendChild(createOrderInput(1));
+      }
+    }
 
+    function createChoiceInput(idx, isChecked) {
+      const div = document.createElement('div');
+      div.className = 'option-item';
+      div.innerHTML = `
+        <input type="radio" name="correctIndex" value="${idx}" ${isChecked ? 'checked' : ''}>
+        <input type="text" class="opt-text" placeholder="Opção ${idx + 1}">
+      `;
+      return div;
+    }
+
+    function createOrderInput(idx) {
+      const div = document.createElement('div');
+      div.className = 'option-item';
+      div.innerHTML = `
+        <span style="font-weight:bold">${idx + 1}º</span>
+        <input type="text" class="opt-text" placeholder="Passo/Item ${idx + 1}">
+      `;
+      return div;
+    }
+
+    function addOptionInput() {
+      const type = document.getElementById('quizType').value;
+      const container = document.getElementById('optionsContainer');
+      const idx = container.children.length;
+
+      if (type === 'choice') {
+        container.appendChild(createChoiceInput(idx, false));
+      } else {
+        container.appendChild(createOrderInput(idx));
+      }
+    }
+
+    function saveInteraction() {
+      const time = parseInt(document.getElementById('pauseTime').value);
+      const type = document.getElementById('quizType').value;
+      const question = document.getElementById('questionText').value.trim();
+      const inputs = document.querySelectorAll('#optionsContainer .opt-text');
+
+      const correctFeedback = document.getElementById('correctFeedback').value.trim() || "✨ Resposta Correta! Excelente!";
+      const incorrectFeedback = document.getElementById('incorrectFeedback').value.trim() || "❌ Resposta Incorreta!";
+
+      if (!time || time < 1) return alert('Informe um segundo válido!');
+      if (!question) return alert('Informe o texto da pergunta!');
+
+      let options = [];
+      let correctAnswers = [];
+
+      if (type === 'choice') {
+        const selectedRadio = document.querySelector('input[name="correctIndex"]:checked');
+        if (!selectedRadio) return alert('Selecione a alternativa correta!');
+        const correctIdx = parseInt(selectedRadio.value);
+
+        inputs.forEach((inp, i) => {
+          if (inp.value.trim() !== "") {
+            options.push({ id: i, text: inp.value.trim() });
+            if (i === correctIdx) correctAnswers.push(i);
+          }
+        });
+      } else {
+        inputs.forEach((inp, i) => {
+          if (inp.value.trim() !== "") {
+            options.push({ id: i, text: inp.value.trim() });
+            correctAnswers.push(i);
+          }
+        });
+      }
+
+      if (options.length < 2) return alert('Insira pelo menos 2 opções!');
+
+      interactions.push({
+        id: Date.now(),
+        time: time,
+        type: type,
+        question: question,
+        options: options,
+        correctAnswers: correctAnswers,
+        correctFeedback: correctFeedback,
+        incorrectFeedback: incorrectFeedback,
+        triggered: false
+      });
+
+      interactions.sort((a, b) => a.time - b.time);
+
+      saveDataToStorage();
+      updateInteractionsList();
+      alert('Dinâmica salva com sucesso!');
+
+      document.getElementById('pauseTime').value = '';
+      document.getElementById('questionText').value = '';
+      document.getElementById('correctFeedback').value = '';
+      document.getElementById('incorrectFeedback').value = '';
+      renderOptionsForm();
+    }
+
+    function updateInteractionsList() {
+      const list = document.getElementById('interactionsList');
+      if (interactions.length === 0) {
+        list.innerText = 'Nenhuma dinâmica cadastrada ainda.';
+        return;
+      }
+
+      list.innerHTML = '';
+      interactions.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'interaction-card';
+        div.innerHTML = `
+          <div>
+            <strong>⏱️ ${item.time}s</strong> - [${item.type === 'choice' ? 'Múltipla Escolha' : 'Ordenar'}] ${item.question}
+          </div>
+          <button class="btn btn-danger" style="width:auto; margin:0; padding: 6px 12px;" onclick="removeInteraction(${item.id})">Excluir</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function removeInteraction(id) {
+      interactions = interactions.filter(i => i.id !== id);
+      saveDataToStorage();
+      updateInteractionsList();
+    }
+
+    function extractYouTubeId(url) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function initStudentPlayer() {
+      const url = document.getElementById('youtubeUrl').value.trim();
+      const videoId = extractYouTubeId(url);
+
+      if (!videoId) return alert('O link do vídeo do YouTube é inválido!');
+
+      score = { correct: 0, incorrect: 0, total: interactions.length };
+      interactions.forEach(i => i.triggered = false);
+
+      document.getElementById('startOverlay').classList.remove('hidden');
+      document.getElementById('quizOverlay').classList.add('hidden');
+      document.getElementById('reportOverlay').classList.add('hidden');
+
+      const container = document.getElementById('playerContainer');
+      container.innerHTML = `
+        <iframe id="player" 
+          src="https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&autoplay=0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+      `;
+
+      if (window.YT && window.YT.Player) {
+        setupPlayerObject();
+      } else {
+        window.onYouTubeIframeAPIReady = setupPlayerObject;
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
+      }
+    }
+
+    function setupPlayerObject() {
+      player = new YT.Player('player', {
+        events: { 'onStateChange': onPlayerStateChange }
+      });
+    }
+
+    function startStudentVideo() {
+      document.getElementById('startOverlay').classList.add('hidden');
+      if (player && typeof player.playVideo === 'function') {
+        player.playVideo();
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        checkTimer = setInterval(checkVideoTime, 250);
+      } else if (event.data === YT.PlayerState.ENDED) {
+        clearInterval(checkTimer);
+        showFinalReport();
+      } else {
+        clearInterval(checkTimer);
+      }
+    }
+
+    function checkVideoTime() {
+      if (!player || typeof player.getCurrentTime !== 'function') return;
+
+      const currentTime = Math.floor(player.getCurrentTime());
+      const nextInteraction = interactions.find(i => i.time === currentTime && !i.triggered);
+
+      if (nextInteraction) {
+        nextInteraction.triggered = true;
+        currentInteraction = nextInteraction;
+        player.pauseVideo();
+        showQuizOverlay(nextInteraction);
+      }
+    }
+
+    let selectedChoiceId = null;
+
+    function showQuizOverlay(data) {
+      document.getElementById('displayQuestion').innerText = data.question;
+      document.getElementById('displayFeedback').className = 'feedback hidden';
+      document.getElementById('btnContinue').classList.add('hidden');
+      document.getElementById('btnAction').classList.remove('hidden');
+
+      const optionsBox = document.getElementById('displayOptions');
+      optionsBox.innerHTML = '';
+
+      if (data.type === 'choice') {
+        selectedChoiceId = null;
+        data.options.forEach(opt => {
+          const btn = document.createElement('div');
+          btn.className = 'quiz-btn';
+          btn.innerText = opt.text;
+          btn.onclick = () => {
+            document.querySelectorAll('.quiz-btn').forEach(b => b.style.borderColor = '#5f6368');
+            btn.style.borderColor = '#1a73e8';
+            selectedChoiceId = opt.id;
+          };
+          optionsBox.appendChild(btn);
+        });
+      } else {
+        const shuffled = [...data.options].sort(() => Math.random() - 0.5);
+        shuffled.forEach(opt => {
+          const item = document.createElement('div');
+          item.className = 'quiz-btn drag-item';
+          item.setAttribute('draggable', 'true');
+          item.dataset.id = opt.id;
+          item.innerHTML = `
+            <span>${opt.text}</span>
+            <span class="drag-handle">☰</span>
+          `;
+          optionsBox.appendChild(item);
+        });
+        setupDragAndDrop(optionsBox);
+      }
+
+      document.getElementById('quizOverlay').classList.remove('hidden');
+    }
+
+    function setupDragAndDrop(container) {
+      let draggedItem = null;
+
+      container.querySelectorAll('.drag-item').forEach(item => {
+        item.addEventListener('dragstart', () => {
+          draggedItem = item;
+          setTimeout(() => item.classList.add('dragging'), 0);
+        });
+
+        item.addEventListener('dragend', () => {
+          draggedItem.classList.remove('dragging');
+          draggedItem = null;
+        });
+      });
+
+      container.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(container, e.clientY);
+        const dragging = container.querySelector('.dragging');
+        if (dragging) {
+          if (afterElement == null) {
+            container.appendChild(dragging);
+          } else {
+            container.insertBefore(dragging, afterElement);
+          }
+        }
+      });
+    }
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.drag-item:not(.dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function handleQuizSubmit() {
+      const feedback = document.getElementById('displayFeedback');
+      let isCorrect = false;
+
+      if (currentInteraction.type === 'choice') {
+        if (selectedChoiceId === null) return alert('Escolha uma das alternativas!');
+        isCorrect = selectedChoiceId === currentInteraction.correctAnswers[0];
+      } else {
+        const currentElements = document.querySelectorAll('#displayOptions .drag-item');
+        const studentSeq = Array.from(currentElements).map(el => parseInt(el.dataset.id));
+        isCorrect = JSON.stringify(studentSeq) === JSON.stringify(currentInteraction.correctAnswers);
+      }
+
+      if (isCorrect) {
+        score.correct++;
+        feedback.innerText = currentInteraction.correctFeedback || "✨ Resposta Correta! Excelente!";
+        feedback.className = "feedback correct";
+      } else {
+        score.incorrect++;
+        feedback.innerText = currentInteraction.incorrectFeedback || "❌ Resposta Incorreta!";
+        feedback.className = "feedback incorrect";
+      }
+
+      document.getElementById('btnAction').classList.add('hidden');
+      document.getElementById('btnContinue').classList.remove('hidden');
+    }
+
+    function resumeVideo() {
+      document.getElementById('quizOverlay').classList.add('hidden');
+      player.playVideo();
+    }
+
+    function showFinalReport() {
+      const total = score.total;
+      const percentage = total > 0 ? Math.round((score.correct / total) * 100) : 100;
+
+      document.getElementById('totalQuestions').innerText = total;
+      document.getElementById('correctAnswers').innerText = score.correct;
+      document.getElementById('incorrectAnswers').innerText = score.incorrect;
+      document.getElementById('scorePercentage').innerText = `${percentage}%`;
+
+      const msgBox = document.getElementById('finalMessage');
+      if (percentage === 100) {
+        msgBox.innerText = "🏆 Perfeito! Você acertou todas as atividades do vídeo!";
+      } else if (percentage >= 70) {
+        msgBox.innerText = "👏 Muito bem! Você teve um ótimo aproveitamento.";
+      } else {
+        msgBox.innerText = "📚 Que tal rever o vídeo e tentar novamente para melhorar sua nota?";
+      }
+
+      document.getElementById('reportOverlay').classList.remove('hidden');
+    }
+
+    function restartVideo() {
+      initStudentPlayer();
+    }
+  </script>
 </body>
 </html>
