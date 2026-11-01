@@ -26,7 +26,6 @@
       min-height: 100vh;
     }
 
-    /* Navegação do Instrutor */
     nav {
       width: 100%;
       background-color: #1a73e8;
@@ -114,6 +113,7 @@
     .btn:hover { background: #1557b0; }
     .btn-secondary { background: #5f6368; }
     .btn-danger { background: #d93025; }
+    .btn-success { background: #188038; }
     .btn-start { background: #34a853; font-size: 18px; padding: 15px 30px; width: auto; }
     .btn-start:hover { background: #2d9247; }
 
@@ -151,7 +151,6 @@
       font-size: 14px;
     }
 
-    /* Player de Vídeo e Overlays */
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
@@ -233,7 +232,6 @@
     .feedback.correct { background: #137333; color: #e6f4ea; }
     .feedback.incorrect { background: #c5221f; color: #fce8e6; }
 
-    /* Relatório Final */
     .score-badge {
       font-size: 3rem;
       font-weight: bold;
@@ -263,11 +261,22 @@
   <div id="screenConfig" class="view-screen hidden">
     
     <div class="card">
-      <h2>🔗 Link Direto para o Aluno</h2>
-      <p style="font-size: 14px; color: #555;">Copie o link abaixo e envie para os alunos ou abra na guia anônima. Ele já contém o vídeo e todas as perguntas gravadas na URL:</p>
+      <h2>🔗 Link do Aluno & Exportação</h2>
+      <p style="font-size: 14px; color: #555;">
+        Para uso imediato em abas anônimas ou envio rápido, copie o link abaixo:
+      </p>
       <div class="share-link-box">
         <input type="text" id="studentShareUrl" readonly>
         <button class="btn" style="width: auto; margin:0; padding: 10px 15px;" onclick="copyStudentLink()">Copiar Link</button>
+      </div>
+
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+        <p style="font-size: 13px; color: #444; margin: 0 0 10px 0;">
+          <strong>Para o GitHub:</strong> Baixe o arquivo de dados e coloque-o na raiz do seu repositório como <code>video_data.json</code>. Assim qualquer visitante ou guia anônima abrirá com as configurações corretas por padrão.
+        </p>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-success" style="margin: 0;" onclick="downloadDataJson()">📥 Baixar video_data.json</button>
+        </div>
       </div>
     </div>
 
@@ -321,8 +330,8 @@
 
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h2 style="margin: 0;">3. Dinâmicas Cadastradas</h2>
-        <button class="btn btn-danger" style="width: auto; margin: 0;" onclick="clearAllData()">🗑️ Limpar Tudo</button>
+        <h2 style="margin: 0;">3. Dinâmicas Cadastradas Neste Repositório</h2>
+        <button class="btn btn-danger" style="width: auto; margin: 0;" onclick="clearAllData()">🗑️ Limpar Apenas Deste Repositório</button>
       </div>
       <div id="interactionsList">Nenhuma dinâmica cadastrada ainda.</div>
     </div>
@@ -384,35 +393,54 @@
       total: 0
     };
 
-    window.onload = function() {
+    // Gera uma chave única de LocalStorage baseada no caminho do repositório
+    function getStorageKey() {
+      const path = window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, '');
+      return 'interactive_video_' + (path || 'root');
+    }
+
+    window.onload = async function() {
       const urlParams = new URLSearchParams(window.location.search);
       const viewMode = urlParams.get('view');
       const encodedData = urlParams.get('data');
 
-      // 1. Tenta carregar os dados vindos pela própria URL (compartilhado ou aba anônima)
-      let loadedFromUrl = false;
+      let loaded = false;
+
+      // Prioridade 1: Dados presentes na URL (funciona em aba anônima e links externos)
       if (encodedData) {
         try {
           const jsonString = decodeURIComponent(escape(atob(encodedData)));
           const parsed = JSON.parse(jsonString);
-          if (parsed.youtubeUrl) {
-            document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
-          }
-          if (Array.isArray(parsed.interactions)) {
-            interactions = parsed.interactions;
-          }
-          loadedFromUrl = true;
+          if (parsed.youtubeUrl) document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
+          if (Array.isArray(parsed.interactions)) interactions = parsed.interactions;
+          loaded = true;
         } catch (e) {
-          console.error("Falha ao decodificar dados da URL", e);
+          console.warn("Erro ao decodificar parâmetro data da URL:", e);
         }
       }
 
-      // 2. Se não veio dados na URL, busca do LocalStorage
-      if (!loadedFromUrl) {
+      // Prioridade 2: Se não veio na URL, tenta carregar o arquivo video_data.json do próprio repositório
+      if (!loaded) {
+        try {
+          const response = await fetch('video_data.json', { cache: 'no-store' });
+          if (response.ok) {
+            const fileData = await response.json();
+            if (fileData.youtubeUrl) document.getElementById('youtubeUrl').value = fileData.youtubeUrl;
+            if (Array.isArray(fileData.interactions)) interactions = fileData.interactions;
+            loaded = true;
+          }
+        } catch (err) {
+          // Arquivo local opcional não encontrado, segue para LocalStorage
+        }
+      }
+
+      // Prioridade 3: LocalStorage isolado para esta URL
+      if (!loaded) {
         loadDataFromStorage();
       }
 
       renderOptionsForm();
+      updateInteractionsList();
 
       if (viewMode === 'config') {
         document.getElementById('instructorNav').classList.remove('hidden');
@@ -432,7 +460,6 @@
         interactions: interactions
       };
       
-      // Converte os dados em Base64 seguro para URL
       const jsonString = JSON.stringify(dataToSave);
       const encoded = btoa(unescape(encodeURIComponent(jsonString)));
 
@@ -443,7 +470,20 @@
       const copyText = document.getElementById('studentShareUrl');
       copyText.select();
       document.execCommand("copy");
-      alert("Link copiado! Você já pode abrir na guia anônima ou enviar para qualquer pessoa.");
+      alert("Link copiado com sucesso! Ele abre exatamente com este vídeo e dinâmicas, inclusive na guia anônima.");
+    }
+
+    function downloadDataJson() {
+      const dataToSave = {
+        youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
+        interactions: interactions
+      };
+      const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'video_data.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
     }
 
     function saveDataToStorage() {
@@ -451,12 +491,12 @@
         youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
         interactions: interactions
       };
-      localStorage.setItem('interactive_video_data', JSON.stringify(dataToSave));
+      localStorage.setItem(getStorageKey(), JSON.stringify(dataToSave));
       updateShareLink();
     }
 
     function loadDataFromStorage() {
-      const saved = localStorage.getItem('interactive_video_data');
+      const saved = localStorage.getItem(getStorageKey());
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -467,19 +507,19 @@
             interactions = parsed.interactions;
           }
         } catch (e) {
-          console.error("Erro ao carregar dados", e);
+          console.error("Erro ao carregar dados locais", e);
         }
       }
-      updateInteractionsList();
     }
 
     function clearAllData() {
-      if (confirm("Tem certeza de que deseja apagar todas as dinâmicas cadastradas?")) {
+      if (confirm("Tem certeza de que deseja apagar as configurações deste repositório específico?")) {
         interactions = [];
-        localStorage.removeItem('interactive_video_data');
+        localStorage.removeItem(getStorageKey());
+        document.getElementById('youtubeUrl').value = 'https://www.youtube.com/watch?v=M7lc1UVf-VE';
         updateInteractionsList();
         updateShareLink();
-        alert("Todos os dados foram limpos!");
+        alert("Configurações deste repositório foram reiniciadas!");
       }
     }
 
