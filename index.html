@@ -6,270 +6,218 @@
   <title>Produtos Perigosos - MOPP</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'Arial', 'Helvetica', 'sans-serif'],
+            sans: ['Arial', 'Helvetica', 'sans-serif'],
           },
           colors: {
-            brandRed: '#d92027',
-            pageBg: '#f2f2f2',
-            cardGray: '#d9d9d9',
+            brandRed: '#D62429',
+            pageBg: '#F2F2F2',
             textDark: '#333333',
-            textMuted: '#4a4a4a',
           }
         }
       }
     }
   </script>
 </head>
-<body class="bg-pageBg text-textDark font-sans antialiased selection:bg-brandRed selection:text-white">
+<body class="bg-pageBg text-textDark font-sans antialiased">
 
-  <!-- Container Principal -->
-  <div class="max-w-[960px] mx-auto px-4 sm:px-6 pt-8 pb-16">
+  <!-- Container Principal em Coluna Única -->
+  <div class="max-w-[820px] mx-auto px-4 sm:px-6 pt-10 pb-16">
 
     <!-- Cabeçalho Centralizado -->
     <header class="text-center mb-10">
-      <h1 class="text-brandRed text-2xl sm:text-[28px] font-extrabold tracking-tight leading-tight">
+      <h1 class="text-brandRed text-2xl sm:text-[28px] font-bold tracking-tight leading-tight">
         Produtos Perigosos - MOPP
       </h1>
-      <p class="text-[#222222] text-xs sm:text-[13px] mt-1.5 font-normal">
+      <p class="text-textDark text-xs sm:text-[13.5px] mt-1.5 font-normal">
         Curso de capacitação para condutores de veículos de transporte de produtos perigosos - MOPP
       </p>
     </header>
 
-    <!-- Layout de Duas Colunas -->
-    <main class="flex flex-col md:flex-row items-start justify-between gap-8">
+    <!-- Conteúdo Corrido Organizado em Seções -->
+    <main class="space-y-7">
 
-      <!-- Coluna Esquerda (Conteúdo Principal) -->
-      <div class="w-full md:w-[68%] space-y-7">
+      <!-- Parágrafo Introdutório -->
+      <p class="text-[13px] leading-[1.6] text-textDark">
+        O curso de Capacitação Para Condutores De Produtos Perigosos (MOPP). É um curso 100% EAD (Ensino a distância), voltado aos condutores que queiram estar regulamentado na profissão.
+      </p>
 
-        <!-- Texto Introdutório -->
-        <p class="text-[12.5px] leading-[1.6] text-textMuted">
-          O curso de Capacitação Para Condutores De Produtos Perigosos (MOPP). É um curso 100% EAD (Ensino a distância), voltado aos condutores que queiram estar regulamentado na profissão.
-        </p>
-
-        <!-- Seção: Passo a passo -->
-        <section>
-          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
-            Passo a passo
-          </h2>
-          <ul class="space-y-2.5 text-[12.5px] text-textMuted">
-            <li class="flex items-start gap-2.5">
-              <!-- Ícone Seta Direita Vermelha -->
-              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
-              </svg>
-              <span>Fazer a inscrição no menu inscrever-se;</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
-              </svg>
-              <span>Realizar o curso;</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
-              </svg>
-              <span>Após conclusão, seu certificado será emitido em até 48h úteis;</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
-              </svg>
-              <span>Fazer a impressão do seu certificado.</span>
-            </li>
-          </ul>
-        </section>
-
-        <!-- Seção: Observações -->
-        <section>
-          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
-            Observações
-          </h2>
-          <ul class="space-y-2.5 text-[12.5px] text-textMuted">
-            <li class="flex items-start gap-2.5">
-              <!-- Ícone Duplo Check Vermelho -->
-              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 6L7 17l-5-5"/>
-                <path d="M22 10l-7.5 7.5L13 16"/>
-              </svg>
-              <span>Curso 100% online;</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 6L7 17l-5-5"/>
-                <path d="M22 10l-7.5 7.5L13 16"/>
-              </svg>
-              <span>Autorizado pela SENATRAN Portaria N° 1.152;</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 6L7 17l-5-5"/>
-                <path d="M22 10l-7.5 7.5L13 16"/>
-              </svg>
-              <span>Disponível 24 horas por dia;</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 6L7 17l-5-5"/>
-                <path d="M22 10l-7.5 7.5L13 16"/>
-              </svg>
-              <span>Qualquer dúvida chame nosso time no chat ou ligue no fone (47) 2123.4000.</span>
-            </li>
-          </ul>
-        </section>
-
-        <!-- Seção: Objetivo -->
-        <section>
-          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
-            Objetivo
-          </h2>
-          <div class="flex items-start gap-2.5 text-[12.5px] leading-[1.6] text-textMuted">
-            <!-- Ícone Alvo / Bullseye Vermelho -->
-            <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="9"/>
-              <circle cx="12" cy="12" r="5"/>
-              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+      <!-- Seção: Passo a passo -->
+      <section>
+        <h2 class="text-[15.5px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+          Passo a passo
+        </h2>
+        <ul class="space-y-2.5 text-[13px] text-textDark">
+          <li class="flex items-start gap-2.5">
+            <!-- Ícone Seta Direita Vermelha -->
+            <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
             </svg>
-            <p>
-              O curso para CONDUTORES DE TRANSPORTE DE PRODUTOS PERIGOSOS - MOPP, é totalmente em EAD (Ensino a distância). O curso é de 50 horas/aula e voltado aos condutores que queiram regularizar a sua profissão.
-            </p>
-          </div>
-        </section>
-
-        <!-- Seção: Grade Curricular do Curso -->
-        <section>
-          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
-            Grade Curricular do Curso
-          </h2>
-          <div class="w-full overflow-x-auto bg-white border-t border-gray-200 rounded-sm">
-            <table class="w-full border-collapse text-left text-[12px]">
-              <tbody class="divide-y divide-gray-200">
-                <tr>
-                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top w-[18%]">
-                    Módulo 1
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted align-top">
-                    Legislação de Trânsito
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top w-[22%]">
-                    10 horas / aula
-                  </td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
-                    Módulo 2
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted align-top">
-                    Direção Defensiva
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top">
-                    15 horas / aula
-                  </td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
-                    Módulo 3
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted align-top leading-snug">
-                    Noções de Primeiros Socorros, Respeito ao meio Ambiente e Prevenção de Incêndio
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top">
-                    10 horas / aula
-                  </td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
-                    Módulo 4
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted align-top">
-                    Movimentação de Produtos Perigosos
-                  </td>
-                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top">
-                    15 horas / aula
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- Coluna Direita (Barra Lateral) -->
-      <aside class="w-full md:w-[28%] space-y-6">
-
-        <!-- Card Cinza "Começar Agora?" (Sem valores de preço) -->
-        <div class="bg-cardGray border border-[#cccccc] rounded-[4px] p-5 text-center shadow-xs">
-          <h2 class="text-[17px] font-extrabold text-[#111111] mb-4">
-            Começar Agora?
-          </h2>
-
-          <!-- Seletor de Estado Estático -->
-          <div class="bg-white border border-[#cccccc] rounded-[3px] px-3 py-2 flex items-center justify-between text-[12px] text-[#333333] mb-5 select-none">
-            <span>São Paulo</span>
-            <svg class="w-3.5 h-3.5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+            <span>Fazer a inscrição no menu inscrever-se;</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
             </svg>
-          </div>
-
-          <!-- Botão Vermelho Estático "Inscrever-se >" -->
-          <div class="inline-flex items-center justify-center gap-1.5 bg-brandRed text-white font-bold text-[13px] px-5 py-2.5 rounded-[3px] select-none">
-            <span>Inscrever-se</span>
-            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+            <span>Realizar o curso;</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
             </svg>
-          </div>
-        </div>
+            <span>Após conclusão, seu certificado será emitido em até 48h úteis;</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+            </svg>
+            <span>Fazer a impressão do seu certificado.</span>
+          </li>
+        </ul>
+      </section>
 
-        <!-- Seção: Carga horária -->
-        <section>
-          <h3 class="text-[14px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-2.5">
-            Carga horária
-          </h3>
-          <p class="text-[12px] text-textMuted">
-            50 hora/aula
+      <!-- Seção: Observações -->
+      <section>
+        <h2 class="text-[15.5px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+          Observações
+        </h2>
+        <ul class="space-y-2.5 text-[13px] text-textDark">
+          <li class="flex items-start gap-2.5">
+            <!-- Ícone Duplo Check Vermelho -->
+            <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6L7 17l-5-5"/>
+              <path d="M22 10l-7.5 7.5L13 16"/>
+            </svg>
+            <span>Curso 100% online;</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6L7 17l-5-5"/>
+              <path d="M22 10l-7.5 7.5L13 16"/>
+            </svg>
+            <span>Autorizado pela SENATRAN Portaria N° 1.152;</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6L7 17l-5-5"/>
+              <path d="M22 10l-7.5 7.5L13 16"/>
+            </svg>
+            <span>Disponível 24 horas por dia;</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6L7 17l-5-5"/>
+              <path d="M22 10l-7.5 7.5L13 16"/>
+            </svg>
+            <span>Qualquer dúvida chame nosso time no chat ou ligue no fone (47) 2123.4000.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Seção: Objetivo -->
+      <section>
+        <h2 class="text-[15.5px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+          Objetivo
+        </h2>
+        <div class="flex items-start gap-2.5 text-[13px] leading-[1.6] text-textDark">
+          <!-- Ícone Alvo / Bullseye Vermelho -->
+          <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="5"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+          <p>
+            O curso para CONDUTORES DE TRANSPORTE DE PRODUTOS PERIGOSOS - MOPP, é totalmente em EAD (Ensino a distância). O curso é de 50 horas/aula e voltado aos condutores que queiram regularizar a sua profissão.
           </p>
-        </section>
+        </div>
+      </section>
 
-        <!-- Seção: Requisitos -->
-        <section>
-          <h3 class="text-[14px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-2.5">
-            Requisitos
-          </h3>
-          <ul class="list-disc pl-4 space-y-1.5 text-[12px] leading-[1.55] text-textMuted">
-            <li>Ser maior de vinte e um anos;</li>
-            <li>Estar habilitado: no mínimo na categoria B;</li>
-            <li>
-              Não estar cumprindo pena de suspensão do direito de dirigir, cassação da CNH, pena decorrente de crime de trânsito, bem como estar impedido judicialmente de exercer seus direitos;
-            </li>
-          </ul>
-        </section>
+      <!-- Seção: Carga horária -->
+      <section>
+        <h2 class="text-[15.5px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+          Carga horária
+        </h2>
+        <p class="text-[13px] text-textDark">
+          50 hora/aula
+        </p>
+      </section>
 
-      </aside>
+      <!-- Seção: Requisitos -->
+      <section>
+        <h2 class="text-[15.5px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+          Requisitos
+        </h2>
+        <ul class="list-disc pl-5 space-y-2 text-[13px] leading-[1.6] text-textDark">
+          <li>Ser maior de vinte e um anos;</li>
+          <li>Estar habilitado: no mínimo na categoria B;</li>
+          <li>
+            Não estar cumprindo pena de suspensão do direito de dirigir, cassação da CNH, pena decorrente de crime de trânsito, bem como estar impedido judicialmente de exercer seus direitos;
+          </li>
+        </ul>
+      </section>
+
+      <!-- Seção: Grade Curricular do Curso -->
+      <section>
+        <h2 class="text-[15.5px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+          Grade Curricular do Curso
+        </h2>
+        <div class="w-full overflow-x-auto border border-gray-200 rounded-[4px]">
+          <table class="w-full border-collapse text-left text-[12.5px]">
+            <tbody class="divide-y divide-gray-200">
+              <tr class="bg-white">
+                <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top w-[16%]">
+                  Módulo 1
+                </td>
+                <td class="py-2.5 px-3 text-textDark align-top">
+                  Legislação de Trânsito
+                </td>
+                <td class="py-2.5 px-3 text-textDark text-right whitespace-nowrap align-top w-[20%]">
+                  10 horas / aula
+                </td>
+              </tr>
+              <tr class="bg-[#F9F9F9]">
+                <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
+                  Módulo 2
+                </td>
+                <td class="py-2.5 px-3 text-textDark align-top">
+                  Direção Defensiva
+                </td>
+                <td class="py-2.5 px-3 text-textDark text-right whitespace-nowrap align-top">
+                  15 horas / aula
+                </td>
+              </tr>
+              <tr class="bg-white">
+                <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
+                  Módulo 3
+                </td>
+                <td class="py-2.5 px-3 text-textDark align-top leading-snug">
+                  Noções de Primeiros Socorros, Respeito ao meio Ambiente e Prevenção de Incêndio
+                </td>
+                <td class="py-2.5 px-3 text-textDark text-right whitespace-nowrap align-top">
+                  10 horas / aula
+                </td>
+              </tr>
+              <tr class="bg-[#F9F9F9]">
+                <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
+                  Módulo 4
+                </td>
+                <td class="py-2.5 px-3 text-textDark align-top">
+                  Movimentação de Produtos Perigosos
+                </td>
+                <td class="py-2.5 px-3 text-textDark text-right whitespace-nowrap align-top">
+                  15 horas / aula
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
     </main>
-
-    <!-- Chamada Final Centralizada (Sem a caixa "Ainda tem alguma dúvida?") -->
-    <footer class="mt-16 text-center">
-      <h2 class="text-[20px] sm:text-[22px] font-extrabold text-[#111111] mb-4">
-        Pronto para começar?
-      </h2>
-      <div class="inline-flex items-center justify-center gap-1.5 bg-brandRed text-white font-bold text-[13px] px-6 py-2.5 rounded-[3px] select-none">
-        <span>Inscrever-se</span>
-        <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
-        </svg>
-      </div>
-    </footer>
 
   </div>
 
