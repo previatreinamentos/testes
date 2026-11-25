@@ -2,1064 +2,276 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Plataforma de Vídeos Interativos</title>
-
-  <!-- Polyfill para Drag and Drop em telas Touch/Mobile -->
-  <script src="https://cdn.jsdelivr.net/npm/drag-drop-touch@1.3.0/DragDropTouch.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    nav {
-      width: 100%;
-      background-color: #1a73e8;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-
-    nav button {
-      background: transparent;
-      border: 2px solid white;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 14px;
-    }
-
-    nav button.active, nav button:hover {
-      background: white;
-      color: #1a73e8;
-    }
-
-    .view-screen {
-      width: 100%;
-      max-width: 950px;
-      padding: 10px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .card {
-      background: #ffffff;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 15px;
-    }
-
-    h1, h2, h3 {
-      color: #1a73e8;
-      margin-top: 0;
-    }
-
-    .form-group {
-      margin-bottom: 12px;
-    }
-
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 5px;
-      color: #333;
-      font-size: 13px;
-    }
-
-    input[type="text"], input[type="number"], select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .btn {
-      background: #1a73e8;
-      color: white;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      width: 100%;
-      margin-top: 8px;
-      font-size: 14px;
-      touch-action: manipulation;
-    }
-
-    .btn:hover { background: #1557b0; }
-    .btn-secondary { background: #5f6368; }
-    .btn-danger { background: #d93025; }
-    .btn-start { background: #34a853; font-size: 17px; padding: 14px 28px; width: auto; }
-    .btn-start:hover { background: #2d9247; }
-
-    .share-link-box {
-      background: #e8f0fe;
-      border: 1px solid #aecbfa;
-      padding: 10px;
-      border-radius: 8px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .option-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-      background: #f8f9fa;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #e0e0e0;
-    }
-
-    .interaction-card {
-      border-left: 4px solid #1a73e8;
-      background: #f8f9fa;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-    }
-
-    /* Container do Player */
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      margin: 0 auto;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-
-    /* Proporção Padrão (Horizontal 16:9) */
-    .video-wrapper.ratio-horizontal {
-      padding-bottom: 56.25%;
-      height: 0;
-    }
-
-    /* Proporção Vertical (Shorts/Celular 9:16) */
-    .video-wrapper.ratio-vertical {
-      max-width: 420px;
-      padding-bottom: 150%;
-      height: 0;
-    }
-
-    /* Modo Tela Cheia */
-    .video-wrapper:fullscreen, 
-    .video-wrapper:-webkit-full-screen {
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      padding-bottom: 0 !important;
-      border-radius: 0 !important;
-      background: #000 !important;
-    }
-
-    .video-wrapper iframe, 
-    .video-wrapper #playerContainer,
-    .video-wrapper #player {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100% !important;
-      height: 100% !important;
-      border: 0;
-    }
-
-    /* Botão de Tela Cheia */
-    .fullscreen-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(0, 0, 0, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      color: #fff;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      z-index: 25;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      backdrop-filter: blur(4px);
-    }
-
-    /* Overlays Centralizados Sobre o Vídeo */
-    .overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85); /* Fundo escuro uniforme sobre o vídeo */
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center; /* Centralizado no meio da tela */
-      align-items: center;
-      padding: 15px;
-      z-index: 20;
-      overflow-y: auto;
-    }
-
-    /* Painel do Questionário Centralizado */
-    .quiz-box {
-      background: #202124;
-      padding: 18px 20px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 480px;
-      max-height: 90%;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      overflow-y: auto;
-    }
-
-    .quiz-header {
-      margin-bottom: 12px;
-    }
-
-    .quiz-header h3 {
-      font-size: 16px;
-      line-height: 1.4;
-      margin: 0;
-      color: #fff;
-      text-align: left;
-    }
-
-    .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin: 10px 0;
-      overflow-y: auto;
-      max-height: 220px;
-      padding-right: 4px;
-    }
-
-    .quiz-options::-webkit-scrollbar {
-      width: 5px;
-    }
-    .quiz-options::-webkit-scrollbar-thumb {
-      background: #555;
-      border-radius: 4px;
-    }
-
-    .quiz-btn {
-      background: #3c4043;
-      color: #f1f3f4;
-      border: 2px solid #5f6368;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-      touch-action: none;
-      transition: all 0.15s;
-    }
-
-    .quiz-btn:hover {
-      background: #494e52;
-    }
-
-    .drag-item { cursor: grab; }
-    .drag-item.dragging { opacity: 0.5; background: #1a73e8; }
-    .drag-handle { color: #9aa0a6; font-size: 18px; }
-
-    .feedback {
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      text-align: center;
-      font-size: 13px;
-    }
-    .feedback.correct { background: #137333; color: #e6f4ea; }
-    .feedback.incorrect { background: #c5221f; color: #fce8e6; }
-
-    .score-badge {
-      font-size: 2.8rem;
-      font-weight: bold;
-      color: #34a853;
-      margin: 8px 0;
-    }
-
-    .score-details {
-      background: #303134;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      font-size: 14px;
-      line-height: 1.6;
-      text-align: left;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Menu do Instrutor -->
-  <nav id="instructorNav" class="hidden">
-    <button id="navConfig" onclick="switchScreen('config')">⚙️ Configuração</button>
-    <button id="navStudent" onclick="switchScreen('student')">🎓 Preview do Aluno</button>
-  </nav>
-
-  <!-- ================= TELA 1: CONFIGURAÇÃO ================= -->
-  <div id="screenConfig" class="view-screen hidden">
-    
-    <div class="card">
-      <h2>🔗 Link do Aluno</h2>
-      <p style="font-size: 13px; color: #555;">Copie o link abaixo para abrir em guia anônima ou celular:</p>
-      <div class="share-link-box">
-        <input type="text" id="studentShareUrl" readonly>
-        <button class="btn" style="width: auto; margin:0; padding: 8px 14px;" onclick="copyStudentLink()">Copiar Link</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>1. Configurar Vídeo Principal</h2>
-      <div class="form-group">
-        <label for="youtubeUrl">Cole o Link do YouTube ou o ID:</label>
-        <input type="text" id="youtubeUrl" placeholder="Ex: https://www.youtube.com/watch?v=..." oninput="onVideoInputChanged()">
-        <small id="detectedIdFeedback" style="color: #555; display: block; margin-top: 5px;"></small>
-      </div>
-
-      <div class="form-group">
-        <label for="videoOrientation">Formato do Vídeo:</label>
-        <select id="videoOrientation" onchange="applyOrientation()">
-          <option value="vertical">📱 Vertical (Shorts / Gravado em Pé no Celular)</option>
-          <option value="horizontal">🖥️ Horizontal (Formato Padrão 16:9)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>2. Adicionar Dinâmica / Pergunta</h2>
-      
-      <div class="form-group">
-        <label for="pauseTime">Pausar no Segundo:</label>
-        <input type="number" id="pauseTime" placeholder="Ex: 10" min="1">
-      </div>
-
-      <div class="form-group">
-        <label for="quizType">Tipo de Dinâmica:</label>
-        <select id="quizType" onchange="renderOptionsForm()">
-          <option value="choice">Múltipla Escolha (1 Opção Correta)</option>
-          <option value="order">Ordenar Sequência (Arrastar e Soltar)</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="questionText">Pergunta / Instrução:</label>
-        <input type="text" id="questionText" placeholder="Ex: Selecione a alternativa correta:">
-      </div>
-
-      <div class="form-group">
-        <label id="optionsLabel">Alternativas:</label>
-        <div id="optionsContainer"></div>
-        <button type="button" class="btn btn-secondary" onclick="addOptionInput()">+ Adicionar Opção</button>
-      </div>
-
-      <div class="form-group" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-        <label for="correctFeedback" style="color: #137333;">Mensagem para Resposta Correta:</label>
-        <input type="text" id="correctFeedback" placeholder="Ex: ✨ Parabéns! Você acertou.">
-      </div>
-
-      <div class="form-group">
-        <label for="incorrectFeedback" style="color: #c5221f;">Mensagem para Resposta Incorreta:</label>
-        <input type="text" id="incorrectFeedback" placeholder="Ex: ❌ Resposta Incorreta!">
-      </div>
-
-      <button type="button" class="btn" onclick="saveInteraction()">💾 Salvar Dinâmica neste Segundo</button>
-    </div>
-
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 style="margin: 0; font-size: 17px;">3. Dinâmicas Cadastradas</h2>
-        <button class="btn btn-danger" style="width: auto; margin: 0; padding: 6px 12px; font-size: 13px;" onclick="clearAllData()">🗑️ Limpar Tudo</button>
-      </div>
-      <div id="interactionsList">Nenhuma dinâmica cadastrada ainda.</div>
-    </div>
-  </div>
-
-  <!-- ================= TELA 2: ALUNO ================= -->
-  <div id="screenStudent" class="view-screen">
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h2 style="margin: 0; font-size: 18px;">Vídeo Interativo</h2>
-      </div>
-
-      <div class="video-wrapper ratio-vertical" id="videoWrapperContainer">
-        <!-- Botão de Expandir Tela -->
-        <button class="fullscreen-btn" onclick="toggleFullScreen()" title="Expandir Tela">
-          <span id="fullscreenIcon">⛶</span> Tela Cheia
-        </button>
-
-        <div id="playerContainer"></div>
-
-        <div id="startOverlay" class="overlay">
-          <button class="btn btn-start" onclick="startStudentVideo()">▶ Iniciar Vídeo</button>
-        </div>
-
-        <!-- Painel Centralizado Diretamente Sobre o Vídeo -->
-        <div id="quizOverlay" class="overlay hidden">
-          <div class="quiz-box">
-            <div class="quiz-header">
-              <h3 id="displayQuestion">Pergunta?</h3>
-            </div>
-            <div id="displayOptions" class="quiz-options"></div>
-            <div id="displayFeedback" class="feedback hidden"></div>
-            <button id="btnAction" class="btn" onclick="handleQuizSubmit()">Responder</button>
-            <button id="btnContinue" class="btn hidden" onclick="resumeVideo()">Continuar Vídeo ▶</button>
-          </div>
-        </div>
-
-        <!-- Relatório Final -->
-        <div id="reportOverlay" class="overlay hidden">
-          <div class="quiz-box" style="text-align: center;">
-            <h2 style="font-size: 18px; margin-bottom: 8px;">🎓 Aula Concluída!</h2>
-            <p style="font-size: 13px; margin: 0 0 10px 0;">Confira seu resultado final:</p>
-            
-            <div id="scorePercentage" class="score-badge">0%</div>
-
-            <div class="score-details">
-              <div>🎯 <strong>Total de Atividades:</strong> <span id="totalQuestions">0</span></div>
-              <div>✅ <strong>Acertos:</strong> <span id="correctAnswers">0</span></div>
-              <div>❌ <strong>Erros:</strong> <span id="incorrectAnswers">0</span></div>
-            </div>
-
-            <p id="finalMessage" style="font-size: 13px; margin-bottom: 12px;"></p>
-
-            <button class="btn" onclick="restartVideo()">🔄 Refazer Vídeo</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos Perigosos - MOPP</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
-    const REPO_DEFAULT_VIDEO = ""; 
-    const REPO_DEFAULT_INTERACTIONS = []; 
-
-    let interactions = []; 
-    let currentInteraction = null;
-    let player = null;
-    let checkTimer = null;
-    let videoOrientation = "vertical";
-
-    let score = {
-      correct: 0,
-      incorrect: 0,
-      total: 0
-    };
-
-    function applyOrientation() {
-      videoOrientation = document.getElementById('videoOrientation').value;
-      const wrapper = document.getElementById('videoWrapperContainer');
-      if (videoOrientation === 'vertical') {
-        wrapper.classList.remove('ratio-horizontal');
-        wrapper.classList.add('ratio-vertical');
-      } else {
-        wrapper.classList.remove('ratio-vertical');
-        wrapper.classList.add('ratio-horizontal');
-      }
-      saveDataToStorage();
-    }
-
-    function toggleFullScreen() {
-      const container = document.getElementById('videoWrapperContainer');
-      const icon = document.getElementById('fullscreenIcon');
-
-      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        if (container.requestFullscreen) {
-          container.requestFullscreen();
-        } else if (container.webkitRequestFullscreen) {
-          container.webkitRequestFullscreen();
-        }
-        icon.innerText = "✖";
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        }
-        icon.innerText = "⛶";
-      }
-    }
-
-    document.addEventListener('fullscreenchange', () => {
-      const icon = document.getElementById('fullscreenIcon');
-      icon.innerText = document.fullscreenElement ? "✖" : "⛶";
-    });
-
-    function getRepoStorageKey() {
-      const cleanPath = window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, '');
-      return 'yt_quiz_data_' + (cleanPath || 'root');
-    }
-
-    function extractYouTubeId(url) {
-      if (!url) return null;
-      url = url.trim();
-
-      if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
-        return url;
-      }
-
-      const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-      const match = url.match(reg);
-      return match ? match[1] : null;
-    }
-
-    function onVideoInputChanged() {
-      const input = document.getElementById('youtubeUrl').value;
-      const detectedId = extractYouTubeId(input);
-      const feedback = document.getElementById('detectedIdFeedback');
-      
-      if (detectedId) {
-        feedback.innerText = `✅ Vídeo identificado com sucesso! ID: ${detectedId}`;
-        feedback.style.color = '#137333';
-      } else if (input.trim() !== '') {
-        feedback.innerText = `⚠️ Link não reconhecido como vídeo do YouTube.`;
-        feedback.style.color = '#d93025';
-      } else {
-        feedback.innerText = '';
-      }
-      saveDataToStorage();
-    }
-
-    window.onload = function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const viewMode = urlParams.get('view');
-      const paramVideo = urlParams.get('v');
-      const paramData = urlParams.get('d');
-      const paramOrient = urlParams.get('o');
-
-      let loaded = false;
-
-      if (paramOrient) {
-        videoOrientation = paramOrient;
-        document.getElementById('videoOrientation').value = paramOrient;
-      }
-
-      if (paramVideo) {
-        document.getElementById('youtubeUrl').value = paramVideo;
-        loaded = true;
-      }
-      if (paramData) {
-        try {
-          interactions = JSON.parse(decodeURIComponent(escape(atob(paramData))));
-          loaded = true;
-        } catch(e) {
-          console.error("Erro ao decodificar dados da URL", e);
-        }
-      }
-
-      if (!loaded) {
-        const saved = localStorage.getItem(getRepoStorageKey());
-        if (saved) {
-          try {
-            const parsed = JSON.parse(saved);
-            if (parsed.youtubeUrl) {
-              document.getElementById('youtubeUrl').value = parsed.youtubeUrl;
-              loaded = true;
-            }
-            if (parsed.orientation) {
-              videoOrientation = parsed.orientation;
-              document.getElementById('videoOrientation').value = parsed.orientation;
-            }
-            if (Array.isArray(parsed.interactions)) {
-              interactions = parsed.interactions;
-            }
-          } catch(e) {}
-        }
-      }
-
-      if (!loaded && REPO_DEFAULT_VIDEO) {
-        document.getElementById('youtubeUrl').value = REPO_DEFAULT_VIDEO;
-        interactions = REPO_DEFAULT_INTERACTIONS;
-      }
-
-      applyOrientation();
-      renderOptionsForm();
-      updateInteractionsList();
-
-      if (viewMode === 'config') {
-        document.getElementById('instructorNav').classList.remove('hidden');
-        switchScreen('config');
-        onVideoInputChanged();
-      } else {
-        document.getElementById('instructorNav').classList.add('hidden');
-        switchScreen('student');
-      }
-
-      updateShareLink();
-    };
-
-    function updateShareLink() {
-      const baseUrl = window.location.href.split('?')[0];
-      const videoId = extractYouTubeId(document.getElementById('youtubeUrl').value);
-      
-      if (!videoId) {
-        document.getElementById('studentShareUrl').value = 'Informe um vídeo válido para gerar o link.';
-        return;
-      }
-
-      const jsonInteractions = JSON.stringify(interactions);
-      const encodedInteractions = btoa(unescape(encodeURIComponent(jsonInteractions)));
-
-      document.getElementById('studentShareUrl').value = `${baseUrl}?view=student&v=${videoId}&o=${videoOrientation}&d=${encodeURIComponent(encodedInteractions)}`;
-    }
-
-    function copyStudentLink() {
-      const copyText = document.getElementById('studentShareUrl');
-      if (!copyText.value.startsWith('http')) {
-        alert("Insira um link de vídeo válido primeiro!");
-        return;
-      }
-      copyText.select();
-      document.execCommand("copy");
-      alert("Link copiado com sucesso!");
-    }
-
-    function saveDataToStorage() {
-      const dataToSave = {
-        youtubeUrl: document.getElementById('youtubeUrl').value.trim(),
-        orientation: videoOrientation,
-        interactions: interactions
-      };
-      localStorage.setItem(getRepoStorageKey(), JSON.stringify(dataToSave));
-      updateShareLink();
-    }
-
-    function clearAllData() {
-      if (confirm("Tem certeza que deseja apagar os dados configurados para este repositório?")) {
-        localStorage.removeItem(getRepoStorageKey());
-        interactions = [];
-        document.getElementById('youtubeUrl').value = '';
-        updateInteractionsList();
-        updateShareLink();
-        alert("Dados deste repositório limpos!");
-      }
-    }
-
-    function switchScreen(screen) {
-      document.getElementById('screenConfig').classList.add('hidden');
-      document.getElementById('screenStudent').classList.add('hidden');
-      document.getElementById('navConfig').classList.remove('active');
-      document.getElementById('navStudent').classList.remove('active');
-
-      if (screen === 'config') {
-        document.getElementById('screenConfig').classList.remove('hidden');
-        document.getElementById('navConfig').classList.add('active');
-        if (player) clearInterval(checkTimer);
-      } else {
-        document.getElementById('screenStudent').classList.remove('hidden');
-        document.getElementById('navStudent').classList.add('active');
-        initStudentPlayer();
-      }
-    }
-
-    function renderOptionsForm() {
-      const type = document.getElementById('quizType').value;
-      const container = document.getElementById('optionsContainer');
-      const label = document.getElementById('optionsLabel');
-      container.innerHTML = '';
-
-      if (type === 'choice') {
-        label.innerText = 'Alternativas (Marque a correta no botão redondo):';
-        container.appendChild(createChoiceInput(0, true));
-        container.appendChild(createChoiceInput(1, false));
-      } else {
-        label.innerText = 'Insira os itens NA ORDEM CORRETA (eles serão embaralhados para o aluno):';
-        container.appendChild(createOrderInput(0));
-        container.appendChild(createOrderInput(1));
-      }
-    }
-
-    function createChoiceInput(idx, isChecked) {
-      const div = document.createElement('div');
-      div.className = 'option-item';
-      div.innerHTML = `
-        <input type="radio" name="correctIndex" value="${idx}" ${isChecked ? 'checked' : ''}>
-        <input type="text" class="opt-text" placeholder="Opção ${idx + 1}">
-      `;
-      return div;
-    }
-
-    function createOrderInput(idx) {
-      const div = document.createElement('div');
-      div.className = 'option-item';
-      div.innerHTML = `
-        <span style="font-weight:bold">${idx + 1}º</span>
-        <input type="text" class="opt-text" placeholder="Passo/Item ${idx + 1}">
-      `;
-      return div;
-    }
-
-    function addOptionInput() {
-      const type = document.getElementById('quizType').value;
-      const container = document.getElementById('optionsContainer');
-      const idx = container.children.length;
-
-      if (type === 'choice') {
-        container.appendChild(createChoiceInput(idx, false));
-      } else {
-        container.appendChild(createOrderInput(idx));
-      }
-    }
-
-    function saveInteraction() {
-      const time = parseInt(document.getElementById('pauseTime').value);
-      const type = document.getElementById('quizType').value;
-      const question = document.getElementById('questionText').value.trim();
-      const inputs = document.querySelectorAll('#optionsContainer .opt-text');
-
-      const correctFeedback = document.getElementById('correctFeedback').value.trim() || "✨ Resposta Correta! Excelente!";
-      const incorrectFeedback = document.getElementById('incorrectFeedback').value.trim() || "❌ Resposta Incorreta!";
-
-      if (!time || time < 1) return alert('Informe um segundo válido!');
-      if (!question) return alert('Informe o texto da pergunta!');
-
-      let options = [];
-      let correctAnswers = [];
-
-      if (type === 'choice') {
-        const selectedRadio = document.querySelector('input[name="correctIndex"]:checked');
-        if (!selectedRadio) return alert('Selecione a alternativa correta!');
-        const correctIdx = parseInt(selectedRadio.value);
-
-        inputs.forEach((inp, i) => {
-          if (inp.value.trim() !== "") {
-            options.push({ id: i, text: inp.value.trim() });
-            if (i === correctIdx) correctAnswers.push(i);
-          }
-        });
-      } else {
-        inputs.forEach((inp, i) => {
-          if (inp.value.trim() !== "") {
-            options.push({ id: i, text: inp.value.trim() });
-            correctAnswers.push(i);
-          }
-        });
-      }
-
-      if (options.length < 2) return alert('Insira pelo menos 2 opções!');
-
-      interactions.push({
-        id: Date.now(),
-        time: time,
-        type: type,
-        question: question,
-        options: options,
-        correctAnswers: correctAnswers,
-        correctFeedback: correctFeedback,
-        incorrectFeedback: incorrectFeedback,
-        triggered: false
-      });
-
-      interactions.sort((a, b) => a.time - b.time);
-
-      saveDataToStorage();
-      updateInteractionsList();
-      alert('Dinâmica salva com sucesso!');
-
-      document.getElementById('pauseTime').value = '';
-      document.getElementById('questionText').value = '';
-      document.getElementById('correctFeedback').value = '';
-      document.getElementById('incorrectFeedback').value = '';
-      renderOptionsForm();
-    }
-
-    function updateInteractionsList() {
-      const list = document.getElementById('interactionsList');
-      if (interactions.length === 0) {
-        list.innerText = 'Nenhuma dinâmica cadastrada ainda.';
-        return;
-      }
-
-      list.innerHTML = '';
-      interactions.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'interaction-card';
-        div.innerHTML = `
-          <div>
-            <strong>⏱️ ${item.time}s</strong> - [${item.type === 'choice' ? 'Múltipla Escolha' : 'Ordenar'}] ${item.question}
-          </div>
-          <button class="btn btn-danger" style="width:auto; margin:0; padding: 4px 8px; font-size: 12px;" onclick="removeInteraction(${item.id})">Excluir</button>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    function removeInteraction(id) {
-      interactions = interactions.filter(i => i.id !== id);
-      saveDataToStorage();
-      updateInteractionsList();
-    }
-
-    function initStudentPlayer() {
-      const urlOrId = document.getElementById('youtubeUrl').value.trim();
-      const videoId = extractYouTubeId(urlOrId);
-
-      const container = document.getElementById('playerContainer');
-
-      if (!videoId) {
-        container.innerHTML = `
-          <div style="color: white; text-align: center; padding-top: 20%;">
-            <h3>Nenhum vídeo configurado</h3>
-            <p>Acesse o painel com <code>?view=config</code> para configurar o vídeo.</p>
-          </div>
-        `;
-        document.getElementById('startOverlay').classList.add('hidden');
-        return;
-      }
-
-      score = { correct: 0, incorrect: 0, total: interactions.length };
-      interactions.forEach(i => i.triggered = false);
-
-      document.getElementById('startOverlay').classList.remove('hidden');
-      document.getElementById('quizOverlay').classList.add('hidden');
-      document.getElementById('reportOverlay').classList.add('hidden');
-
-      container.innerHTML = `
-        <iframe id="player" 
-          src="https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      `;
-
-      if (window.YT && window.YT.Player) {
-        setupPlayerObject();
-      } else {
-        window.onYouTubeIframeAPIReady = setupPlayerObject;
-        if (!document.getElementById('ytApiScript')) {
-          const tag = document.createElement('script');
-          tag.id = 'ytApiScript';
-          tag.src = "https://www.youtube.com/iframe_api";
-          document.head.appendChild(tag);
-        }
-      }
-    }
-
-    function setupPlayerObject() {
-      player = new YT.Player('player', {
-        events: { 'onStateChange': onPlayerStateChange }
-      });
-    }
-
-    function startStudentVideo() {
-      document.getElementById('startOverlay').classList.add('hidden');
-      if (player && typeof player.playVideo === 'function') {
-        player.playVideo();
-      }
-    }
-
-    function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.PLAYING) {
-        checkTimer = setInterval(checkVideoTime, 250);
-      } else if (event.data === YT.PlayerState.ENDED) {
-        clearInterval(checkTimer);
-        showFinalReport();
-      } else {
-        clearInterval(checkTimer);
-      }
-    }
-
-    function checkVideoTime() {
-      if (!player || typeof player.getCurrentTime !== 'function') return;
-
-      const currentTime = Math.floor(player.getCurrentTime());
-      const nextInteraction = interactions.find(i => i.time === currentTime && !i.triggered);
-
-      if (nextInteraction) {
-        nextInteraction.triggered = true;
-        currentInteraction = nextInteraction;
-        player.pauseVideo();
-        showQuizOverlay(nextInteraction);
-      }
-    }
-
-    let selectedChoiceId = null;
-
-    function showQuizOverlay(data) {
-      document.getElementById('displayQuestion').innerText = data.question;
-      document.getElementById('displayFeedback').className = 'feedback hidden';
-      document.getElementById('btnContinue').classList.add('hidden');
-      document.getElementById('btnAction').classList.remove('hidden');
-
-      const optionsBox = document.getElementById('displayOptions');
-      optionsBox.innerHTML = '';
-
-      if (data.type === 'choice') {
-        selectedChoiceId = null;
-        data.options.forEach(opt => {
-          const btn = document.createElement('div');
-          btn.className = 'quiz-btn';
-          btn.innerText = opt.text;
-          btn.onclick = () => {
-            document.querySelectorAll('.quiz-btn').forEach(b => {
-              b.style.borderColor = '#5f6368';
-              b.style.background = '#3c4043';
-            });
-            btn.style.borderColor = '#1a73e8';
-            btn.style.background = '#1557b0';
-            selectedChoiceId = opt.id;
-          };
-          optionsBox.appendChild(btn);
-        });
-      } else {
-        const shuffled = [...data.options].sort(() => Math.random() - 0.5);
-        shuffled.forEach(opt => {
-          const item = document.createElement('div');
-          item.className = 'quiz-btn drag-item';
-          item.setAttribute('draggable', 'true');
-          item.dataset.id = opt.id;
-          item.innerHTML = `
-            <span>${opt.text}</span>
-            <span class="drag-handle">☰</span>
-          `;
-          optionsBox.appendChild(item);
-        });
-        setupDragAndDrop(optionsBox);
-      }
-
-      document.getElementById('quizOverlay').classList.remove('hidden');
-    }
-
-    function setupDragAndDrop(container) {
-      let draggedItem = null;
-
-      container.querySelectorAll('.drag-item').forEach(item => {
-        item.addEventListener('dragstart', () => {
-          draggedItem = item;
-          setTimeout(() => item.classList.add('dragging'), 0);
-        });
-
-        item.addEventListener('dragend', () => {
-          draggedItem.classList.remove('dragging');
-          draggedItem = null;
-        });
-      });
-
-      container.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        const afterElement = getDragAfterElement(container, e.clientY);
-        const dragging = container.querySelector('.dragging');
-        if (dragging) {
-          if (afterElement == null) {
-            container.appendChild(dragging);
-          } else {
-            container.insertBefore(dragging, afterElement);
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Arial', 'Helvetica', 'sans-serif'],
+          },
+          colors: {
+            brandRed: '#d92027',
+            pageBg: '#f2f2f2',
+            cardGray: '#d9d9d9',
+            textDark: '#333333',
+            textMuted: '#4a4a4a',
           }
         }
-      });
-    }
-
-    function getDragAfterElement(container, y) {
-      const draggableElements = [...container.querySelectorAll('.drag-item:not(.dragging)')];
-
-      return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    function handleQuizSubmit() {
-      const feedback = document.getElementById('displayFeedback');
-      let isCorrect = false;
-
-      if (currentInteraction.type === 'choice') {
-        if (selectedChoiceId === null) return alert('Escolha uma das alternativas!');
-        isCorrect = selectedChoiceId === currentInteraction.correctAnswers[0];
-      } else {
-        const currentElements = document.querySelectorAll('#displayOptions .drag-item');
-        const studentSeq = Array.from(currentElements).map(el => parseInt(el.dataset.id));
-        isCorrect = JSON.stringify(studentSeq) === JSON.stringify(currentInteraction.correctAnswers);
       }
-
-      if (isCorrect) {
-        score.correct++;
-        feedback.innerText = currentInteraction.correctFeedback || "✨ Resposta Correta! Excelente!";
-        feedback.className = "feedback correct";
-      } else {
-        score.incorrect++;
-        feedback.innerText = currentInteraction.incorrectFeedback || "❌ Resposta Incorreta!";
-        feedback.className = "feedback incorrect";
-      }
-
-      document.getElementById('btnAction').classList.add('hidden');
-      document.getElementById('btnContinue').classList.remove('hidden');
-    }
-
-    function resumeVideo() {
-      document.getElementById('quizOverlay').classList.add('hidden');
-      player.playVideo();
-    }
-
-    function showFinalReport() {
-      const total = score.total;
-      const percentage = total > 0 ? Math.round((score.correct / total) * 100) : 100;
-
-      document.getElementById('totalQuestions').innerText = total;
-      document.getElementById('correctAnswers').innerText = score.correct;
-      document.getElementById('incorrectAnswers').innerText = score.incorrect;
-      document.getElementById('scorePercentage').innerText = `${percentage}%`;
-
-      const msgBox = document.getElementById('finalMessage');
-      if (percentage === 100) {
-        msgBox.innerText = "🏆 Perfeito! Você acertou todas as atividades do vídeo!";
-      } else if (percentage >= 70) {
-        msgBox.innerText = "👏 Muito bem! Você teve um ótimo aproveitamento.";
-      } else {
-        msgBox.innerText = "📚 Que tal rever o vídeo e tentar novamente para melhorar sua nota?";
-      }
-
-      document.getElementById('reportOverlay').classList.remove('hidden');
-    }
-
-    function restartVideo() {
-      initStudentPlayer();
     }
   </script>
+</head>
+<body class="bg-pageBg text-textDark font-sans antialiased selection:bg-brandRed selection:text-white">
+
+  <!-- Container Principal -->
+  <div class="max-w-[960px] mx-auto px-4 sm:px-6 pt-8 pb-16">
+
+    <!-- Cabeçalho Centralizado -->
+    <header class="text-center mb-10">
+      <h1 class="text-brandRed text-2xl sm:text-[28px] font-extrabold tracking-tight leading-tight">
+        Produtos Perigosos - MOPP
+      </h1>
+      <p class="text-[#222222] text-xs sm:text-[13px] mt-1.5 font-normal">
+        Curso de capacitação para condutores de veículos de transporte de produtos perigosos - MOPP
+      </p>
+    </header>
+
+    <!-- Layout de Duas Colunas -->
+    <main class="flex flex-col md:flex-row items-start justify-between gap-8">
+
+      <!-- Coluna Esquerda (Conteúdo Principal) -->
+      <div class="w-full md:w-[68%] space-y-7">
+
+        <!-- Texto Introdutório -->
+        <p class="text-[12.5px] leading-[1.6] text-textMuted">
+          O curso de Capacitação Para Condutores De Produtos Perigosos (MOPP). É um curso 100% EAD (Ensino a distância), voltado aos condutores que queiram estar regulamentado na profissão.
+        </p>
+
+        <!-- Seção: Passo a passo -->
+        <section>
+          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+            Passo a passo
+          </h2>
+          <ul class="space-y-2.5 text-[12.5px] text-textMuted">
+            <li class="flex items-start gap-2.5">
+              <!-- Ícone Seta Direita Vermelha -->
+              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+              </svg>
+              <span>Fazer a inscrição no menu inscrever-se;</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+              </svg>
+              <span>Realizar o curso;</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+              </svg>
+              <span>Após conclusão, seu certificado será emitido em até 48h úteis;</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg class="w-3.5 h-3.5 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+              </svg>
+              <span>Fazer a impressão do seu certificado.</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Seção: Observações -->
+        <section>
+          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+            Observações
+          </h2>
+          <ul class="space-y-2.5 text-[12.5px] text-textMuted">
+            <li class="flex items-start gap-2.5">
+              <!-- Ícone Duplo Check Vermelho -->
+              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6L7 17l-5-5"/>
+                <path d="M22 10l-7.5 7.5L13 16"/>
+              </svg>
+              <span>Curso 100% online;</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6L7 17l-5-5"/>
+                <path d="M22 10l-7.5 7.5L13 16"/>
+              </svg>
+              <span>Autorizado pela SENATRAN Portaria N° 1.152;</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6L7 17l-5-5"/>
+                <path d="M22 10l-7.5 7.5L13 16"/>
+              </svg>
+              <span>Disponível 24 horas por dia;</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6L7 17l-5-5"/>
+                <path d="M22 10l-7.5 7.5L13 16"/>
+              </svg>
+              <span>Qualquer dúvida chame nosso time no chat ou ligue no fone (47) 2123.4000.</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Seção: Objetivo -->
+        <section>
+          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+            Objetivo
+          </h2>
+          <div class="flex items-start gap-2.5 text-[12.5px] leading-[1.6] text-textMuted">
+            <!-- Ícone Alvo / Bullseye Vermelho -->
+            <svg class="w-4 h-4 text-brandRed shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+            <p>
+              O curso para CONDUTORES DE TRANSPORTE DE PRODUTOS PERIGOSOS - MOPP, é totalmente em EAD (Ensino a distância). O curso é de 50 horas/aula e voltado aos condutores que queiram regularizar a sua profissão.
+            </p>
+          </div>
+        </section>
+
+        <!-- Seção: Grade Curricular do Curso -->
+        <section>
+          <h2 class="text-[15px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-3">
+            Grade Curricular do Curso
+          </h2>
+          <div class="w-full overflow-x-auto bg-white border-t border-gray-200 rounded-sm">
+            <table class="w-full border-collapse text-left text-[12px]">
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top w-[18%]">
+                    Módulo 1
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted align-top">
+                    Legislação de Trânsito
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top w-[22%]">
+                    10 horas / aula
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
+                    Módulo 2
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted align-top">
+                    Direção Defensiva
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top">
+                    15 horas / aula
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
+                    Módulo 3
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted align-top leading-snug">
+                    Noções de Primeiros Socorros, Respeito ao meio Ambiente e Prevenção de Incêndio
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top">
+                    10 horas / aula
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-bold text-[#222222] whitespace-nowrap align-top">
+                    Módulo 4
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted align-top">
+                    Movimentação de Produtos Perigosos
+                  </td>
+                  <td class="py-2.5 px-3 text-textMuted text-right whitespace-nowrap align-top">
+                    15 horas / aula
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Coluna Direita (Barra Lateral) -->
+      <aside class="w-full md:w-[28%] space-y-6">
+
+        <!-- Card Cinza "Começar Agora?" (Sem valores de preço) -->
+        <div class="bg-cardGray border border-[#cccccc] rounded-[4px] p-5 text-center shadow-xs">
+          <h2 class="text-[17px] font-extrabold text-[#111111] mb-4">
+            Começar Agora?
+          </h2>
+
+          <!-- Seletor de Estado Estático -->
+          <div class="bg-white border border-[#cccccc] rounded-[3px] px-3 py-2 flex items-center justify-between text-[12px] text-[#333333] mb-5 select-none">
+            <span>São Paulo</span>
+            <svg class="w-3.5 h-3.5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <!-- Botão Vermelho Estático "Inscrever-se >" -->
+          <div class="inline-flex items-center justify-center gap-1.5 bg-brandRed text-white font-bold text-[13px] px-5 py-2.5 rounded-[3px] select-none">
+            <span>Inscrever-se</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Seção: Carga horária -->
+        <section>
+          <h3 class="text-[14px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-2.5">
+            Carga horária
+          </h3>
+          <p class="text-[12px] text-textMuted">
+            50 hora/aula
+          </p>
+        </section>
+
+        <!-- Seção: Requisitos -->
+        <section>
+          <h3 class="text-[14px] font-bold text-[#111111] border-b border-brandRed pb-1 mb-2.5">
+            Requisitos
+          </h3>
+          <ul class="list-disc pl-4 space-y-1.5 text-[12px] leading-[1.55] text-textMuted">
+            <li>Ser maior de vinte e um anos;</li>
+            <li>Estar habilitado: no mínimo na categoria B;</li>
+            <li>
+              Não estar cumprindo pena de suspensão do direito de dirigir, cassação da CNH, pena decorrente de crime de trânsito, bem como estar impedido judicialmente de exercer seus direitos;
+            </li>
+          </ul>
+        </section>
+
+      </aside>
+
+    </main>
+
+    <!-- Chamada Final Centralizada (Sem a caixa "Ainda tem alguma dúvida?") -->
+    <footer class="mt-16 text-center">
+      <h2 class="text-[20px] sm:text-[22px] font-extrabold text-[#111111] mb-4">
+        Pronto para começar?
+      </h2>
+      <div class="inline-flex items-center justify-center gap-1.5 bg-brandRed text-white font-bold text-[13px] px-6 py-2.5 rounded-[3px] select-none">
+        <span>Inscrever-se</span>
+        <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+    </footer>
+
+  </div>
+
 </body>
 </html>
